@@ -74,5 +74,6 @@
         "typeinfo": "cpp",
         "valarray": "cpp"
     },
-    "terminal.integrated.sendKeybindingsToShell": true
+    "terminal.integrated.sendKeybindingsToShell": true,
+    "terminal.integrated.allowChords": false
 }
