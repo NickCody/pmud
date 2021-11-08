@@ -16,8 +16,13 @@ int MAX_GENERATIONS=1000;
 int REFRESH_DELAY_MS=50;
 char FILENAME[4096];
 
+struct results {
+    int generations;
+    int key_pressed;
+};
+
 void process_cli(int argc, char** argv);
-int play();
+struct results play();
 
 // Board Structure
 //
@@ -59,11 +64,11 @@ int main(int argc, char** argv) {
 	raw();				/* Line buffering disabled	*/
     nodelay(stdscr, true);
 
-    int generations = play();
+    struct results result = play();
 
 	endwin();			/* End curses mode		  */
 
-    printf("Wow, we experienced %d generations together! This is a special memory that I'll remember.\n", generations);
+    printf("Wow, we experienced %d generations together! This is a special memory that I'll remember.\n", result.key_pressed, result.generations);
     return 0;
 }
 
@@ -104,7 +109,7 @@ void process_cli(int argc, char** argv) {
 //
 // play
 //
-int play() {
+struct results play() {
     // Create all boards we need
     char** board1 = allocate_board();
     char** board2 = allocate_board();
@@ -152,7 +157,7 @@ int play() {
     	refresh();			/* Print it on to the real screen */
         usleep(1000 * REFRESH_DELAY_MS);
         in = getch();
-        if (in != ERR)
+        if (in != ERR && in != KEY_RESIZE)
             break;
 
     }
@@ -166,7 +171,11 @@ int play() {
     free_board(board1);
     free_board(board2);
 
-    return i;
+    struct results result;
+    result.generations = i;
+    result.key_pressed = in;
+
+    return result;
 }
 
 //
