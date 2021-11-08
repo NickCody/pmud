@@ -17,7 +17,7 @@ int REFRESH_DELAY_MS=50;
 char FILENAME[4096];
 
 void process_cli(int argc, char** argv);
-void play();
+int play();
 
 // Board Structure
 //
@@ -59,11 +59,11 @@ int main(int argc, char** argv) {
 	raw();				/* Line buffering disabled	*/
     nodelay(stdscr, true);
 
-    play();
+    int generations = play();
 
-    getch();
 	endwin();			/* End curses mode		  */
 
+    printf("Wow, we experienced %d generations together! This is a special memory that I'll remember.\n", generations);
     return 0;
 }
 
@@ -104,7 +104,7 @@ void process_cli(int argc, char** argv) {
 //
 // play
 //
-void play() {
+int play() {
     // Create all boards we need
     char** board1 = allocate_board();
     char** board2 = allocate_board();
@@ -123,7 +123,10 @@ void play() {
     print_board(currentGen);
     refresh();			/* Print it on to the real screen */
 
-    for (int i=1; i <= MAX_GENERATIONS; i++ ) {
+    int in = getch();
+    int i;
+
+    for (i=1; i <= MAX_GENERATIONS; i++ ) {
         move(0,0);
 
         calc_next_generation(currentGen, nextGen);
@@ -148,13 +151,22 @@ void play() {
         
     	refresh();			/* Print it on to the real screen */
         usleep(1000 * REFRESH_DELAY_MS);
-        if (getch() != ERR)
+        in = getch();
+        if (in != ERR)
             break;
+
     }
 
+ 
+    if (in == ERR) {
+        nodelay(stdscr, false);
+        getch();
+    }
 
     free_board(board1);
     free_board(board2);
+
+    return i;
 }
 
 //
