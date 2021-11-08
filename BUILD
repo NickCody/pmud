@@ -6,3 +6,10 @@ cc_binary(
     deps = ["@ncurses//:main"],
 )
 
+
+cc_binary(
+    name = "life",
+    srcs = ["src/life/life.c"],
+    deps = ["@ncurses//:main"],
+)
+
