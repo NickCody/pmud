@@ -11,6 +11,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         ca-certificates \
         curl \
         gnupg2 \
+        vim \
         software-properties-common \
     &&  add-apt-repository \
         "deb [arch=amd64] https://download.docker.com/linux/debian \
