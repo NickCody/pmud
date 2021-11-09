@@ -10,8 +10,8 @@
 #define DEAD ' '
 #define OUTSIDE '-'
 
-int NUM_ROWS=5;
-int NUM_COLS=5;
+int NUM_ROWS=15;
+int NUM_COLS=15;
 int MAX_GENERATIONS=1000;
 int REFRESH_DELAY_MS=50;
 char FILENAME[4096];
