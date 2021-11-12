@@ -4,11 +4,16 @@
 #include <unistd.h>
 #include <time.h>
 #include <getopt.h>
+#include <locale.h>
+#define _XOPEN_SOURCE_EXTENDED 1
 #include <ncurses.h>
 
 #define ALIVE 'O'
 #define DEAD ' '
 #define OUTSIDE '-'
+
+#define OUT_ALIVE L"\u2B24"
+#define OUT_DEAD L"\u00B7"
 
 int NUM_ROWS=15;
 int NUM_COLS=15;
@@ -56,6 +61,8 @@ int    num_neighbors        (char** board, int row, int col);
 void   calc_next_generation (char** nextGen, char** currentGen);
 
 int main(int argc, char** argv) {
+    setlocale(LC_ALL, "");
+
     printf("Welcome to the Game of Life\n");
 
     process_cli(argc, argv);
@@ -214,7 +221,11 @@ void clear_board(char** board, char clearchar) {
 void print_board(char** board) {
     for(int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
-            printw("%c ", board[i][j]);
+            if ( board[i][j] == ALIVE)
+                addwstr(OUT_ALIVE);
+            else
+                addwstr(OUT_DEAD);
+            addstr(" ");
         }
         printw("\n");
     }
