@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 
 	endwin();			/* End curses mode		  */
 
-    printf("Wow, we experienced %d generations together! This is a special memory that I'll remember.\n", result.key_pressed, result.generations);
+    printf("Wow, we experienced %d generations together! This is a special memory that I'll remember.\n", result.generations);
     return 0;
 }
 
