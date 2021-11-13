@@ -86,7 +86,7 @@ void process_cli(int argc, char** argv) {
     int opt;
     strcpy(FILENAME, "");
 
-    while((opt = getopt(argc, argv, "c:r:g:f:")) != -1)
+    while((opt = getopt(argc, argv, "c:r:g:f:d:")) != -1)
     {
         switch(opt)
         {
