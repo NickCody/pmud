@@ -32,6 +32,9 @@ RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/
     && chmod +x buildifier \
     && mv buildifier /usr/local/bin
 
+RUN locale-gen en_US.UTF-8
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
 RUN groupadd docker \
     && usermod -aG docker vscode
 
