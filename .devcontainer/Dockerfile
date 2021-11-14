@@ -13,6 +13,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         gnupg2 \
         vim \
         software-properties-common \
+        graphviz xdot \
     &&  add-apt-repository \
         "deb [arch=amd64] https://download.docker.com/linux/debian \
         $(lsb_release -cs) \
@@ -31,6 +32,7 @@ RUN curl -L -O https://golang.org/dl/go1.15.5.linux-amd64.tar.gz \
 RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier \
     && chmod +x buildifier \
     && mv buildifier /usr/local/bin
+
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

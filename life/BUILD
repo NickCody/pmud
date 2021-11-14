@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 cc_binary(
-    name = "life",
-    srcs = ["src/life/life.c"],
+    name = "binary",
+    srcs = ["life.c"],
     deps = ["@ncurses//:main"],
 )
