@@ -4,16 +4,12 @@
 
 using namespace std;
   
-// A utility function to add an edge in an
-// undirected graph.
 void addEdge(vector<int> adj[], int u, int v)
 {
     adj[u].push_back(v);
     adj[v].push_back(u);
 }
   
-// A utility function to print the adjacency list
-// representation of graph
 void printGraph(vector<int> adj[], int V)
 {
     printf("digraph {\n");
@@ -27,7 +23,6 @@ void printGraph(vector<int> adj[], int V)
     printf("}\n");
 }
  
-// Driver code
 int main(int argc, char** argv)
 {
     std::setlocale(LC_ALL, "en_US.UTF-8");
