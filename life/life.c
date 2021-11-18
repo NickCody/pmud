@@ -8,7 +8,7 @@
 #define _XOPEN_SOURCE_EXTENDED 1
 #include <ncurses.h>
 
-#define ALIVE 'O'
+#define ALIVE 'X'
 #define DEAD ' '
 #define OUTSIDE '-'
 
