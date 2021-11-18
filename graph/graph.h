@@ -69,7 +69,7 @@ void addEdge(int u, int v)
     addDirectedEdge(v, u);
 }
 
-void printGraph(bool strict)
+void printDotGraph(bool strict)
 {
     if (strict)
         cout << "strict ";

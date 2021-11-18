@@ -6,12 +6,6 @@
 
 #include "graph.h"
 
-void addEdgesRandom(Graph& graph, int N) {
-    for (int i=0; i < N; i++) {
-        graph.addEdge(rand() % graph.numVertices(), rand() % graph.numVertices());
-    }
-}
-
 void addEdgesAllConnect(Graph& graph) {
     int N = graph.numVertices();
     for (int i=0; i < N; i++) {
@@ -34,7 +28,6 @@ int main(int argc, char** argv)
 
     Graph graph(V, false);
     addEdgesAllConnect(graph);
-    graph.printGraph(true);
+    graph.printDotGraph(true);
 
     return 0;
-}

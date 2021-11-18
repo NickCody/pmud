@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
     Graph graph(V, false);
     addEdgesRandom(graph, R);
-    graph.printGraph(true);
+    graph.printDotGraph(true);
 
     return 0;
 }
