@@ -19,7 +19,6 @@ void addEdgesAllConnect(Graph& graph) {
 int main(int argc, char** argv)
 {
     std::setlocale(LC_ALL, "en_US.UTF-8");
-    srand(time(0));
 
     int V=5;
 
@@ -31,3 +30,4 @@ int main(int argc, char** argv)
     graph.printDotGraph(true);
 
     return 0;
+}

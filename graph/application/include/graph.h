@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ public:
   Graph(int V, bool directed) : V(V), directed(directed) {
     vertices.resize(V);
     for(int u=0; u < V; u++) {
-      vertices[u].vertex_num = u;
+      vertices[u].vertex_num = u+1;
     }
   }
 
@@ -90,6 +91,62 @@ void printDotGraph(bool strict)
       }
     }
     cout << "}" << endl;
+}
+
+void printStructure() {
+    std::string connector = "--";
+
+    for (auto x : vertices) {
+      cout << x;
+      for (auto y : x.adj) {
+        cout << " " << connector << " " << y;
+      }
+      cout << endl;
+    }
+}
+
+void printMatrix() {
+  vector<vector<int>> rows;
+  for (size_t i=0; i < vertices.size(); i++) {
+    rows.push_back(vector<int>(vertices.size()));
+    for (size_t j=0; j < vertices.size(); j++) {
+      rows[i][j] = 0;
+    }
+   }
+
+  for (size_t i=0; i < vertices.size(); i++) {
+    for (int x : vertices[i].adj) {
+      rows[i][vertices[x].vertex_num-1] = 1;
+    }
+  }
+
+  cout << "      ";
+
+  for (size_t j=0; j < vertices.size(); j++) {
+    cout << setw(3) << j << " ";
+  }
+
+  cout << endl;
+
+  cout << "     ";
+
+  for (size_t j=0; j < vertices.size(); j++) {
+    cout << "----";
+  }
+
+  cout << "-";
+
+  cout << endl;
+
+
+  for (size_t i=0; i < vertices.size(); i++) {
+    cout << setw(3) << i << " | ";
+    for (size_t j=0; j < vertices.size(); j++) {
+      cout << setw(3) << rows[i][j] << " ";
+    }
+    cout << endl;
+  }
+
 }
 
 }; // Graph

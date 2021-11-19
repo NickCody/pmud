@@ -77,5 +77,6 @@
         "span": "cpp"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
-    "terminal.integrated.allowChords": false
+    "terminal.integrated.allowChords": false,
+    "C_Cpp.errorSquiggles": "Disabled"
 }
