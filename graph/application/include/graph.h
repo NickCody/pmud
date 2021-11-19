@@ -30,6 +30,8 @@ private:
   int V;
   bool directed;
 
+  string PRESENT = "×";
+  string ABSENT = " ";
 
 public:
   Graph(int V, bool directed) : V(V), directed(directed) {
@@ -106,17 +108,17 @@ void printStructure() {
 }
 
 void printMatrix() {
-  vector<vector<int>> rows;
+  vector<vector<string>> rows;
   for (size_t i=0; i < vertices.size(); i++) {
-    rows.push_back(vector<int>(vertices.size()));
+    rows.push_back(vector<string>(vertices.size()));
     for (size_t j=0; j < vertices.size(); j++) {
-      rows[i][j] = 0;
+      rows[i][j] = ABSENT;
     }
    }
 
   for (size_t i=0; i < vertices.size(); i++) {
     for (int x : vertices[i].adj) {
-      rows[i][vertices[x].vertex_num-1] = 1;
+      rows[i][vertices[x].vertex_num-1] = PRESENT;
     }
   }
 
@@ -142,7 +144,7 @@ void printMatrix() {
   for (size_t i=0; i < vertices.size(); i++) {
     cout << setw(3) << i << " | ";
     for (size_t j=0; j < vertices.size(); j++) {
-      cout << setw(3) << rows[i][j] << " ";
+      cout << "  " << rows[i][j] << " ";
     }
     cout << endl;
   }
