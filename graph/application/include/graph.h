@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <vector>
+#include <array>
 #include <string>
 #include <algorithm>
 #include <iomanip>
@@ -45,110 +45,141 @@ public:
     V = rhs.V;
     directed = rhs.directed;
     vertices.resize(V);
+    for(int u=0; u < V; u++) {
+      vertices[u].vertex_num = u+1;
+    }
 
     for (int u=0; u < V; u++ ) {
-        for (auto x: vertices[u].adj) {
+        for (auto x: rhs.vertices[u].adj) {
             addDirectedEdge(u, x);
         }
     }
 
   }
 
-int numVertices() {
-  return V;
-}
+  Graph& operator=(Graph&& other) {
+    cout << "std::move() called" << endl;
+      vertices = std::move(other.vertices);
+      directed = other.directed;
+      V = other.V;
+      return *this;
+  }
 
-void addDirectedEdge(int u, int v)
-{
-  if (find(vertices[u].adj.begin(), vertices[u].adj.end(), v) == vertices[u].adj.end())
-    vertices[u].adj.push_back(v);
-}
+  int numVertices() {
+    return V;
+  }
 
-void addEdge(int u, int v)
-{
-  addDirectedEdge(u,v);
+  void addDirectedEdge(int u, int v)
+  {
+    if (find(vertices[u].adj.begin(), vertices[u].adj.end(), v) == vertices[u].adj.end())
+      vertices[u].adj.push_back(v);
+  }
 
-  if (!directed)
-    addDirectedEdge(v, u);
-}
+  void addEdge(int u, int v)
+  {
+    addDirectedEdge(u,v);
 
-void printDotGraph(bool strict)
-{
-    if (strict)
-        cout << "strict ";
-    
-    std::string connector;
-    if (directed) {
-      cout << "digraph {" << endl;
-      connector = "->";
+    if (!directed)
+      addDirectedEdge(v, u);
+  }
+
+  Graph transpose() {
+
+    Graph _temp(*this);
+
+    if (!directed)
+      return _temp;
+
+    for (Vertex& x : _temp.vertices) {
+      x.adj.clear();
     }
-    else {
-      cout << "graph {" << endl;
-      connector = "--";
-    }
 
-    for (auto x : vertices) {
-      for (auto y : x.adj) {
-        cout << " " << x << " " << connector << " " << y << endl;
+    for (Vertex& x : vertices) {
+      for (int y : x.adj) {
+        _temp.addDirectedEdge(y, x.vertex_num-1);
       }
     }
-    cout << "}" << endl;
-}
 
-void printStructure() {
-    std::string connector = "--";
+    return _temp;
+  }
 
-    for (auto x : vertices) {
-      cout << x;
-      for (auto y : x.adj) {
-        cout << " " << connector << " " << y;
+  void printDotGraph(bool strict)
+  {
+      if (strict)
+          cout << "strict ";
+      
+      std::string connector;
+      if (directed) {
+        cout << "digraph {" << endl;
+        connector = "->";
+      }
+      else {
+        cout << "graph {" << endl;
+        connector = "--";
+      }
+
+      for (auto x : vertices) {
+        for (auto y : x.adj) {
+          cout << " " << x << " " << connector << " " << y << endl;
+        }
+      }
+      cout << "}" << endl;
+  }
+
+  void printStructure() {
+      std::string connector = "--";
+
+      for (auto x : vertices) {
+        cout << x;
+        for (auto y : x.adj) {
+          cout << " " << connector << " " << y;
+        }
+        cout << endl;
+      }
+  }
+
+  void printMatrix() {
+    vector<vector<string>> rows;
+    for (size_t i=0; i < vertices.size(); i++) {
+      rows.push_back(vector<string>(vertices.size()));
+      for (size_t j=0; j < vertices.size(); j++) {
+        rows[i][j] = ABSENT;
+      }
+    }
+
+    for (size_t i=0; i < vertices.size(); i++) {
+      for (int x : vertices[i].adj) {
+        rows[i][vertices[x].vertex_num-1] = PRESENT;
+      }
+    }
+
+    cout << "      ";
+
+    for (size_t j=0; j < vertices.size(); j++) {
+      cout << setw(3) << j << " ";
+    }
+
+    cout << endl;
+
+    cout << "     ";
+
+    for (size_t j=0; j < vertices.size(); j++) {
+      cout << "----";
+    }
+
+    cout << "-";
+
+    cout << endl;
+
+
+    for (size_t i=0; i < vertices.size(); i++) {
+      cout << setw(3) << i << " | ";
+      for (size_t j=0; j < vertices.size(); j++) {
+        cout << "  " << rows[i][j] << " ";
       }
       cout << endl;
     }
-}
 
-void printMatrix() {
-  vector<vector<string>> rows;
-  for (size_t i=0; i < vertices.size(); i++) {
-    rows.push_back(vector<string>(vertices.size()));
-    for (size_t j=0; j < vertices.size(); j++) {
-      rows[i][j] = ABSENT;
-    }
-   }
-
-  for (size_t i=0; i < vertices.size(); i++) {
-    for (int x : vertices[i].adj) {
-      rows[i][vertices[x].vertex_num-1] = PRESENT;
-    }
   }
-
-  cout << "      ";
-
-  for (size_t j=0; j < vertices.size(); j++) {
-    cout << setw(3) << j << " ";
-  }
-
-  cout << endl;
-
-  cout << "     ";
-
-  for (size_t j=0; j < vertices.size(); j++) {
-    cout << "----";
-  }
-
-  cout << "-";
-
-  cout << endl;
-
-
-  for (size_t i=0; i < vertices.size(); i++) {
-    cout << setw(3) << i << " | ";
-    for (size_t j=0; j < vertices.size(); j++) {
-      cout << "  " << rows[i][j] << " ";
-    }
-    cout << endl;
-  }
-
-}
 
 }; // Graph
