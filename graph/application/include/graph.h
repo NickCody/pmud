@@ -5,24 +5,26 @@
 #include <string>
 #include <algorithm>
 #include <iomanip>
+#include <optional>
 
 using namespace std;
 
+namespace cody {
+namespace graph {
+
+template <typename T = int>
 class Graph
 {
 private:
 
   struct Vertex {
-    string name;
+    std::optional<T> name = {};
     vector<int> adj;
-    int vertex_num;
+    int vertex_num = 0; // range(1..N)
 
     friend ostream& operator<<(ostream& output, Vertex const& vertex) {
-      if (vertex.name.empty()) {
-        return output << vertex.vertex_num;
-      } else {
-        return output << vertex.name;
-      }
+      output << vertex.name.value_or(vertex.vertex_num);
+      return output;
     }
   };
 
@@ -183,3 +185,6 @@ public:
   }
 
 }; // Graph
+
+} // namespace graph
+} // namespace cody

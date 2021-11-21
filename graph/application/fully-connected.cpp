@@ -6,7 +6,9 @@
 
 #include "graph.h"
 
-void addEdgesAllConnect(Graph& graph) {
+using namespace cody::graph;
+
+void addEdgesAllConnect(Graph<>& graph) {
     int N = graph.numVertices();
     for (int i=0; i < N; i++) {
         for (int j=i+1; j < N; j++) {
@@ -25,7 +27,7 @@ int main(int argc, char** argv)
     if (argc == 2)
         V = atoi(argv[1]);
 
-    Graph graph(V, false);
+    Graph<> graph(V, false);
     addEdgesAllConnect(graph);
     graph.printDotGraph(true);
 

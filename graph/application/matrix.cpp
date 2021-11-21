@@ -6,7 +6,9 @@
 
 #include "graph.h"
 
-void addEdgesRandom(Graph& graph, int N) {
+using namespace cody::graph;
+
+void addEdgesRandom(Graph<>& graph, int N) {
     for (int i=0; i < N; i++) {
         graph.addEdge(rand() % graph.numVertices(), rand() % graph.numVertices());
     }
@@ -28,7 +30,7 @@ int main(int argc, char** argv)
         R = atoi(argv[2]);
     }
 
-    Graph graph(V, false);
+    Graph<> graph(V, false);
     addEdgesRandom(graph, R);
     graph.printMatrix();
 

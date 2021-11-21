@@ -74,7 +74,9 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "ranges": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "*.def": "cpp",
+        "*.inc": "cpp"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.allowChords": false,

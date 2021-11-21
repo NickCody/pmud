@@ -43,10 +43,3 @@ cc_binary(
     deps = ["graph"],
     copts = global_copts(),
 )
-
-cc_binary(
-    name = "cppversion",
-    srcs = ["cppversion.cpp"],
-    deps = ["graph"],
-    copts = global_copts(),
-)

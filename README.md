@@ -18,3 +18,9 @@ bazel run //graph/application:random-connected --  10 100     # randomly connect
 bazel run //graph/application:matrix -- 10 100                # prints adjacency matrix representation (custom output)
 bazel run //graph/application:structure --  10 100            # prints adj-list structure (custom output)
 ```
+
+### util
+
+```
+bazel run //util:cppversion
+```

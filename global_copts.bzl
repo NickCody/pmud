@@ -1,3 +1,5 @@
+"""Global gcc compilere options"""
+
 def global_copts(unwanted_options = []):
     opts = [
         "-std=c++20",
