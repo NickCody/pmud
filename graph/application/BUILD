@@ -3,7 +3,7 @@ load("@//:global_copts.bzl", "global_copts")
 
 cc_library(
     name = "graph",
-    hdrs = ["include/graph.h"],
+    hdrs = ["include/graph.h", "include/search_graph.h"],
     deps = ["@ncurses//:main"],
     strip_include_prefix = "include",
 )
@@ -36,10 +36,16 @@ cc_binary(
     copts = global_copts(),
 )
 
-
 cc_binary(
     name = "transpose",
     srcs = ["transpose.cpp"],
+    deps = ["graph"],
+    copts = global_copts(),
+)
+
+cc_binary(
+    name = "search",
+    srcs = ["search.cpp"],
     deps = ["graph"],
     copts = global_copts(),
 )

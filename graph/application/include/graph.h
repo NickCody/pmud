@@ -12,23 +12,24 @@ using namespace std;
 namespace cody {
 namespace graph {
 
-template <typename T = int>
+template <typename D>
+struct Vertex {
+  std::optional<D> data = {};
+  vector<int> adj;
+  int vertex_num = 0; // range(1..N)
+
+  friend ostream& operator<<(ostream& output, Vertex const& vertex) {
+    output << vertex.data.value_or(vertex.vertex_num);
+    return output;
+  }
+};
+
+template <typename VertexType = Vertex<int>>
 class Graph
 {
 private:
 
-  struct Vertex {
-    std::optional<T> name = {};
-    vector<int> adj;
-    int vertex_num = 0; // range(1..N)
-
-    friend ostream& operator<<(ostream& output, Vertex const& vertex) {
-      output << vertex.name.value_or(vertex.vertex_num);
-      return output;
-    }
-  };
-
-  vector<Vertex> vertices;
+  vector<VertexType> vertices;
   int V;
   bool directed;
 
@@ -92,11 +93,11 @@ public:
     if (!directed)
       return _temp;
 
-    for (Vertex& x : _temp.vertices) {
+    for (VertexType& x : _temp.vertices) {
       x.adj.clear();
     }
 
-    for (Vertex& x : vertices) {
+    for (VertexType& x : vertices) {
       for (int y : x.adj) {
         _temp.addDirectedEdge(y, x.vertex_num-1);
       }
