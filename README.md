@@ -24,3 +24,7 @@ bazel run //graph/application:structure --  10 100            # prints adj-list 
 ```
 bazel run //util:cppversion
 ```
+
+## TODO
+
+Unified CLI so for any program, you can choose output format (matrix, structure, dot).
