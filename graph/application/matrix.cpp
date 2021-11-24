@@ -10,7 +10,7 @@ using namespace cody::graph;
 
 void addEdgesRandom(Graph<>& graph, int N) {
     for (int i=0; i < N; i++) {
-        graph.addEdge(rand() % graph.numVertices(), rand() % graph.numVertices());
+        graph.addEdge(rand() % graph.getNumVertices(), rand() % graph.getNumVertices());
     }
 }
 

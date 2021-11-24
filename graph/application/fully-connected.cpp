@@ -9,7 +9,7 @@
 using namespace cody::graph;
 
 void addEdgesAllConnect(Graph<>& graph) {
-    int N = graph.numVertices();
+    int N = graph.getNumVertices();
     for (int i=0; i < N; i++) {
         for (int j=i+1; j < N; j++) {
             if (i != j)
