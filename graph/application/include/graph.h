@@ -68,7 +68,7 @@ public:
       return *this;
   }
 
-  int numVertices() {
+  int getNumVertices() {
     return V;
   }
 
@@ -84,6 +84,14 @@ public:
 
     if (!directed)
       addDirectedEdge(v, u);
+  }
+
+  VertexType& getVertex(int u) {
+    return vertices[u];
+  }
+
+  vector<int>& getAdjancency(int u ) {
+    return vertices[u].adj;  
   }
 
   Graph transpose() {
@@ -159,7 +167,7 @@ public:
     cout << "      ";
 
     for (size_t j=0; j < vertices.size(); j++) {
-      cout << setw(3) << j << " ";
+      cout << setw(3) << j+1 << " ";
     }
 
     cout << endl;
@@ -176,7 +184,7 @@ public:
 
 
     for (size_t i=0; i < vertices.size(); i++) {
-      cout << setw(3) << i << " | ";
+      cout << setw(3) << i+1 << " | ";
       for (size_t j=0; j < vertices.size(); j++) {
         cout << "  " << rows[i][j] << " ";
       }

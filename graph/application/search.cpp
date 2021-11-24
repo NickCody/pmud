@@ -3,6 +3,7 @@
 #include <clocale>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 
 #include "graph.h"
 #include "search_graph.h"
@@ -11,7 +12,7 @@ using namespace cody::graph;
 
 void addEdgesRandom(Graph<>& graph, int N) {
     for (int i=0; i < N; i++) {
-        graph.addEdge(rand() % graph.numVertices(), rand() % graph.numVertices());
+        graph.addEdge(rand() % graph.getNumVertices(), rand() % graph.getNumVertices());
     }
 }
 
@@ -35,8 +36,13 @@ int main(int argc, char** argv)
     addEdgesRandom(graph, R);
 
     graph.printMatrix();
-    
-    cout << "Done searching!";
+
+    SearchData data = BFS(graph, 0);
+    int s = 0;
+    int v = V-1;
+    cout << endl;
+    cout << "Path from " << graph.getVertex(s) << " to " << graph.getVertex(v) << " is: ";
+    printPath(graph, s, v, data);
 
     return 0;
 }
