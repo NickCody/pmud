@@ -19,8 +19,7 @@ struct SearchData {
 
 };
 
-template <typename VertexType>
-SearchData BFS(Graph<VertexType>& graph, int s) {
+SearchData BFS(Graph<>& graph, int s) {
   
   vector<int> π(graph.getNumVertices());
   vector<SearchColor> color(graph.getNumVertices());
