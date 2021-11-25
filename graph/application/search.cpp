@@ -5,10 +5,11 @@
 #include <time.h>
 #include <limits.h>
 
-#include "graph.h"
-#include "search_graph.h"
+#include "graph/graph.h"
+#include "graph/BFS.h"
 
 using namespace cody::graph;
+using namespace cody::graph::BFS;
 
 void addEdgesRandom(Graph<>& graph, int N) {
     for (int i=0; i < N; i++) {
@@ -21,7 +22,7 @@ int main(int argc, char** argv)
     std::setlocale(LC_ALL, "en_US.UTF-8");
     srand(time(0));
 
-    int V=5;
+    int V=20;
     int R=V*10;
 
     if (argc == 2) {
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
 
     graph.printMatrix();
 
-    SearchData data = BFS(graph, 0);
+    SearchData data = BreadthFirstSearch(graph, 0);
     int s = 0;
     int v = V-1;
     cout << endl;

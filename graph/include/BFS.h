@@ -2,10 +2,12 @@
 
 #include <limits.h>
 #include <queue>
-#include <graph.h>
+
+#include "graph.h"
 
 namespace cody {
 namespace graph {
+namespace BFS {
 
 using namespace std;
 
@@ -19,7 +21,7 @@ struct SearchData {
 
 };
 
-SearchData BFS(Graph<>& graph, int s) {
+SearchData BreadthFirstSearch(Graph<>& graph, int s) {
   
   vector<int> π(graph.getNumVertices());
   vector<SearchColor> color(graph.getNumVertices());
@@ -77,6 +79,6 @@ void printPath(Graph<>& graph, int s, int v, SearchData& data) {
   cout << endl;
 }
 
-
+} // namespace BFS
 } // namespace graph
 } // namesapce cody

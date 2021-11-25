@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "graph.h"
+#include "graph/graph.h"
 
 using namespace cody::graph;
 

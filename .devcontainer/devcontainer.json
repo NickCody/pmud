@@ -22,7 +22,8 @@
 		"ms-azuretools.vscode-docker",
 		"bazelbuild.vscode-bazel",
 		"ms-vscode.cpptools",
-		"matepek.vscode-catch2-test-adapter"
+		"matepek.vscode-catch2-test-adapter",
+		"jeff-hykin.better-cpp-syntax"
 	],
 
 	"mounts": [
