@@ -8,13 +8,6 @@
 
 using namespace cody::graph;
 
-
-void addEdgesRandom(Graph<>& graph, int N) {
-    for (int i=0; i < N; i++) {
-        graph.addEdge(rand() % graph.getNumVertices(), rand() % graph.getNumVertices());
-    }
-}
-
 int main(int argc, char** argv)
 {
     std::setlocale(LC_ALL, "en_US.UTF-8");

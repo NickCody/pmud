@@ -6,7 +6,7 @@
 namespace cody {
 namespace graph {
 
-const string PRESENT = "×";
+const string PRESENT = "*";
 const string ABSENT = " ";
 
 void _printPath(Graph<>& graph, int s, int v, vector<int>& π) {
@@ -109,6 +109,22 @@ void printMatrix(Graph<>& graph) {
     cout << endl;
   }
 
+}
+
+void addEdgesRandom(Graph<>& graph, int N) {
+    for (int i=0; i < N; i++) {
+        graph.addEdge(rand() % graph.getNumVertices(), rand() % graph.getNumVertices());
+    }
+}
+
+void addEdgesAllConnect(Graph<>& graph) {
+    int N = graph.getNumVertices();
+    for (int i=0; i < N; i++) {
+        for (int j=i+1; j < N; j++) {
+            if (i != j)
+                graph.addEdge(i, j);
+        }
+    }
 }
 
 
