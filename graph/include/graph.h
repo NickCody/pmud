@@ -25,11 +25,11 @@ struct Vertex {
 
     size_t getAdjSize() const { return adj.size(); }
     int getVertexNum() const { return vertex_num; }
+    int getAdj(int v) const { return adj[v]; }
     
     void setVertexNum(int v) { vertex_num = v; }
     void addAdj(int v) { adj.push_back(v); }
     void clearAdj() { adj.clear(); }
-    int getAdj(int v) { return adj[v]; }
 
     using iterator = adj_t::iterator;
     using const_iterator = adj_t::const_iterator;
@@ -100,7 +100,7 @@ public:
   const_iterator cbegin() const { return vertices.cbegin(); }
   const_iterator cend() const { return vertices.cend(); }
 
-  int getNumVertices() {
+  int getNumVertices() const {
     return V;
   }
 
@@ -120,15 +120,13 @@ public:
       addDirectedEdge(v, u);
   }
 
-  VertexType& getVertex(int u) {
+  const VertexType& getVertex(int u) const {
     return vertices[u];
   }
 
-  vector<int>& getAdjancency(int u ) {
-    return vertices[u].adj;  
+  bool isDirected() const { 
+    return directed; 
   }
-
-  bool isDirected() { return directed; }
 
   Graph transpose() {
 

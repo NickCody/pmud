@@ -44,7 +44,7 @@ void printDotGraph(Graph<>& graph, bool strict)
     }
 
     for (auto const &x : graph) {
-      for (auto const &y : x) {
+      for (int y : x) {
         cout << " " << x << " " << connector << " " << graph.getVertex(y) << endl;
       }
     }
@@ -56,7 +56,7 @@ void printStructure(Graph<>& graph) {
 
   for (auto const &x : graph) {
     cout << x;
-    for (auto const &y : x) {
+    for (int y : x) {
       cout << " " << connector << " " << graph.getVertex(y);
     }
     cout << endl;
@@ -76,7 +76,7 @@ void printMatrix(Graph<>& graph) {
 
   for (auto const &x : graph) {
     int u=x.getVertexNum()-1;
-    for (auto const &y : x) {
+    for (int y : x) {
       int v = graph.getVertex(y).getVertexNum()-1;
       rows[u][v] = PRESENT;
     }
