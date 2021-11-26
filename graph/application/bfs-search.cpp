@@ -6,10 +6,10 @@
 #include <limits.h>
 
 #include "graph/graph.h"
+#include "graph/common.h"
 #include "graph/BFS.h"
 
 using namespace cody::graph;
-using namespace cody::graph::BFS;
 
 void addEdgesRandom(Graph<>& graph, int N) {
     for (int i=0; i < N; i++) {
@@ -38,12 +38,12 @@ int main(int argc, char** argv)
 
     graph.printMatrix();
 
-    SearchData data = BreadthFirstSearch(graph, 0);
+    BFS::SearchData data = BFS::BreadthFirstSearch(graph, 0);
     int s = 0;
     int v = V-1;
     cout << endl;
     cout << "Path from " << graph.getVertex(s) << " to " << graph.getVertex(v) << " is: ";
-    printPath(graph, s, v, data);
+    printPath(graph, s, v, data.π);
 
     return 0;
 }

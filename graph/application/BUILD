@@ -39,8 +39,15 @@ cc_binary(
 )
 
 cc_binary(
-    name = "search",
-    srcs = ["search.cpp"],
+    name = "bfs-search",
+    srcs = ["bfs-search.cpp"],
+    deps = ["//graph:headers"],
+    copts = global_copts(),
+)
+
+cc_binary(
+    name = "dfs-search",
+    srcs = ["dfs-search.cpp"],
     deps = ["//graph:headers"],
     copts = global_copts(),
 )
