@@ -45,8 +45,8 @@ SearchData BreadthFirstSearch(Graph<>& graph, int s) {
 
   while(!Q.empty()) {
     int& u = Q.front();
-    for(size_t i = 0; i < graph.getAdjancency(u).size(); i++) {
-      int v = graph.getVertex(u).adj[i];
+    for(size_t i = 0; i < graph.getVertex(u).getAdjSize(); i++) {
+      int v = graph.getVertex(u).getAdj(i);
       if (color[v] == WHITE) {
         color[v] = GRAY;
         d[v] = d[u] + 1;

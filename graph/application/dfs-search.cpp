@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     Graph<> graph(V, true);
     addEdgesRandom(graph, R);
 
-    graph.printMatrix();
+    printMatrix(graph);
 
     DFS::SearchData data = DFS::DepthFirstSearch(graph);
     int s = 0;

@@ -23,7 +23,7 @@ struct SearchData {
 void DFS_Visit(Graph<>& graph, int u, int& time, vector<int> π, vector<SearchColor> color, vector<int> d, vector<int> f ) {
   color[u] = GRAY;
   d[u] = time++;
-  for(size_t v = 0; v < graph.getAdjancency(u).size(); v++) {
+  for(auto const& v : graph.getVertex(u)) {
     if (color[v] == WHITE) {
       π[v] = u;
       DFS_Visit(graph, v, time, π, color, d, f);

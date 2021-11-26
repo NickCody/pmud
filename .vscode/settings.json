@@ -76,7 +76,10 @@
         "ranges": "cpp",
         "span": "cpp",
         "*.def": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.allowChords": false,

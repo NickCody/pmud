@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     Graph<> graph(V, true);
     addEdgesRandom(graph, R);
 
-    graph.printMatrix();
+    printMatrix(graph);
 
     BFS::SearchData data = BFS::BreadthFirstSearch(graph, 0);
     int s = 0;

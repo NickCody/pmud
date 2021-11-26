@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "graph/graph.h"
+#include "graph/common.h"
 
 using namespace cody::graph;
 
@@ -32,7 +32,13 @@ int main(int argc, char** argv)
 
     Graph<> graph(V, false);
     addEdgesRandom(graph, R);
-    graph.printMatrix();
+    
+    cout << "Adjaceny List =>" << endl << endl;;
+    printStructure(graph);
+    cout << endl;
+    
+    cout << "Adjacency Matrix =>" << endl << endl;;
+    printMatrix(graph);
 
     return 0;
 }

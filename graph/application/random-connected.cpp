@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "graph/graph.h"
+#include "graph/common.h"
 
 using namespace cody::graph;
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 
     Graph<> graph(V, false);
     addEdgesRandom(graph, R);
-    graph.printDotGraph(true);
+    printDotGraph(graph, true);
 
     return 0;
 }

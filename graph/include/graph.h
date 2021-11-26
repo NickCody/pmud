@@ -14,33 +14,55 @@ namespace graph {
 
 template <typename D>
 struct Vertex {
-  std::optional<D> data = {};
-  vector<int> adj;
-  int vertex_num = 0; // range(1..N)
+  private:
+    using adj_t = std::vector<int>;
 
-  friend ostream& operator<<(ostream& output, Vertex const& vertex) {
-    output << vertex.data.value_or(vertex.vertex_num);
-    return output;
-  }
+    std::optional<D> data = {};
+    int vertex_num = 0; // range(1..N)
+    adj_t adj;
+    
+  public:
+
+    size_t getAdjSize() const { return adj.size(); }
+    int getVertexNum() const { return vertex_num; }
+    
+    void setVertexNum(int v) { vertex_num = v; }
+    void addAdj(int v) { adj.push_back(v); }
+    void clearAdj() { adj.clear(); }
+    int getAdj(int v) { return adj[v]; }
+
+    using iterator = adj_t::iterator;
+    using const_iterator = adj_t::const_iterator;
+
+    iterator begin() { return adj.begin(); }
+    iterator end() { return adj.end(); }
+    const_iterator begin() const { return adj.begin(); }
+    const_iterator end() const { return adj.end(); }
+    const_iterator cbegin() const { return adj.cbegin(); }
+    const_iterator cend() const { return adj.cend(); }
+
+    friend ostream& operator<<(ostream& output, Vertex const& vertex) {
+      output << vertex.data.value_or(vertex.vertex_num);
+      return output;
+    }
+
 };
 
 template <typename VertexType = Vertex<int>>
 class Graph
 {
 private:
+  using vertices_t = vector<VertexType>;
 
-  vector<VertexType> vertices;
+  vertices_t vertices;
   int V;
   bool directed;
-
-  string PRESENT = "×";
-  string ABSENT = " ";
 
 public:
   Graph(int V, bool directed) : V(V), directed(directed) {
     vertices.resize(V);
     for(int u=0; u < V; u++) {
-      vertices[u].vertex_num = u+1;
+      vertices[u].setVertexNum(u+1);
     }
   }
 
@@ -49,12 +71,12 @@ public:
     directed = rhs.directed;
     vertices.resize(V);
     for(int u=0; u < V; u++) {
-      vertices[u].vertex_num = u+1;
+      vertices[u].setVertexNum(u+1);
     }
 
-    for (int u=0; u < V; u++ ) {
-        for (auto x: rhs.vertices[u].adj) {
-            addDirectedEdge(u, x);
+    for (auto const& x: rhs) {
+        for (int y: x) {
+            addDirectedEdge(x.getVertexNum()-1, y);
         }
     }
 
@@ -68,14 +90,26 @@ public:
       return *this;
   }
 
+  using iterator = vertices_t::iterator;
+  using const_iterator = vertices_t::const_iterator;
+
+  iterator begin() { return vertices.begin(); }
+  iterator end() { return vertices.end(); }
+  const_iterator begin() const { return vertices.begin(); }
+  const_iterator end() const { return vertices.end(); }
+  const_iterator cbegin() const { return vertices.cbegin(); }
+  const_iterator cend() const { return vertices.cend(); }
+
   int getNumVertices() {
     return V;
   }
 
   void addDirectedEdge(int u, int v)
   {
-    if (find(vertices[u].adj.begin(), vertices[u].adj.end(), v) == vertices[u].adj.end())
-      vertices[u].adj.push_back(v);
+    auto& x = vertices[u];
+
+    if (find(x.begin(), x.end(), v) == x.end())
+      x.addAdj(v);
   }
 
   void addEdge(int u, int v)
@@ -94,6 +128,8 @@ public:
     return vertices[u].adj;  
   }
 
+  bool isDirected() { return directed; }
+
   Graph transpose() {
 
     Graph _temp(*this);
@@ -102,96 +138,19 @@ public:
       return _temp;
 
     for (VertexType& x : _temp.vertices) {
-      x.adj.clear();
+      x.clearAdj();
     }
 
-    for (VertexType& x : vertices) {
-      for (int y : x.adj) {
-        _temp.addDirectedEdge(y, x.vertex_num-1);
+    for (auto const& x : vertices) {
+      for (int y : x) {
+        _temp.addDirectedEdge(y, x.getVertexNum()-1);
       }
     }
 
     return _temp;
   }
 
-  void printDotGraph(bool strict)
-  {
-      if (strict)
-          cout << "strict ";
-      
-      std::string connector;
-      if (directed) {
-        cout << "digraph {" << endl;
-        connector = "->";
-      }
-      else {
-        cout << "graph {" << endl;
-        connector = "--";
-      }
 
-      for (auto x : vertices) {
-        for (auto y : x.adj) {
-          cout << " " << x << " " << connector << " " << y << endl;
-        }
-      }
-      cout << "}" << endl;
-  }
-
-  void printStructure() {
-      std::string connector = "--";
-
-      for (auto x : vertices) {
-        cout << x;
-        for (auto y : x.adj) {
-          cout << " " << connector << " " << y;
-        }
-        cout << endl;
-      }
-  }
-
-  void printMatrix() {
-    vector<vector<string>> rows;
-    for (size_t i=0; i < vertices.size(); i++) {
-      rows.push_back(vector<string>(vertices.size()));
-      for (size_t j=0; j < vertices.size(); j++) {
-        rows[i][j] = ABSENT;
-      }
-    }
-
-    for (size_t i=0; i < vertices.size(); i++) {
-      for (int x : vertices[i].adj) {
-        rows[i][vertices[x].vertex_num-1] = PRESENT;
-      }
-    }
-
-    cout << "      ";
-
-    for (size_t j=0; j < vertices.size(); j++) {
-      cout << setw(3) << j+1 << " ";
-    }
-
-    cout << endl;
-
-    cout << "     ";
-
-    for (size_t j=0; j < vertices.size(); j++) {
-      cout << "----";
-    }
-
-    cout << "-";
-
-    cout << endl;
-
-
-    for (size_t i=0; i < vertices.size(); i++) {
-      cout << setw(3) << i+1 << " | ";
-      for (size_t j=0; j < vertices.size(); j++) {
-        cout << "  " << rows[i][j] << " ";
-      }
-      cout << endl;
-    }
-
-  }
 
 }; // Graph
 

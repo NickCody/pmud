@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "graph/graph.h"
+#include "graph/common.h"
 
 using namespace cody::graph;
 
@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 
     Graph<> graph(V, true);
     addEdgesRandom(graph, R);
-    graph.printMatrix();
+    printMatrix(graph);
     Graph transposed = graph.transpose();
-    transposed.printMatrix();
+    printMatrix(transposed);
 
     return 0;
 }
