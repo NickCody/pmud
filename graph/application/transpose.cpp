@@ -24,7 +24,7 @@ int main(int argc, char** argv)
         R = atoi(argv[2]);
     }
 
-    Graph<> graph(V, true);
+    Graph<> graph(V, GRAPHTYPE_DIRECTED);
     addEdgesRandom(graph, R);
     printMatrix(graph);
     Graph transposed = graph.transpose();

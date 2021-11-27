@@ -24,7 +24,7 @@ int main(int argc, char** argv)
         R = atoi(argv[2]);
     }
 
-    Graph<> graph(V, false);
+    Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
     addEdgesRandom(graph, R);
     
     cout << "Adjaceny List =>" << endl << endl;;

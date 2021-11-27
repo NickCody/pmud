@@ -79,7 +79,8 @@
         "*.inc": "cpp",
         "bit": "cpp",
         "compare": "cpp",
-        "concepts": "cpp"
+        "concepts": "cpp",
+        "locale": "cpp"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.allowChords": false,

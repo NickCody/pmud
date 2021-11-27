@@ -16,9 +16,9 @@ int main(int argc, char** argv)
     if (argc == 2)
         V = atoi(argv[1]);
 
-    Graph<> graph(V, false);
+    Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
     addEdgesAllConnect(graph);
-    printDotGraph(graph, true);
+    printDot(graph, DOT_STRICT);
 
     return 0;
 }

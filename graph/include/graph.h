@@ -14,6 +14,8 @@ using namespace std;
 namespace cody {
 namespace graph {
 
+enum GraphType { GRAPHTYPE_DIRECTED, GRAPHTYPE_UNDIRECTED };
+
 template <typename VertexType = Vertex<int>>
 class Graph
 {
@@ -22,10 +24,10 @@ private:
 
   vertices_t vertices;
   int V;
-  bool directed;
+  GraphType directed;
 
 public:
-  Graph(int V, bool directed) : V(V), directed(directed) {
+  Graph(int V, GraphType directed) : V(V), directed(directed) {
     vertices.resize(V);
     for(int u=0; u < V; u++) {
       vertices[u].setVertexNum(u+1);
@@ -82,7 +84,7 @@ public:
   {
     addDirectedEdge(u,v);
 
-    if (!directed)
+    if (directed == GRAPHTYPE_UNDIRECTED)
       addDirectedEdge(v, u);
   }
 
@@ -90,7 +92,7 @@ public:
     return vertices[u];
   }
 
-  bool isDirected() const { 
+  GraphType isDirected() const { 
     return directed; 
   }
 
@@ -98,7 +100,7 @@ public:
 
     Graph _temp(*this);
 
-    if (!directed)
+    if (directed == GRAPHTYPE_UNDIRECTED)
       return _temp;
 
     for (VertexType& x : _temp.vertices) {
@@ -113,8 +115,6 @@ public:
 
     return _temp;
   }
-
-
 
 }; // Graph
 

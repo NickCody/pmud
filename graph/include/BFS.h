@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <queue>
 
-#include "graph.h"
+#include "common.h"
 
 namespace cody {
 namespace graph {
@@ -14,50 +14,57 @@ using namespace std;
 enum SearchColor { WHITE, GRAY, BLACK };
 
 struct SearchData {
-  vector<int> π;
+  vector<int> pi;
   vector<SearchColor> color;
   vector<int> d;
+  weak_ptr<Graph<>> graph;
 };
 
 // Introduction to Algorithms, by Cormen, Leiserson, and Rivest
 //
-SearchData BreadthFirstSearch(Graph<>& graph, int s) {
+SearchData BreadthFirstSearch(weak_ptr<Graph<>> graph, int s) {
   
-  vector<int> π(graph.getNumVertices());
-  vector<SearchColor> color(graph.getNumVertices());
-  vector<int> d(graph.getNumVertices());
+  if (auto g = graph.lock()) {
+    int V = g->getNumVertices();
 
-  queue<int> Q;
+    vector<int> π(V);
+    vector<SearchColor> color(V);
+    vector<int> d(V);
 
-  for(int u=0; u < graph.getNumVertices(); u++ ) {
-    if (u == s)
-      continue;
+    queue<int> Q;
 
-    color[u] = WHITE;
-    d[u] = INT_MAX;
-    π[u] = INT_MIN;
-  }
+    for(int u=0; u < V; u++ ) {
+      if (u == s)
+        continue;
 
-  color[s] = GRAY;
-  d[s] = 0;
-  π[s] = INT_MIN;
-  Q.push(s);
-
-  while(!Q.empty()) {
-    int& u = Q.front();
-    for(int v : graph.getVertex(u)) {
-      if (color[v] == WHITE) {
-        color[v] = GRAY;
-        d[v] = d[u] + 1;
-        π[v] = u;
-        Q.push(v);
-      }
+      color[u] = WHITE;
+      d[u] = INT_MAX;
+      π[u] = INVALID_VERTEX;
     }
-    Q.pop();
-    color[u] = BLACK;
-  }
 
-  return SearchData { π, color, d };
+    color[s] = GRAY;
+    d[s] = 0;
+    π[s] = INVALID_VERTEX;
+    Q.push(s);
+
+    while(!Q.empty()) {
+      int& u = Q.front();
+      for(int v : g->getVertex(u)) {
+        if (color[v] == WHITE) {
+          color[v] = GRAY;
+          d[v] = d[u] + 1;
+          π[v] = u;
+          Q.push(v);
+        }
+      }
+      Q.pop();
+      color[u] = BLACK;
+    }
+
+    return SearchData { π, color, d, graph };
+  } else {
+    throw runtime_error("graph is null");
+  }
 }
 
 

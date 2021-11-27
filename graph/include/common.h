@@ -9,11 +9,15 @@ namespace graph {
 const string PRESENT = "*";
 const string ABSENT = " ";
 
+const int INVALID_VERTEX = -1;
+
+enum DotGraphType { DOT_STRICT, DOT_NONSTRICT };
+
 void _printPath(Graph<>& graph, int s, int v, vector<int>& π) {
   if (v == s) {
     cout << graph.getVertex(v);
   } else {
-    if (π[v] == INT_MIN) {
+    if (π[v] == INVALID_VERTEX) {
       cout << "No path from " << graph.getVertex(s) << " to " << graph.getVertex(v) << " exists." << endl;
     } else {
       _printPath(graph, s, π[v], π);
@@ -28,9 +32,9 @@ void printPath(Graph<>& graph, int s, int v, vector<int>& π) {
 }
 
 
-void printDotGraph(Graph<>& graph, bool strict)
+void printDot(Graph<>& graph, DotGraphType strict)
 {
-    if (strict)
+    if (strict == DOT_STRICT)
         cout << "strict ";
     
     std::string connector;
@@ -44,9 +48,11 @@ void printDotGraph(Graph<>& graph, bool strict)
     }
 
     for (auto const &x : graph) {
+      cout << " " << x;
       for (int y : x) {
-        cout << " " << x << " " << connector << " " << graph.getVertex(y) << endl;
+        cout << " " << connector << " " << graph.getVertex(y);
       }
+      cout << endl;
     }
     cout << "}" << endl;
 }
@@ -99,7 +105,6 @@ void printMatrix(Graph<>& graph) {
   cout << "-";
 
   cout << endl;
-
 
   for (size_t i=0; i < V; i++) {
     cout << setw(3) << i+1 << " | ";
