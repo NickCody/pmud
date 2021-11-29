@@ -28,8 +28,10 @@ struct Vertex {
 
     size_t adjSize() const { return _adj.size(); }
     int index() const { return _index; }
-    int adj(int v) const { return _adj[v]; }
-    
+    const int operator[](size_t v) const {
+      return _adj[v];
+    }
+
     void addAdj(int v) { _adj.push_back(v); }
     void clearAdj() { _adj.clear(); }
 
