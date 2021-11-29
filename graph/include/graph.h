@@ -27,25 +27,23 @@ private:
   GraphType directed;
 
 public:
-  Graph(int V, GraphType directed) : V(V), directed(directed) {
-    vertices.resize(V);
+  Graph(int numVertices, GraphType directed) : V(numVertices), directed(directed) {
     for(int u=0; u < V; u++) {
-      vertices[u].setVertexNum(u+1);
+      vertices.push_back(VertexType(u));
     }
   }
 
   Graph(const Graph& rhs) {
     V = rhs.V;
     directed = rhs.directed;
-    vertices.resize(V);
     for(int u=0; u < V; u++) {
-      vertices[u].setVertexNum(u+1);
+      vertices.push_back(VertexType(u));
     }
 
     for (auto const& x: rhs) {
-        for (int y: x) {
-            addDirectedEdge(x.getVertexNum()-1, y);
-        }
+      for (int y: x) {
+          addDirectedEdge(x.index(), y);
+      }
     }
 
   }
@@ -68,7 +66,7 @@ public:
   const_iterator cbegin() const { return vertices.cbegin(); }
   const_iterator cend() const { return vertices.cend(); }
 
-  int getNumVertices() const {
+  int numVertices() const {
     return V;
   }
 
@@ -88,12 +86,17 @@ public:
       addDirectedEdge(v, u);
   }
 
-  const VertexType& getVertex(int u) const {
+  const VertexType& vertex(int u) const {
     return vertices[u];
   }
 
-  GraphType isDirected() const { 
-    return directed; 
+  const VertexType& operator[](size_t u) const
+  {
+      return vertices[u];
+  }
+
+  bool isDirected() const { 
+    return directed == GRAPHTYPE_DIRECTED; 
   }
 
   Graph transpose() {
@@ -109,7 +112,7 @@ public:
 
     for (auto const& x : vertices) {
       for (int y : x) {
-        _temp.addDirectedEdge(y, x.getVertexNum()-1);
+        _temp.addDirectedEdge(y, x.index());
       }
     }
 

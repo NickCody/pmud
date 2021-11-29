@@ -80,7 +80,8 @@
         "bit": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "locale": "cpp"
+        "locale": "cpp",
+        "variant": "cpp"
     },
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.allowChords": false,

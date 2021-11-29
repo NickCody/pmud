@@ -1,6 +1,4 @@
-digraph {
-    a -> b;
-    b -> c;
-    c -> d;
-    d -> a;
+strict digraph {
+    a -> b
+    c -> c
 }

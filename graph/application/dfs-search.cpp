@@ -13,7 +13,7 @@ using namespace cody::graph;
 int main(int argc, char** argv)
 {
     std::setlocale(LC_ALL, "en_US.UTF-8");
-    srand(10);
+    srand(11);
 
     int V=10;
     int R=V*10;
@@ -29,9 +29,15 @@ int main(int argc, char** argv)
     auto graph = make_shared<Graph<>>(V, GRAPHTYPE_DIRECTED);
     
     addEdgesRandom(*graph, R);
-    printDot(*graph, DOT_STRICT);
-    DFS::SearchData data = DFS::DepthFirstSearch(graph);
+
+    DFS::SearchData data = DFS::DepthFirstSearch(graph, 4);
+
+    cerr << "Performed DFS on the graph:" << endl;
+    printStructure(*graph, cerr);
+    cerr << "With the following search/traversal data:" << endl;
     cerr << data << endl;
+
+    printDotDfsAnnotate(*graph, DOT_STRICT, data);
 
     return 0;
 }

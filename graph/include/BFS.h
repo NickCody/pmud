@@ -25,7 +25,7 @@ struct SearchData {
 SearchData BreadthFirstSearch(weak_ptr<Graph<>> graph, int s) {
   
   if (auto g = graph.lock()) {
-    int V = g->getNumVertices();
+    int V = g->numVertices();
 
     vector<int> π(V);
     vector<SearchColor> color(V);
@@ -49,7 +49,7 @@ SearchData BreadthFirstSearch(weak_ptr<Graph<>> graph, int s) {
 
     while(!Q.empty()) {
       int& u = Q.front();
-      for(int v : g->getVertex(u)) {
+      for(int v : g->vertex(u)) {
         if (color[v] == WHITE) {
           color[v] = GRAY;
           d[v] = d[u] + 1;

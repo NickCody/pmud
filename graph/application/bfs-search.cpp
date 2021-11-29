@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     int s = 0;
     int v = V-1;
     cout << endl;
-    cout << "Path from " << graph->getVertex(s) << " to " << graph->getVertex(v) << " is: ";
+    cout << "Path from " << graph->vertex(s) << " to " << graph->vertex(v) << " is: ";
     printPath(*graph, s, v, data.pi);
 
     return 0;
