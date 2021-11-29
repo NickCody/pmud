@@ -9,10 +9,10 @@
 
 #include "vertex.h"
 
-using namespace std;
-
 namespace cody {
 namespace graph {
+
+using namespace std;
 
 enum GraphType { GRAPHTYPE_DIRECTED, GRAPHTYPE_UNDIRECTED };
 
@@ -49,11 +49,10 @@ public:
   }
 
   Graph& operator=(Graph&& other) {
-    cout << "std::move() called" << endl;
-      vertices = std::move(other.vertices);
-      directed = other.directed;
-      V = other.V;
-      return *this;
+    vertices = std::move(other.vertices);
+    directed = other.directed;
+    V = other.V;
+    return *this;
   }
 
   using iterator = vertices_t::iterator;

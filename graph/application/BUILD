@@ -1,8 +1,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("@//:global_copts.bzl", "global_copts")
 
-
-
 cc_binary(
     name = "random-connected",
     srcs = ["random-connected.cpp"],
