@@ -2,7 +2,7 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 load("@//:global_copts.bzl", "global_copts")
 
 cc_test(
-  name = "tests",
+  name = "test",
   srcs = glob(["**/*.cpp"]),
   deps = [
     "//graph:headers",

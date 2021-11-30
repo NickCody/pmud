@@ -88,7 +88,7 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "testMate.cpp.test.advancedExecutables": [
         {
-          "pattern": "./bazel-out/k8-dbg/**/*tests.runfiles/**/*tests",
+          "pattern": "./bazel-out/k8-dbg/**/*test.runfiles/**/*test",
           "cwd": "${workspaceDirectory}"
         }
       ]

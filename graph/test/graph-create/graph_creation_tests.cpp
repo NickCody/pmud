@@ -27,7 +27,7 @@ TEST(GraphCreationTest, UndirectedGraphShouldHaveSpecifiedAdjacencies) {
 }
 
 
-TEST(DirectedGraphAssignmentTest, ShouldCloneGraph) {
+TEST(GraphCreationTest, DirectedGraphAssignmenShouldCloneGraph) {
     Graph<> graph(3, GRAPHTYPE_DIRECTED);
     graph.addEdge(0, 1);
     graph.addEdge(1, 0);
@@ -43,7 +43,7 @@ TEST(DirectedGraphAssignmentTest, ShouldCloneGraph) {
     EXPECT_EQ(graph_cloned[graph_cloned[1][2]].index(), 2);
 } 
 
-TEST(UnDirectedGraphAssignmentTest, ShouldCloneGraph) {
+TEST(GraphCreationTest, UnDirectedGraphAssignmentShouldCloneGraph) {
     Graph<> graph(3, GRAPHTYPE_UNDIRECTED);
     graph.addEdge(0, 1);
     graph.addEdge(1, 0);
@@ -59,7 +59,7 @@ TEST(UnDirectedGraphAssignmentTest, ShouldCloneGraph) {
     EXPECT_EQ(graph_cloned[graph_cloned[1][2]].index(), 2);
 } 
 
-TEST(TransposedGraphTest, ShouldTranposeGraph) {
+TEST(GraphCreationTest, TransposedGraphShouldTranposeGraph) {
     Graph<> graph(3, GRAPHTYPE_DIRECTED);
     graph.addEdge(0, 1); // transposed 1 -- 2
     graph.addEdge(1, 0); // transposed 0 -- 1
