@@ -339,3 +339,5 @@ bazel-out
 bazel-testlogs
 bazel-vscode-cpp-container
 bazel-cpp-game
+.cache/
+
