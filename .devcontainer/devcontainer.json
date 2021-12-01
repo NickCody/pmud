@@ -13,9 +13,9 @@
 		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"],
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
+	// "settings": { 
+	// 	"terminal.integrated.shell.linux": "/bin/bash"
+	// },
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
