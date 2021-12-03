@@ -14,7 +14,9 @@ static const char* cpp_version = "C++20";
 static const char* cpp_version = "C++Unknown";
 #endif
 
+#include "include/fmt/format.h"
+
 int main()
 {
-    std::cout << cpp_version << std::endl;
+    std::cout << fmt::format("{}", cpp_version) << std::endl;
 }

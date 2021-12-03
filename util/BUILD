@@ -7,4 +7,8 @@ cc_binary(
     name = "cppversion",
     srcs = ["cppversion.cpp"],
     copts = global_copts(),
+    deps = [
+        "@fmt//:main",
+        "@ncurses//:main",
+    ],
 )
