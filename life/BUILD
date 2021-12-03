@@ -4,4 +4,5 @@ cc_binary(
     name = "binary",
     srcs = ["life.c"],
     deps = ["@ncurses//:main"],
+    copts = ["-O3"],
 )

@@ -17,7 +17,7 @@
 
 int NUM_ROWS=15;
 int NUM_COLS=15;
-int MAX_GENERATIONS=1000;
+int MAX_GENERATIONS=10000;
 int REFRESH_DELAY_MS=50;
 char FILENAME[4096];
 
@@ -225,7 +225,7 @@ void print_board(char** board) {
                 addwstr(OUT_ALIVE);
             else
                 addwstr(OUT_DEAD);
-            addstr(" ");
+            addwstr(L" ");
         }
         printw("\n");
     }
