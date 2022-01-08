@@ -15,6 +15,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         vim \
         software-properties-common \
         graphviz xdot \
+        ninja-build \
     &&  add-apt-repository \
         "deb [arch=amd64] https://download.docker.com/linux/debian \
         $(lsb_release -cs) \
@@ -37,10 +38,10 @@ RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/
 RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
     && unzip -d caf c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
     && cd caf/actor-framework-c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a/ \
-    && ./configure \
+    && ./configure --generator=Ninja \
     && cd build \
-    && make \
-    && make install \
+    && cmake -G "Ninja" .. \
+    && ninja install \
     && cd ../../.. \
     && rm -rf caf
 
