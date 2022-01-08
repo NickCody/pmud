@@ -8,7 +8,7 @@ cc_binary(
     srcs = ["actor.cpp"],
     copts = global_copts(),
     deps = [
-        "@org_actor_framework_caf",
+        "@caf//:main",
         "@fmt//:main",
         "@ncurses//:main",
     ],

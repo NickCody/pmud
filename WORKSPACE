@@ -21,23 +21,9 @@ new_git_repository(
     build_file = "//:fmt.BUILD",
 )
 
-# new_git_repository(
-#     name = "org_actor_framework_caf",
-#     remote = "https://github.com/actor-framework/actor-framework",
-#     commit = "c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a", 
-#     shallow_since = "1626427996 +0200",
-#     build_file = "//:caf.BUILD",
-# )
+new_local_repository(
+    name = "caf",
+    path = "/usr/local", 
+    build_file = "caf.BUILD",
 
-http_archive(
-    name = "org_actor_framework_caf",
-    build_file = "//:caf.BUILD",
-    url = "https://github.com/actor-framework/actor-framework/archive/c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip",
-)
-
-git_repository(
-    name = "boringssl",
-    remote = "https://boringssl.googlesource.com/boringssl",
-    commit = "5416e4f16bffdc24e71e84d6e3977eed73c6f6b3",
-    shallow_since = "1641415239 +0000"
 )

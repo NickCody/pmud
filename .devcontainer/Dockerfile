@@ -11,6 +11,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         ca-certificates \
         curl \
         gnupg2 \
+        libssl-dev \
         vim \
         software-properties-common \
         graphviz xdot \
@@ -33,6 +34,15 @@ RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/
     && chmod +x buildifier \
     && mv buildifier /usr/local/bin
 
+RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
+    && unzip -d caf c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
+    && cd caf/actor-framework-c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a/ \
+    && ./configure \
+    && cd build \
+    && make \
+    && make install \
+    && cd ../../.. \
+    && rm -rf caf
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
