@@ -4,20 +4,11 @@ load("@//:global_copts.bzl", "global_copts")
 package(features = ["-default_compile_flags"])
 
 cc_binary(
-    name = "cppversion",
-    srcs = ["cppversion.cpp"],
+    name = "actor",
+    srcs = ["actor.cpp"],
     copts = global_copts(),
     deps = [
-        "@fmt//:main",
-        "@ncurses//:main",
-    ],
-)
-
-cc_binary(
-    name = "scratch",
-    srcs = ["scratch.cpp"],
-    copts = global_copts(),
-    deps = [
+        "@caf//:main",
         "@fmt//:main",
         "@ncurses//:main",
     ],
