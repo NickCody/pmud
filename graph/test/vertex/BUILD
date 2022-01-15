@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_test")
-load("@//:global_copts.bzl", "global_copts")
+load("@//:global_copts.bzl", "global_cppopts")
 
 cc_test(
   name = "test",
@@ -8,5 +8,5 @@ cc_test(
     "//graph:headers",
     "@googletest//:gtest_main",
   ],
-  copts = global_copts(),
+  copts = global_cppopts(),
 )

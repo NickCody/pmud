@@ -18,7 +18,7 @@
 int NUM_ROWS=15;
 int NUM_COLS=15;
 int MAX_GENERATIONS=10000;
-int REFRESH_DELAY_MS=50;
+int REFRESH_DELAY_MS=125;
 char FILENAME[4096];
 
 struct results {
@@ -299,12 +299,12 @@ void read_file(char* filename, char** board) {
         if (buf[NUM_COLS] == '\n')
             buf[NUM_COLS] = '\0';
 
-        if (strlen(buf) > NUM_COLS) {
+        if (strlen(buf) > (size_t)NUM_COLS) {
             printf("%s has %d columns (max %d)\n", filename, (int)strlen(buf), NUM_COLS);
             exit(1);
         }
 
-        for (int j=0; j < NUM_COLS; j++)
+        for (int j=0; j < (int)NUM_COLS; j++)
             board[row][j] = buf[j];
 
         row++;
