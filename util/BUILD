@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@//:global_cpopts.bzl", "global_cppopts")
+load("@//:global_copts.bzl", "global_cppopts")
 
 package(features = ["-default_compile_flags"])
 
