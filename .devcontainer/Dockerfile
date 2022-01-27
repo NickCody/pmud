@@ -1,9 +1,9 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.134.0/containers/cpp/.devcontainer/base.Dockerfile
 ARG VARIANT="bullseye"
+
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-
 
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
@@ -56,7 +56,7 @@ RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-RUN groupadd docker \
+RUN groupadd  docker \
     && usermod -aG docker vscode
 
 USER vscode
