@@ -341,4 +341,4 @@ bazel-vscode-cpp-container
 bazel-game-cpp
 bazel-cpp-game
 .cache/
-
+compile_commands.json

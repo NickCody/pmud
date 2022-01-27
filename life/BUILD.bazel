@@ -2,8 +2,8 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@//:global_copts.bzl", "global_copts")
 
 cc_binary(
-    name = "binary",
+    name = "main",
     srcs = ["life.c"],
-    deps = ["@ncurses//:main"],
     copts = global_copts(),
+    deps = ["@ncurses//:main"],
 )
