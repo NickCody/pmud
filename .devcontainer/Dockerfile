@@ -56,7 +56,7 @@ RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-RUN groupadd  docker \
+RUN groupadd docker \
     && usermod -aG docker vscode
 
 USER vscode
