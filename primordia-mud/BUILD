@@ -12,6 +12,7 @@ cc_binary(
         "-lstdc++fs",
     ],
     deps = [
+        "//graph:library",
         "@caf//:main",
         "@fmt//:main",
     ],
