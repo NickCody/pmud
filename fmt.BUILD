@@ -27,6 +27,6 @@ cc_library(
         "include",
         "src",
     ],
-    strip_include_prefix = "include/fmt/",
+    strip_include_prefix = "include",
     visibility = ["//visibility:public"],
 )

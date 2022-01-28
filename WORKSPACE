@@ -8,19 +8,20 @@ git_repository(
 
 new_local_repository(
     name = "ncurses",
-    path = "/usr/", # Use this for Ubuntu
     build_file = "ncurses.BUILD",
+    path = "/usr/",
 )
 
 new_git_repository(
     name = "fmt",
-    remote = "https://github.com/fmtlib/fmt",
-    branch = "master",
     build_file = "//:fmt.BUILD",
+    commit = "6884aab49b1b7fc6dcba1e27999f1aced0b888be",
+    remote = "https://github.com/fmtlib/fmt",
+    shallow_since = "1641501513 -0800",
 )
 
 new_local_repository(
     name = "caf",
-    path = "/usr/local", 
     build_file = "caf.BUILD",
+    path = "/usr/local",
 )

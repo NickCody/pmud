@@ -4,8 +4,8 @@ load("@//:global_copts.bzl", "global_cppopts")
 package(features = ["-default_compile_flags"])
 
 cc_binary(
-    name = "actor",
-    srcs = ["actor.cpp"],
+    name = "main",
+    srcs = ["main.cpp"],
     copts = global_cppopts(),
     linkopts = [
         "-pthread",
@@ -13,5 +13,6 @@ cc_binary(
     ],
     deps = [
         "@caf//:main",
+        "@fmt//:main",
     ],
 )
