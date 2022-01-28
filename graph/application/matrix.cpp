@@ -8,31 +8,32 @@
 
 using namespace cody::graph;
 
-int main(int argc, char** argv)
-{
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    srand(time(0));
+int main(int argc, char** argv) {
+  std::setlocale(LC_ALL, "en_US.UTF-8");
+  srand(time(0));
 
-    int V=5;
-    int R=V*10;
+  int V = 5;
+  int R = V * 10;
 
-    if (argc == 2) {
-        V = atoi(argv[1]);
-        R = V*10;
-    } else if (argc == 3) {
-        V = atoi(argv[1]);
-        R = atoi(argv[2]);
-    }
+  if (argc == 2) {
+    V = atoi(argv[1]);
+    R = V * 10;
+  } else if (argc == 3) {
+    V = atoi(argv[1]);
+    R = atoi(argv[2]);
+  }
 
-    Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
-    addEdgesRandom(graph, R);
-    
-    cout << "Adjaceny List =>" << endl << endl;;
-    printStructure(graph);
-    cout << endl;
-    
-    cout << "Adjacency Matrix =>" << endl << endl;;
-    printMatrix(graph);
+  Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
+  addEdgesRandom(graph, R);
 
-    return 0;
+  cout << "Adjaceny List =>" << endl << endl;
+  ;
+  printStructure(graph);
+  cout << endl;
+
+  cout << "Adjacency Matrix =>" << endl << endl;
+  ;
+  printMatrix(graph);
+
+  return 0;
 }

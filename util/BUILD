@@ -12,3 +12,13 @@ cc_binary(
         "@ncurses//:main",
     ],
 )
+
+cc_binary(
+    name = "scratch",
+    srcs = ["scratch.cpp"],
+    copts = global_cppopts(),
+    deps = [
+        "@fmt//:main",
+        "@ncurses//:main",
+    ],
+)

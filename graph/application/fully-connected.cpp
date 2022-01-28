@@ -7,18 +7,17 @@
 
 using namespace cody::graph;
 
-int main(int argc, char** argv)
-{
-    std::setlocale(LC_ALL, "en_US.UTF-8");
+int main(int argc, char** argv) {
+  std::setlocale(LC_ALL, "en_US.UTF-8");
 
-    int V=5;
+  int V = 5;
 
-    if (argc == 2)
-        V = atoi(argv[1]);
+  if (argc == 2)
+    V = atoi(argv[1]);
 
-    Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
-    addEdgesAllConnect(graph);
-    printDot(graph, DOT_STRICT);
+  Graph<> graph(V, GRAPHTYPE_UNDIRECTED);
+  addEdgesAllConnect(graph);
+  printDot(graph, DOT_STRICT);
 
-    return 0;
+  return 0;
 }

@@ -6,68 +6,67 @@
 #include "common.h"
 
 namespace cody {
-namespace graph {
-namespace BFS {
+  namespace graph {
+    namespace BFS {
 
-using namespace std;
+      using namespace std;
 
-enum SearchColor { WHITE, GRAY, BLACK };
+      enum SearchColor { WHITE, GRAY, BLACK };
 
-struct SearchData {
-  vector<int> pi;
-  vector<SearchColor> color;
-  vector<int> d;
-  weak_ptr<Graph<>> graph;
-};
+      struct SearchData {
+        vector<int> pi;
+        vector<SearchColor> color;
+        vector<int> d;
+        weak_ptr<Graph<>> graph;
+      };
 
-// Introduction to Algorithms, by Cormen, Leiserson, and Rivest
-//
-SearchData BreadthFirstSearch(weak_ptr<Graph<>> graph, int s) {
-  
-  if (auto g = graph.lock()) {
-    int V = g->numVertices();
+      // Introduction to Algorithms, by Cormen, Leiserson, and Rivest
+      //
+      SearchData BreadthFirstSearch(weak_ptr<Graph<>> graph, int s) {
 
-    vector<int> π(V);
-    vector<SearchColor> color(V);
-    vector<int> d(V);
+        if (auto g = graph.lock()) {
+          int V = g->numVertices();
 
-    queue<int> Q;
+          vector<int> π(V);
+          vector<SearchColor> color(V);
+          vector<int> d(V);
 
-    for(int u=0; u < V; u++ ) {
-      if (u == s)
-        continue;
+          queue<int> Q;
 
-      color[u] = WHITE;
-      d[u] = INT_MAX;
-      π[u] = INVALID_VERTEX;
-    }
+          for (int u = 0; u < V; u++) {
+            if (u == s)
+              continue;
 
-    color[s] = GRAY;
-    d[s] = 0;
-    π[s] = INVALID_VERTEX;
-    Q.push(s);
+            color[u] = WHITE;
+            d[u] = INT_MAX;
+            π[u] = INVALID_VERTEX;
+          }
 
-    while(!Q.empty()) {
-      int& u = Q.front();
-      for(int v : g->vertex(u)) {
-        if (color[v] == WHITE) {
-          color[v] = GRAY;
-          d[v] = d[u] + 1;
-          π[v] = u;
-          Q.push(v);
+          color[s] = GRAY;
+          d[s] = 0;
+          π[s] = INVALID_VERTEX;
+          Q.push(s);
+
+          while (!Q.empty()) {
+            int& u = Q.front();
+            for (int v : g->vertex(u)) {
+              if (color[v] == WHITE) {
+                color[v] = GRAY;
+                d[v] = d[u] + 1;
+                π[v] = u;
+                Q.push(v);
+              }
+            }
+            Q.pop();
+            color[u] = BLACK;
+          }
+
+          return SearchData{ π, color, d, graph };
+        } else {
+          throw runtime_error("graph is null");
         }
       }
-      Q.pop();
-      color[u] = BLACK;
-    }
 
-    return SearchData { π, color, d, graph };
-  } else {
-    throw runtime_error("graph is null");
-  }
-}
-
-
-} // namespace BFS
-} // namespace graph
-} // namesapce cody
+    } // namespace BFS
+  }   // namespace graph
+} // namespace cody

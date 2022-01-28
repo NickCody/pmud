@@ -10,34 +10,33 @@
 
 using namespace cody::graph;
 
-int main(int argc, char** argv)
-{
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    srand(11);
+int main(int argc, char** argv) {
+  std::setlocale(LC_ALL, "en_US.UTF-8");
+  srand(11);
 
-    int V=10;
-    int R=V*10;
+  int V = 10;
+  int R = V * 10;
 
-    if (argc == 2) {
-        V = atoi(argv[1]);
-        R = V*10;
-    } else if (argc == 3) {
-        V = atoi(argv[1]);
-        R = atoi(argv[2]);
-    }
+  if (argc == 2) {
+    V = atoi(argv[1]);
+    R = V * 10;
+  } else if (argc == 3) {
+    V = atoi(argv[1]);
+    R = atoi(argv[2]);
+  }
 
-    auto graph = make_shared<Graph<>>(V, GRAPHTYPE_DIRECTED);
-    
-    addEdgesRandom(*graph, R);
+  auto graph = make_shared<Graph<>>(V, GRAPHTYPE_DIRECTED);
 
-    DFS::SearchData data = DFS::DepthFirstSearch(graph, 4);
+  addEdgesRandom(*graph, R);
 
-    cerr << "Performed DFS on the graph:" << endl;
-    printStructure(*graph, cerr);
-    cerr << "With the following search/traversal data:" << endl;
-    cerr << data << endl;
+  DFS::SearchData data = DFS::DepthFirstSearch(graph, 4);
 
-    printDotDfsAnnotate(*graph, DOT_STRICT, data);
+  cerr << "Performed DFS on the graph:" << endl;
+  printStructure(*graph, cerr);
+  cerr << "With the following search/traversal data:" << endl;
+  cerr << data << endl;
 
-    return 0;
+  printDotDfsAnnotate(*graph, DOT_STRICT, data);
+
+  return 0;
 }
