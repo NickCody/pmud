@@ -18,3 +18,9 @@ new_git_repository(
     branch = "master",
     build_file = "//:fmt.BUILD",
 )
+
+new_local_repository(
+    name = "caf",
+    path = "/usr/local", 
+    build_file = "caf.BUILD",
+)
