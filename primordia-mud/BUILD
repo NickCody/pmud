@@ -4,8 +4,11 @@ load("@//:global_copts.bzl", "global_cppopts")
 package(features = ["-default_compile_flags"])
 
 cc_binary(
-    name = "main",
-    srcs = ["main.cpp"],
+    name = "pmud",
+    srcs = [
+        "comm/comm_static.h",
+        "main.cpp",
+    ],
     copts = global_cppopts(),
     linkopts = [
         "-pthread",
@@ -15,5 +18,6 @@ cc_binary(
         "//graph:library",
         "@caf//:main",
         "@fmt//:main",
+        "@yaml-cpp//:main",
     ],
 )

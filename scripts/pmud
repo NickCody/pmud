@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+set -u
+set -o pipefail
+
+# build and run (to be invoked inside container)
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SCRIPT_DIR/..
+bazel build //primordia-mud:pmud
+bazel-bin/primordia-mud/pmud --config-file=".caf_pmud" "$@"

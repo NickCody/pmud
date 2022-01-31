@@ -25,3 +25,9 @@ new_local_repository(
     build_file = "caf.BUILD",
     path = "/usr/local",
 )
+
+new_local_repository(
+    name = "yaml-cpp",
+    build_file = "yaml-cpp.BUILD",
+    path = "/usr/local",
+)

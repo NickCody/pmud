@@ -32,6 +32,8 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     docker-ce-cli \
     bazel \
     tree \
+    moreutils \
+    telnet \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -52,6 +54,17 @@ RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26
     && ninja install \
     && cd ../../.. \
     && rm -rf caf
+
+RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
+    && tar xvfz yaml-cpp-0.7.0.tar.gz \
+    && cd yaml-cpp-yaml-cpp-0.7.0 \
+    && mkdir build \
+    && cd build \
+    && cmake -G "Ninja" .. \
+    && ninja install \
+    && cd ../.. \
+    && rm -rf yaml-cpp-yaml-cpp-0.7.0  \
+    && rm yaml-cpp-0.7.0.tar.gz
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
