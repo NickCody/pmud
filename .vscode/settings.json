@@ -99,5 +99,6 @@
   ],
   "editor.formatOnSave": true,
   "clang-format.executable": "/usr/lib/llvm-14/bin/clang-format",
-  "C_Cpp.default.intelliSenseMode": "linux-clang-x64"
+  "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
+  "terminal.integrated.scrollback": 100000
 }

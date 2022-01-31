@@ -5,10 +5,10 @@ package(features = ["-default_compile_flags"])
 
 cc_binary(
     name = "pmud",
-    srcs = [
-        "comm/comm_static.h",
-        "main.cpp",
-    ],
+    srcs = glob([
+        "**/*.cpp",
+        "**/*.h",
+    ]),
     copts = global_cppopts(),
     linkopts = [
         "-pthread",
