@@ -8,5 +8,6 @@ set -o pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/..
-bazel build //primordia-mud:pmud
-bazel-bin/primordia-mud/pmud --config-file=".caf_pmud" "$@"
+bazel build //pmud:pmud
+cd pmud/conf
+../../bazel-bin/pmud/pmud --config-file=".caf_pmud" "$@"
