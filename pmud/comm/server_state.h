@@ -10,6 +10,7 @@ namespace primordia::mud {
     std::string name;
     std::string address;
     uint16_t port;
+    uint16_t max_queued_connections;
   };
 
   struct ServerState {
@@ -43,7 +44,8 @@ namespace primordia::mud {
 
   template <class Inspector> bool inspect(Inspector& f, MudConfig& x) {
 
-    return f.object(x).fields(f.field("name", x.name), f.field("address", x.address), f.field("port", x.port));
+    return f.object(x).fields(
+        f.field("name", x.name), f.field("address", x.address), f.field("port", x.port), f.field("max_queued_connections", x.max_queued_connections));
   }
 
   template <class Inspector> bool inspect(Inspector& f, ServerState& x) {

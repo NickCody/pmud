@@ -21,15 +21,17 @@ namespace primordia::mud {
     self->state.sockfd = 0;
 
     return {
-      [=](StartServer) -> bool {
+      [=](StartServer) -> int {
         aout(self) << format("{} server starting up...\n", self->state.config.name);
 
         self->state.sockfd = socket(AF_INET, SOCK_STREAM, 0);
         if (self->state.sockfd == -1) {
           aout(self) << format("Failed to create socket. errno: {}\n", errno);
-          return false;
+          return errno;
         }
 
+        // set socket to non-blocking
+        //
         int flags = fcntl(self->state.sockfd, F_GETFL);
         fcntl(self->state.sockfd, F_SETFL, flags | O_NONBLOCK);
 
@@ -38,7 +40,7 @@ namespace primordia::mud {
 
         if (bind(self->state.sockfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0) {
           aout(self) << format("Failed to bind to port {}. errno: {}\n", self->state.config.port, errno);
-          return false;
+          return errno;
         }
 
         char sockaddr_buffer[INET_ADDRSTRLEN];
@@ -46,15 +48,15 @@ namespace primordia::mud {
         aout(self) << format("Listening on {}:{}\n", sockaddr_buffer, self->state.config.port);
 
         // Start listening. Hold at most 10 connections in the queue
-        if (listen(self->state.sockfd, 64) < 0) {
+        if (listen(self->state.sockfd, self->state.config.max_queued_connections) < 0) {
           aout(self) << format("Failed to listen on socket. errno: {}\n", errno);
-          return false;
+          return errno;
         }
 
         aout(self) << format("Listening on sockfd: {}\n", self->state.sockfd);
         self->send(self, AcceptConnection_v);
 
-        return true;
+        return 0;
       },
       [=](AcceptConnection) {
         if (self->state.sockfd <= 0)

@@ -21,6 +21,9 @@
 //   - https://www.rfc-editor.org/rfc/rfc5198
 //   - https://www.rfc-editor.org/rfc/rfc856
 //
+// Coping with the TCP TIME_WAIT state
+//  - https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux
+//
 
 using namespace primordia::mud;
 using namespace std;
@@ -39,6 +42,7 @@ MudConfig parse_yaml(const string& filename) {
     config["server"]["name"].as<string>(),
     config["server"]["address"].as<string>(),
     config["server"]["port"].as<uint16_t>(),
+    config["server"]["max_queued_connections"].as<uint16_t>(),
   };
 }
 
@@ -58,10 +62,10 @@ void signal_handler(int signal) {
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
-bool start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
-  bool server_success = false;
+int start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
+  int server_success = 0;
   self->request(server, timeout, StartServer_v)
-      .receive([&](bool status) { server_success = status; }, [&](const error& err) { aout(self) << format("Error: {}\n", to_string(err)); });
+      .receive([&](int status) { server_success = status; }, [&](const error& err) { aout(self) << format("Error: {}\n", to_string(err)); });
 
   return server_success;
 }
@@ -97,9 +101,11 @@ void caf_main(actor_system& sys) {
     scoped_actor self{ sys };
     auto server = sys.spawn(Server, config);
 
-    bool server_success = start_server(self, server, chrono::seconds(10));
-
-    while (server_success && g_signal_status != SIGINT) {
+    int server_status = start_server(self, server, chrono::seconds(10));
+    if (server_status != 0) {
+      exit(server_status);
+    }
+    while (g_signal_status != SIGINT) {
       this_thread::sleep_for(chrono::milliseconds(500));
     }
 

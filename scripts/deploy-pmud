@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+set -u
+set -o pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $SCRIPT_DIR/..
+
+FILENAME="dist.tar.gz"
+bazel build //pmud:dist
+scp "bazel-bin/pmud/${FILENAME}" nic@singularity:
+ssh nic@singularity "chmod 666 ${FILENAME}"
+ssh nic@singularity "tar xvfz ~/${FILENAME}"
+ssh nic@singularity "rm ${FILENAME}"
+ssh nic@singularity "cd pmud; nohup ./run.sh >> ../pmud.log 2>&1 &"
