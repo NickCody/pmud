@@ -48,6 +48,8 @@ namespace primordia::mud {
           if (bytes_read == 0) {
             if (self->state.break_count == 0) {
               aout(self) << "detected break\n";
+              // todo: only do on virgin connection
+              // comm.emit_line("Detected quit, type again to quit!");
               self->state.break_count++;
               self->send(self, WaitForInput_v);
             } else {
@@ -60,18 +62,28 @@ namespace primordia::mud {
               self->quit();
             }
           } else {
+            self->state.break_count = 0;
+
             if (user_read.find("\n") == string::npos) {
               self->state.current_input += user_read;
+              aout(self) << format("partial [{}]\n", self->state.current_input);
               self->send(self, WaitForInput_v);
             } else {
-              string temp = self->state.current_input + user_read;
-              temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
-              string response = format("You said {}", temp);
-
-              comm.emit_line(response);
-
+              string final_user_read = self->state.current_input + user_read;
+              final_user_read.erase(std::remove(final_user_read.begin(), final_user_read.end(), '\n'), final_user_read.end());
+              final_user_read.erase(std::remove(final_user_read.begin(), final_user_read.end(), (char)0x0D), final_user_read.end());
               self->state.current_input.clear();
-              self->send(self, PromptUser_v);
+
+              aout(self) << format("final [{}]\n", final_user_read);
+
+              if (final_user_read == "quit" || final_user_read == "exit") {
+                comm.emit_line("Goodbye!");
+                self->send(self, CloseConnection_v);
+              } else {
+                string response = format("You said {}", final_user_read);
+                comm.emit_line(response);
+                self->send(self, PromptUser_v);
+              }
             }
           }
         } else {
