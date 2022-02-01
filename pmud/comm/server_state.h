@@ -22,6 +22,8 @@ namespace primordia::mud {
   struct ConnectionState {
     int connection;
     std::string registery_id;
+    int break_count;
+    std::string current_input;
   };
 } // namespace primordia::mud
 
@@ -55,6 +57,9 @@ namespace primordia::mud {
 
   template <class Inspector> bool inspect(Inspector& f, ConnectionState& x) {
 
-    return f.object(x).fields(f.field("connection", x.connection), f.field("registery_id", x.registery_id));
+    return f.object(x).fields(f.field("connection", x.connection),
+                              f.field("registery_id", x.registery_id),
+                              f.field("break_count", x.break_count),
+                              f.field("current_input", x.current_input));
   }
 } // namespace primordia::mud

@@ -11,6 +11,8 @@
 
 namespace primordia::mud {
 
+  using namespace fmt;
+
   class CommStatic {
 
   public:
@@ -40,7 +42,7 @@ namespace primordia::mud {
     }
 
     bool emit_line(const std::string& emission = "") {
-      return emit(emission) && emit(NEWLINE);
+      return emit(emission) && emit(CR) && emit(NEWLINE);
     }
 
     bool emit(const std::vector<std::string>& emission) {
@@ -69,14 +71,13 @@ namespace primordia::mud {
         return std::string();
       }
 
-      std::string user_read((char*)buffer);
-      user_read.erase(std::remove(user_read.begin(), user_read.end(), '\n'), user_read.end());
-      return user_read;
+      return std::string((char*)buffer);
     }
 
   private:
     inline static const ssize_t MAX_READ = 4096;
     inline static const std::string NEWLINE = "\n";
+    inline static const std::string CR = format("{}", (char)0x0D);
     inline static const std::string PROMPT = "pmud> ";
 
     inline static const std::vector<std::string> BANNER = { R"(                           _ )",
