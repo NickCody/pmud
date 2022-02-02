@@ -12,6 +12,7 @@
 namespace primordia::mud {
 
   using namespace fmt;
+  using namespace std;
 
   class CommStatic {
 
@@ -19,11 +20,11 @@ namespace primordia::mud {
     CommStatic(int connection)
         : _connection(connection) {
       if (connection <= 0) {
-        throw std::runtime_error(fmt::format("Connection {} is invalid!", connection));
+        throw runtime_error(fmt::format("Connection {} is invalid!", connection));
       }
     }
 
-    bool emit(const std::string& emission) {
+    bool emit(const string& emission) {
 
       auto bytes_sent = send(_connection, emission.c_str(), emission.size(), 0);
 
@@ -41,11 +42,11 @@ namespace primordia::mud {
       return emit(BANNER);
     }
 
-    bool emit_line(const std::string& emission = "") {
+    bool emit_line(const string& emission = "") {
       return emit(emission) && emit(CR) && emit(NEWLINE);
     }
 
-    bool emit(const std::vector<std::string>& emission) {
+    bool emit(const vector<string>& emission) {
       for (auto& line : emission) {
         if (!emit_line(line))
           return false;
@@ -60,7 +61,7 @@ namespace primordia::mud {
       return recv(_connection, buffer, MAX_READ - 1, MSG_PEEK) > 0;
     }
 
-    std::string read_from_user(ssize_t& num_read) {
+    string read_from_user(ssize_t& num_read) {
       // Read from the connection
       uint8_t buffer[MAX_READ];
       memset(buffer, 0, MAX_READ);
@@ -68,26 +69,36 @@ namespace primordia::mud {
 
       if (buffer[0] == (uint8_t)0xff || (num_read == 1 && buffer[0] == 4)) {
         num_read = 0;
-        return std::string();
+        return string();
       }
 
-      return std::string((char*)buffer);
+      return string((char*)buffer);
+    }
+
+    string sanitize(const string& input) {
+      string final;
+      for (auto c : input) {
+        if (c >= 32 && c <= 95) {
+          final += c;
+        }
+      }
+      return final;
     }
 
   private:
     inline static const ssize_t MAX_READ = 4096;
-    inline static const std::string NEWLINE = "\n";
-    inline static const std::string CR = format("{}", (char)0x0D);
-    inline static const std::string PROMPT = "pmud> ";
+    inline static const string NEWLINE = "\n";
+    inline static const string CR = format("{}", (char)0x0D);
+    inline static const string PROMPT = "pmud> ";
 
-    inline static const std::vector<std::string> BANNER = { R"(                           _ )",
-                                                            R"(                          | |)",
-                                                            R"( _ __  _ __ ___  _   _  __| |)",
-                                                            R"(| '_ \| '_ ` _ \| | | |/ _` |)",
-                                                            R"(| |_) | | | | | | |_| | (_| |)",
-                                                            R"(| .__/|_| |_| |_|\__,_|\__,_|)",
-                                                            R"(| |)",
-                                                            R"(|_|)" };
+    inline static const vector<string> BANNER = { R"(                           _ )",
+                                                  R"(                          | |)",
+                                                  R"( _ __  _ __ ___  _   _  __| |)",
+                                                  R"(| '_ \| '_ ` _ \| | | |/ _` |)",
+                                                  R"(| |_) | | | | | | |_| | (_| |)",
+                                                  R"(| .__/|_| |_| |_|\__,_|\__,_|)",
+                                                  R"(| |)",
+                                                  R"(|_|)" };
 
   private:
     int _connection;
