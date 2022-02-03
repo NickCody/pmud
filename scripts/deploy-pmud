@@ -4,13 +4,15 @@ set -e
 set -u
 set -o pipefail
 
+TARGET="${1:-nic@singularity}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/..
 
 FILENAME="dist.tar.gz"
 bazel build //pmud:dist
-scp "bazel-bin/pmud/${FILENAME}" nic@singularity:
-ssh nic@singularity "chmod 666 ${FILENAME}"
-ssh nic@singularity "tar xvfz ~/${FILENAME}"
-ssh nic@singularity "rm ${FILENAME}"
-ssh nic@singularity "cd pmud; nohup ./run.sh >> ../pmud.log 2>&1 &"
+ssh ${TARGET} "rm -f ${FILENAME}"
+scp "bazel-bin/pmud/${FILENAME}" ${TARGET}:
+ssh ${TARGET} "chmod 666 ${FILENAME}"
+ssh ${TARGET} "tar xvfz ~/${FILENAME}"
+ssh ${TARGET} "rm ${FILENAME}"
+ssh ${TARGET} "cd pmud; nohup ./run.sh >> ../pmud.log 2>&1 &"

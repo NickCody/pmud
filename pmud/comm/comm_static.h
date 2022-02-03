@@ -56,29 +56,44 @@ namespace primordia::mud {
 
     bool has_data() {
       // Read from the connection
-      uint8_t buffer[MAX_READ];
-      memset(buffer, 0, MAX_READ);
-      return recv(_connection, buffer, MAX_READ - 1, MSG_PEEK) > 0;
+      uint8_t buffer[BUFFER_SIZE];
+      memset(buffer, 0, BUFFER_SIZE);
+      return recv(_connection, buffer, BUFFER_MAX_READ, MSG_PEEK) > 0;
     }
 
     string read_from_user(ssize_t& num_read) {
       // Read from the connection
-      uint8_t buffer[MAX_READ];
-      memset(buffer, 0, MAX_READ);
-      num_read = read(_connection, buffer, MAX_READ - 1);
+      uint8_t buffer[BUFFER_SIZE];
+      memset(buffer, 0, BUFFER_SIZE);
+      num_read = read(_connection, buffer, BUFFER_MAX_READ);
 
-      if (buffer[0] == (uint8_t)0xff || (num_read == 1 && buffer[0] == 4)) {
+      if (buffer[0] == 0xff || (num_read == 1 && buffer[0] == 4)) {
         num_read = 0;
         return string();
       }
 
-      return string((char*)buffer);
+      return lite_sanitize(buffer);
+      // return string((char*)buffer);
+    }
+
+    // preserves newline
+    //
+    string lite_sanitize(uint8_t* buffer) {
+      string cleaned;
+      for (ssize_t i = 0; buffer[i] != 0 && i < BUFFER_MAX_READ; i++) {
+        uint8_t c = buffer[i];
+        if (c >= 10 && c <= 127) {
+          cleaned += (char)c;
+        }
+      }
+      return cleaned;
     }
 
     string sanitize(const string& input) {
+
       string final;
       for (auto c : input) {
-        if (c >= 32 && c <= 95) {
+        if ((uint8_t)c >= 32 && (uint8_t)c <= 127) {
           final += c;
         }
       }
@@ -86,7 +101,9 @@ namespace primordia::mud {
     }
 
   private:
-    inline static const ssize_t MAX_READ = 4096;
+    inline static const ssize_t BUFFER_MAX_READ = 512;
+    inline static const ssize_t BUFFER_PADDING = 128;
+    inline static const ssize_t BUFFER_SIZE = BUFFER_MAX_READ + BUFFER_PADDING;
     inline static const string NEWLINE = "\n";
     inline static const string CR = format("{}", (char)0x0D);
     inline static const string PROMPT = "pmud> ";

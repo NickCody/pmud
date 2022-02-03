@@ -6,8 +6,10 @@ package(features = ["-default_compile_flags"])
 
 filegroup(
     name = "conf",
-    srcs = glob(["conf/*"]),
-    
+    srcs = [
+        "conf/.caf_pmud",
+        "conf/primordia-mud.yaml",
+    ],
 )
 
 filegroup(

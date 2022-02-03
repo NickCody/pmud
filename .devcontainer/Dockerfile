@@ -34,6 +34,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     tree \
     moreutils \
     telnet \
+    rlwrap \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -77,4 +78,5 @@ WORKDIR /home/vscode
 
 RUN cd /home/vscode \
     && echo "export PATH=$PATH:/usr/local/go/bin:/home/vscode/go/bin" >> /home/vscode/.bashrc \
+    && echo "if [ -f ~/.localrc ]; then source ~/.localrc; fi" >> /home/vscode/.bashrc \
     && /usr/local/go/bin/go get github.com/bazelbuild/buildtools/buildifier >> /home/vscode/results
