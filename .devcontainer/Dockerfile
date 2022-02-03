@@ -35,6 +35,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     moreutils \
     telnet \
     rlwrap \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
