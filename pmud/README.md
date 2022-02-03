@@ -32,3 +32,4 @@ bazel-bin/primordia-mud/pmud --config-file=.caf_pmud
 1. ncurses
     - Experiment with ncurses to see what's capable
     - Experiment with color
+    
