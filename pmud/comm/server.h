@@ -79,7 +79,7 @@ namespace primordia::mud {
           fcntl(c_id, F_SETFL, flags | O_NONBLOCK);
 
           aout(self) << format("Sending welcome to {}\n", c_id);
-          string welcome = format("Welcome to {}", self->state.config.name);
+          string welcome = format("Welcome to {}\nVersion 0.1", self->state.config.name);
           auto connection_actor = self->spawn(Connection, welcome, c_id);
           self->send(connection_actor, PromptUser_v);
         }
