@@ -36,6 +36,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     telnet \
     rlwrap \
     iputils-ping \
+    ssh-askpass \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
