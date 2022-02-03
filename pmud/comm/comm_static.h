@@ -55,14 +55,12 @@ namespace primordia::mud {
     }
 
     bool has_data() {
-      // Read from the connection
       uint8_t buffer[BUFFER_SIZE];
       memset(buffer, 0, BUFFER_SIZE);
       return recv(_connection, buffer, BUFFER_MAX_READ, MSG_PEEK) > 0;
     }
 
     string read_from_user(ssize_t& num_read) {
-      // Read from the connection
       uint8_t buffer[BUFFER_SIZE];
       memset(buffer, 0, BUFFER_SIZE);
       num_read = read(_connection, buffer, BUFFER_MAX_READ);
@@ -73,31 +71,30 @@ namespace primordia::mud {
       }
 
       return lite_sanitize(buffer);
-      // return string((char*)buffer);
     }
 
     // preserves newline
     //
     string lite_sanitize(uint8_t* buffer) {
-      string cleaned;
+      stringstream cleaned;
       for (ssize_t i = 0; buffer[i] != 0 && i < BUFFER_MAX_READ; i++) {
         uint8_t c = buffer[i];
         if (c >= 10 && c <= 127) {
-          cleaned += (char)c;
+          cleaned << (char)c;
         }
       }
-      return cleaned;
+      return cleaned.str();
     }
 
     string sanitize(const string& input) {
 
-      string final;
+      stringstream cleaned;
       for (auto c : input) {
         if ((uint8_t)c >= 32 && (uint8_t)c <= 127) {
-          final += c;
+          cleaned << c;
         }
       }
-      return final;
+      return cleaned.str();
     }
 
   private:
