@@ -78,7 +78,16 @@ RUN groupadd docker \
 USER vscode
 WORKDIR /home/vscode
 
+RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-371.0.0-linux-x86_64.tar.gz \
+    && tar xvfz google-cloud-sdk-371.0.0-linux-x86_64.tar.gz \
+    && cd google-cloud-sdk \
+    && ./install.sh -q --rc-path ~/.bashrc \
+    && cd ~ \
+    && rm google-cloud-sdk-371.0.0-linux-x86_64.tar.gz
+
 RUN cd /home/vscode \
-    && echo "export PATH=$PATH:/usr/local/go/bin:/home/vscode/go/bin" >> /home/vscode/.bashrc \
-    && echo "if [ -f ~/.localrc ]; then source ~/.localrc; fi" >> /home/vscode/.bashrc \
-    && /usr/local/go/bin/go get github.com/bazelbuild/buildtools/buildifier >> /home/vscode/results
+    && echo "export PATH=\$PATH:/usr/local/go/bin:/home/vscode/go/bin" >> /home/vscode/.bashrc \
+    && echo "if [ -f ~/.localrc ]; then source ~/.localrc; fi" >> /home/vscode/.bashrc
+
+RUN /usr/local/go/bin/go get github.com/bazelbuild/buildtools/buildifier >> /home/vscode/results
+
