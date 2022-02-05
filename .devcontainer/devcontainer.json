@@ -37,12 +37,13 @@
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=delegated",
-		"source=${localEnv:HOME}/.localrc,target=/home/vscode/.localrc,type=bind"
+		"source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "gcc -v",
 	// Comment out this line to run as root instead.
-	"remoteUser": "vscode"
+	"remoteUser": "vscode",
+	"postStartCommand": "git config --global user.email \"${localEnv:VSCODE_CONTAINER_GIT_EMAIL}\" && git config --global user.name \"${localEnv:VSCODE_CONTAINER_GIT_USER}\""
 }
