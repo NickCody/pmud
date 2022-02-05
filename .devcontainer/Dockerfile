@@ -89,14 +89,5 @@ RUN cd /home/vscode \
     && echo "export PATH=\$PATH:/usr/local/go/bin:/home/vscode/go/bin" >> /home/vscode/.bashrc \
     && echo "if [ -f ~/.localrc ]; then source ~/.localrc; fi" >> /home/vscode/.bashrc
 
-RUN echo "function fssh() {" > /home/vscode/.localrc \
-    && echo "killall ssh-agent" >> /home/vscode/.localrc \
-    && echo "ssh-agent > ~/.ssh-agent" >> /home/vscode/.localrc \
-    && echo "source ~/.ssh-agent" >> /home/vscode/.localrc \
-    && echo "ssh-add ~/.ssh/id_rsa_gcloud" >> /home/vscode/.localrc \
-    && echo "ssh-add ~/.ssh/google_compute_engine" >> /home/vscode/.localrc \
-    && echo "}" >> /home/vscode/.localrc \
-    && echo "export -f fssh" >> /home/vscode/.localrc
-
 RUN /usr/local/go/bin/go get github.com/bazelbuild/buildtools/buildifier >> /home/vscode/results
 

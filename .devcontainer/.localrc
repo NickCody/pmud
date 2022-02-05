@@ -1,0 +1,14 @@
+function fssh() {
+    killall ssh-agent
+    ssh-agent > ~/.ssh-agent
+    source ~/.ssh-agent
+    ssh-add ~/.ssh/id_rsa
+    ssh-add ~/.ssh/google_compute_engine
+}
+
+export -f fssh
+
+export VSCODE_CONTAINER_GIT_USER="nick.codignotto@gmail.com"
+export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
+
+export ACTIVE_SHELL_CONFIG=""
