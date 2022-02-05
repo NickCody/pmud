@@ -28,7 +28,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     vim \
     graphviz xdot \
     ninja-build \
-    clang-format-14 \
+    clang-format \
     docker-ce-cli \
     bazel \
     tree \
