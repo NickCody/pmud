@@ -16,7 +16,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
     && apt-get update \
     && apt install -y software-properties-common \
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
-    && sudo add-apt-repository "deb [arch=amd64] https://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe" \
+    #&& sudo add-apt-repository "deb [arch=amd64] https://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe" \
     && apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
@@ -68,6 +68,16 @@ RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7
     && cd ../.. \
     && rm -rf yaml-cpp-yaml-cpp-0.7.0  \
     && rm yaml-cpp-0.7.0.tar.gz
+
+
+RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
+    && unzip master.zip \
+    && cd hiredis-master \
+    && make \
+    && make install \
+    && cd .. \
+    && rm master.zip \
+    && rm -rf hiredis-master
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

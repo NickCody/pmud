@@ -1,5 +1,6 @@
 #include <csignal>
 #include <cstdlib>
+#include <stdlib.h> 
 #include <unistd.h>
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
@@ -11,6 +12,7 @@
 #include "comm/connection.h"
 #include "comm/server.h"
 #include "comm/util.h"
+#include "storage/storage.h"
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 // Some references:
@@ -96,6 +98,25 @@ void caf_main(actor_system& sys) {
 
   YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
   MudConfig config = parse_yaml(YAML_CONFIG);
+
+  char* e_redis_host = getenv("REDIS_HOST");
+  char* e_redis_port = getenv("REDIS_PORT");
+
+  if (!e_redis_host || !e_redis_port) {
+    fmt::print(stderr, "Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT\n");
+    exit(1);
+  }
+
+  const string& redis_host = e_redis_host;
+  uint16_t redis_port = (uint16_t)stoul(e_redis_port);
+  primordia::mud::storage::RedisStorage storage(redis_host,redis_port);
+  
+  if (!storage.init()) {
+    fmt::print(stderr, "Error, could not connect to REDIS_HOST {} on REDIS_PORT {}\n", redis_host, redis_port);
+    exit(1);
+  }
+
+  fmt::print("Successsfully connected to redis at {}:{}!\n", redis_host, redis_port);
 
   {
     scoped_actor self{ sys };

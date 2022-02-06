@@ -12,6 +12,12 @@ new_local_repository(
     path = "/usr/",
 )
 
+new_local_repository(
+    name = "hiredis",
+    build_file = "hiredis.BUILD",
+    path = "/usr/",
+)
+
 new_git_repository(
     name = "fmt",
     build_file = "//:fmt.BUILD",

@@ -9,10 +9,11 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/..
 
 FILENAME="dist.tar.gz"
+bazel clean
 bazel build //pmud:dist
 ssh ${TARGET} "rm -f ${FILENAME}"
 scp "bazel-bin/pmud/${FILENAME}" ${TARGET}:
 ssh ${TARGET} "chmod 666 ${FILENAME}"
 ssh ${TARGET} "tar xvfz ~/${FILENAME}"
-ssh ${TARGET} "rm ${FILENAME}"
+#ssh ${TARGET} "rm ${FILENAME}"
 ssh ${TARGET} "cd pmud; nohup ./run.sh >> ../pmud.log 2>&1 &"

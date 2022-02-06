@@ -2,7 +2,7 @@ function fssh() {
     killall ssh-agent
     ssh-agent > ~/.ssh-agent
     source ~/.ssh-agent
-    ssh-add ~/.ssh/id_rsa
+    ssh-add ~/.ssh/id_rsa_gcloud
     ssh-add ~/.ssh/google_compute_engine
 }
 

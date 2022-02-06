@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+set -u
+set -o pipefail
+
+USER=nick_codignotto
+HOST=${1:-pmud}
+gcloud compute ssh --zone "us-east4-a" --project "cody-1562760462924" ${USER}@${HOST}

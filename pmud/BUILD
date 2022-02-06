@@ -9,6 +9,7 @@ filegroup(
     srcs = [
         "conf/.caf_pmud",
         "conf/primordia-mud.yaml",
+        "conf/redis.conf",
     ],
 )
 
@@ -20,6 +21,11 @@ filegroup(
 filegroup(
     name = "caf_so",
     data = ["@caf//:main"],
+)
+
+filegroup(
+    name = "hiredis_so",
+    data = ["@hiredis//:main"],
 )
 
 cc_binary(
@@ -37,6 +43,7 @@ cc_binary(
         "//graph:library",
         "@caf//:main",
         "@fmt//:main",
+        "@hiredis//:main",
         "@yaml-cpp//:main",
     ],
 )
@@ -47,6 +54,7 @@ pkg_tar(
         "//pmud",
         "//pmud:caf_so",
         "//pmud:conf",
+        "//pmud:hiredis_so",
         "//pmud:scripts",
     ],
     extension = "tar.gz",
