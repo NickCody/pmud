@@ -34,3 +34,15 @@ bazel-bin/primordia-mud/pmud --config-file=.caf_pmud
     - Experiment with color
 1. minor
     - Allow yaml to be specified at CLI, not in `.caf_pmud` file
+
+## Tasks
+
+- [ ] Implement user data model into redis
+    - [ ] Bootstrap login data structure into redis
+    - [ ] Login interaction with user, user creation
+    - [ ] Object model: User, Connection
+
+Done:
+
+- [x] Implement redis client library
+- [x] Implement

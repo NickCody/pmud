@@ -13,7 +13,7 @@ namespace primordia::mud {
 
   using namespace fmt;
   using namespace std;
-
+  
   class CommStatic {
 
   public:

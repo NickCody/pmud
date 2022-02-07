@@ -2,10 +2,11 @@
 #include <string>
 #include "caf/all.hpp"
 
-using namespace caf;
 
 namespace primordia::mud {
 
+  using namespace caf;
+  
   struct MudConfig {
     std::string name;
     std::string address;

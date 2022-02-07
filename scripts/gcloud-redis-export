@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+set -u
+set -o pipefail
+
+gcloud redis instances export \
+            gs://cody-1562760462924.appspot.com/pmud/pmud-latest.rdb pmud-redis \
+            --region=us-east4

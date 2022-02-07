@@ -9,11 +9,26 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/..
 
 FILENAME="dist.tar.gz"
+
 bazel clean
 bazel build //pmud:dist
+
 ssh ${TARGET} "rm -f ${FILENAME}"
 scp "bazel-bin/pmud/${FILENAME}" ${TARGET}:
 ssh ${TARGET} "chmod 666 ${FILENAME}"
 ssh ${TARGET} "tar xvfz ~/${FILENAME}"
-#ssh ${TARGET} "rm ${FILENAME}"
-ssh ${TARGET} "cd pmud; nohup ./run.sh >> ../pmud.log 2>&1 &"
+ssh ${TARGET} "rm ${FILENAME}"
+
+if [[ $TARGET =~ gcloud ]]; then
+    REDIS_HOST="$(gcloud redis instances describe pmud-redis | grep host | cut -d: -f2 | tr -d ' ')"
+    REDIS_PORT="$(gcloud redis instances describe pmud-redis | grep port | cut -d: -f2 | tr -d ' ')"
+else
+    REDIS_HOST="$(echo $TARGET | cut -d@ -f2)"
+    REDIS_PORT="$(echo $TARGET | cut -d@ -f2)"
+fi
+
+echo "Using:"
+echo "REDIS_HOST=$REDIS_HOST"
+echo "REDIS_PORT=$REDIS_PORT"
+
+ssh ${TARGET} "cd pmud; nohup ./run.sh $REDIS_HOST $REDIS_PORT >> ../pmud.log 2>&1 &"
