@@ -103,7 +103,7 @@ void caf_main(actor_system& sys) {
   char* e_redis_port = getenv("REDIS_PORT");
 
   if (!e_redis_host || !e_redis_port) {
-    cout << UTCNOW() << fmt::format("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT") << endl;
+    cout << LOG_INFO() << fmt::format("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT") << endl;
     exit(1);
   }
 
@@ -112,11 +112,11 @@ void caf_main(actor_system& sys) {
   primordia::mud::storage::RedisStorage storage(redis_host, redis_port);
 
   if (!storage.init()) {
-    cout << UTCNOW() << fmt::format("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port) << endl;
+    cout << LOG_INFO() << fmt::format("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port) << endl;
     exit(1);
   }
 
-  cout << UTCNOW() << fmt::format("Successsfully connected to redis at {}:{}!", redis_host, redis_port) << endl;
+  cout << LOG_INFO() << fmt::format("Successsfully connected to redis at {}:{}!", redis_host, redis_port) << endl;
 
   {
     scoped_actor self{ sys };
@@ -124,7 +124,7 @@ void caf_main(actor_system& sys) {
 
     int server_status = start_server(self, server, chrono::seconds(10));
     if (server_status != 0) {
-      cout << UTCNOW() << fmt::format("Server failed to start!") << endl;
+      cout << LOG_INFO() << fmt::format("Server failed to start!") << endl;
       exit(server_status);
     }
     while (g_signal_status != SIGINT) {
@@ -136,7 +136,7 @@ void caf_main(actor_system& sys) {
     kill_server(self, server, chrono::seconds(10));
   }
 
-  cout << UTCNOW() << "Done" << endl;
+  cout << LOG_INFO() << "Done" << endl;
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=

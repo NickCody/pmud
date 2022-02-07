@@ -27,12 +27,12 @@ namespace primordia::mud {
       CommStatic comm(self->state.connection);
       bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
       if (!success) {
-        aout(self) << UTCNOW() << format("Failed to send welcome to connection {}\n", self->state.connection);
+        aout(self) << LOG_INFO() << format("Failed to send welcome to connection {}\n", self->state.connection);
         // self->send(self, CloseConnection_v);
       }
     }
 
-    aout(self) << UTCNOW() << format("Was able to send banner!\n", self->state.connection);
+    aout(self) << LOG_INFO() << format("Was able to send banner!\n", self->state.connection);
 
     return {
       [=](PromptUser) {
@@ -54,7 +54,7 @@ namespace primordia::mud {
               self->send(self, WaitForInput_v);
             } else {
               comm.emit_line();
-              aout(self) << UTCNOW() << format("Connection {} quit\n", connection);
+              aout(self) << LOG_INFO() << format("Connection {} quit\n", connection);
               close(self->state.connection);
               self->state.connection = -1;
               self->system().registry().erase(self->state.registery_id);
@@ -90,7 +90,7 @@ namespace primordia::mud {
         }
       },
       [=](CloseConnection) {
-        aout(self) << UTCNOW() << format("Connection terminating: {}", self->state.connection);
+        aout(self) << LOG_INFO() << format("Connection terminating: {}", self->state.connection);
         if (connection != -1)
           close(connection);
         self->state.connection = -1;
