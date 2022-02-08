@@ -6,8 +6,12 @@ set -o pipefail
 
 # build and run (to be invoked inside container)
 
+export REDIS_HOST=192.168.86.25 # singularity
+export REDIS_PORT=6379
+export ENV=dev
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $SCRIPT_DIR/..
+cd $SCRIPT_DIR/../..
 bazel build //pmud:pmud
 cd pmud/conf
 ../../bazel-bin/pmud/pmud --config-file=".caf_pmud" "$@"

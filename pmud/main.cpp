@@ -13,6 +13,7 @@
 #include "comm/server.h"
 #include "comm/util.h"
 #include "storage/storage.h"
+#include "logger/logger.h"
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 // Some references:
@@ -67,7 +68,7 @@ void signal_handler(int signal) {
 int start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   int server_success = 0;
   self->request(server, timeout, StartServer_v)
-      .receive([&](int status) { server_success = status; }, [&](const error& err) { aout(self) << format("Error: {}\n", to_string(err)); });
+      .receive([&](int status) { server_success = status; }, [&](const error& err) { LOG_INFO("Error: {}", to_string(err)); });
 
   return server_success;
 }
@@ -78,7 +79,7 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
   for (auto actor_in_registry : sys.registry().named_actors()) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
-      print("Forcing connection to close: {}\n", actor_in_registry.first);
+      LOG_INFO("Forcing connection to close: {}", actor_in_registry.first);
       self->send(actor_cast<actor>(actor_in_registry.second), CloseConnection_v);
       self->send_exit(actor_in_registry.second, exit_reason::user_shutdown);
     }
@@ -87,13 +88,16 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
 
 void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   self->request(server, timeout, GoodbyeServer_v)
-      .receive([&](bool /*status*/) {}, [&](const error& err) { aout(self) << format("Error: {}\n", to_string(err)); });
+      .receive([&](bool /*status*/) {}, [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
   self->send_exit(server, exit_reason::user_shutdown);
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
 void caf_main(actor_system& sys) {
+  scoped_actor self{ sys };
+  primordia::mud::logger::Logger::init(&self);
+
   signal(SIGINT, signal_handler);
 
   YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
@@ -101,9 +105,15 @@ void caf_main(actor_system& sys) {
 
   char* e_redis_host = getenv("REDIS_HOST");
   char* e_redis_port = getenv("REDIS_PORT");
+  char* e_env = getenv("ENV");
 
   if (!e_redis_host || !e_redis_port) {
-    cout << LOG_INFO() << fmt::format("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT") << endl;
+    LOG_INFO_1("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
+    exit(1);
+  }
+
+  if (!e_env) {
+    LOG_INFO_1("Error, ENV needs to be set!");
     exit(1);
   }
 
@@ -111,32 +121,30 @@ void caf_main(actor_system& sys) {
   uint16_t redis_port = (uint16_t)stoul(e_redis_port);
   primordia::mud::storage::RedisStorage storage(redis_host, redis_port);
 
-  if (!storage.init()) {
-    cout << LOG_INFO() << fmt::format("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port) << endl;
+  if (!storage.init(e_env)) {
+    LOG_INFO("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
     exit(1);
   }
 
-  cout << LOG_INFO() << fmt::format("Successsfully connected to redis at {}:{}!", redis_host, redis_port) << endl;
+  LOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
 
-  {
-    scoped_actor self{ sys };
-    auto server = sys.spawn(Server, config);
+  auto server = sys.spawn(Server, config);
 
-    int server_status = start_server(self, server, chrono::seconds(10));
-    if (server_status != 0) {
-      cout << LOG_INFO() << fmt::format("Server failed to start!") << endl;
-      exit(server_status);
-    }
-    while (g_signal_status != SIGINT) {
-      this_thread::sleep_for(chrono::milliseconds(500));
-    }
-
-    quit_connection_actors(self, sys);
-
-    kill_server(self, server, chrono::seconds(10));
+  int server_status = start_server(self, server, chrono::seconds(10));
+  if (server_status != 0) {
+    LOG_INFO_1("Server failed to start!");
+    exit(server_status);
   }
 
-  cout << LOG_INFO() << "Done" << endl;
+  while (g_signal_status != SIGINT) {
+    this_thread::sleep_for(chrono::milliseconds(500));
+  }
+
+  quit_connection_actors(self, sys);
+
+  kill_server(self, server, chrono::seconds(10));
+
+  LOG_INFO_1("Done");
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=

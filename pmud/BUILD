@@ -30,10 +30,7 @@ filegroup(
 
 cc_binary(
     name = "pmud",
-    srcs = glob([
-        "**/*.cpp",
-        "**/*.h",
-    ]),
+    srcs = ["main.cpp"],
     copts = global_cppopts(),
     linkopts = [
         "-pthread",
@@ -41,6 +38,9 @@ cc_binary(
     ],
     deps = [
         "//graph:library",
+        "//pmud/comm:library",
+        "//pmud/logger:library",
+        "//pmud/storage:library",
         "@caf//:main",
         "@fmt//:main",
         "@hiredis//:main",

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e
-set -u
-set -o pipefail
-
-rlwrap telnet 34.86.83.248 49201

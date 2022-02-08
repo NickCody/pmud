@@ -22,11 +22,11 @@ namespace primordia::mud {
 
     return {
       [=](StartServer) -> int {
-        aout(self) << LOG_INFO() << format("{} server starting up...\n", self->state.config.name);
+        LOG_INFO("{} server starting up...", self->state.config.name);
 
         self->state.sockfd = socket(AF_INET, SOCK_STREAM, 0);
         if (self->state.sockfd == -1) {
-          aout(self) << LOG_INFO() << format("Failed to create socket. errno: {}\n", errno);
+          LOG_INFO("Failed to create socket. errno: {}", errno);
           return errno;
         }
 
@@ -39,21 +39,21 @@ namespace primordia::mud {
         initialize_sockaddr(self->state.config.address.c_str(), self->state.config.port, sockaddr);
 
         if (bind(self->state.sockfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0) {
-          aout(self) << LOG_INFO() << format("Failed to bind to port {}. errno: {}\n", self->state.config.port, errno);
+          LOG_INFO("Failed to bind to port {}. errno: {}", self->state.config.port, errno);
           return errno;
         }
 
         char sockaddr_buffer[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &sockaddr.sin_addr, sockaddr_buffer, sizeof(sockaddr_buffer));
-        aout(self) << LOG_INFO() << format("Listening on {}:{}\n", sockaddr_buffer, self->state.config.port);
+        LOG_INFO("Listening on {}:{}", sockaddr_buffer, self->state.config.port);
 
         // Start listening. Hold at most 10 connections in the queue
         if (listen(self->state.sockfd, self->state.config.max_queued_connections) < 0) {
-          aout(self) << LOG_INFO() << format("Failed to listen on socket. errno: {}\n", errno);
+          LOG_INFO("Failed to listen on socket. errno: {}", errno);
           return errno;
         }
 
-        aout(self) << LOG_INFO() << format("Listening on sockfd: {}\n", self->state.sockfd);
+        LOG_INFO("Listening on sockfd: {}", self->state.sockfd);
         self->send(self, AcceptConnection_v);
 
         return 0;
@@ -71,14 +71,14 @@ namespace primordia::mud {
           if (errno == EWOULDBLOCK || errno == EAGAIN) {
             this_thread::sleep_for(chrono::milliseconds(20));
           } else {
-            aout(self) << LOG_INFO() << format("Failed to grab connection. errno: {}\n", errno);
+            LOG_INFO("Failed to grab connection. errno: {}", errno);
           }
         } else {
 
           int flags = fcntl(c_id, F_GETFL);
           fcntl(c_id, F_SETFL, flags | O_NONBLOCK);
 
-          aout(self) << LOG_INFO() << format("Sending welcome to {}\n", c_id);
+          LOG_INFO("Sending welcome to {}", c_id);
           string welcome = format("Welcome to {}\nVersion 0.1", self->state.config.name);
           auto connection_actor = self->spawn(Connection, welcome, c_id);
           self->send(connection_actor, PromptUser_v);
@@ -87,7 +87,7 @@ namespace primordia::mud {
         self->send(self, AcceptConnection_v);
       },
       [=](GoodbyeServer) -> bool {
-        aout(self) << LOG_INFO() << format("Server actor terminating...\n");
+        LOG_INFO_1("Server actor terminating...");
         close(self->state.sockfd);
         self->state.sockfd = 0;
         self->quit();

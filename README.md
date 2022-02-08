@@ -21,6 +21,7 @@ A collection of simple games and experiments written in C++, ncurses, graphviz a
 
 ### pmud
 
+See [README.md](pmud/README.md) in pmud folder.
 
 ### life
 
