@@ -5,9 +5,9 @@ set -u
 set -o pipefail
 
 TARGET="${1:-nic@singularity}"
-ENV="${2:dev}"
+ENV="${2:-dev}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $SCRIPT_DIR/..
+cd $SCRIPT_DIR/../..
 
 FILENAME="dist.tar.gz"
 
