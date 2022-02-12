@@ -81,7 +81,7 @@ namespace primordia::mud {
           LOG_INFO("Sending welcome to {}", c_id);
           string welcome = format("Welcome to {}\nVersion 0.1", self->state.config.name);
           auto connection_actor = self->spawn(Connection, welcome, c_id);
-          self->send(connection_actor, PromptUser_v);
+          self->send(connection_actor, Welcome_v);
         }
 
         self->send(self, AcceptConnection_v);

@@ -28,7 +28,15 @@ namespace primordia::mud {
     std::string registery_id;
     int break_count;
     std::string current_input;
+    strong_actor_ptr command;
   };
+
+  struct CommandState {
+    int connection;
+    strong_actor_ptr connection_actor;
+    strong_actor_ptr active_controller;
+  };
+
 } // namespace primordia::mud
 
 CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, primordia::mud::type_id::first_net_type_id)
@@ -36,16 +44,19 @@ CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, primordia::mud::type_id::first_n
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::MudConfig))
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ServerState))
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ConnectionState))
+CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::CommandState))
 
 CAF_ADD_ATOM(primorda_mud_caf_types, AcceptConnection)
 CAF_ADD_ATOM(primorda_mud_caf_types, StartServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, WaitForInput)
-CAF_ADD_ATOM(primorda_mud_caf_types, PromptUser)
+CAF_ADD_ATOM(primorda_mud_caf_types, Prompt)
+CAF_ADD_ATOM(primorda_mud_caf_types, Emit)
+CAF_ADD_ATOM(primorda_mud_caf_types, Welcome)
 CAF_ADD_ATOM(primorda_mud_caf_types, LoginUser)
 CAF_ADD_ATOM(primorda_mud_caf_types, CloseConnection)
 
-CAF_ADD_ATOM(primorda_mud_caf_types, NotifyUserInput)
+CAF_ADD_ATOM(primorda_mud_caf_types, UserInput)
 
 CAF_END_TYPE_ID_BLOCK(primorda_mud_caf_types)
 
@@ -64,9 +75,12 @@ namespace primordia::mud {
 
   template <class Inspector> bool inspect(Inspector& f, ConnectionState& x) {
 
-    return f.object(x).fields(f.field("connection", x.connection),
-                              f.field("registery_id", x.registery_id),
-                              f.field("break_count", x.break_count),
-                              f.field("current_input", x.current_input));
+    return f.object(x).fields(f.field("connection", x.connection));
   }
+
+  template <class Inspector> bool inspect(Inspector& f, CommandState& x) {
+
+    return f.object(x).fields(f.field("connection", x.connection));
+  }
+
 } // namespace primordia::mud

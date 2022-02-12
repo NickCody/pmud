@@ -13,7 +13,7 @@ namespace primordia::mud {
 
   using namespace fmt;
   using namespace std;
-  
+
   class CommStatic {
 
   public:
@@ -25,17 +25,17 @@ namespace primordia::mud {
     }
 
     bool emit(const string& emission) {
+      if (emission.size() > 0) {
+        auto bytes_sent = send(_connection, emission.c_str(), emission.size(), 0);
 
-      auto bytes_sent = send(_connection, emission.c_str(), emission.size(), 0);
-
-      if (bytes_sent == -1)
-        return false;
-
+        if (bytes_sent == -1)
+          return false;
+      }
       return true;
     }
 
-    bool emit_prompt() {
-      return emit(PROMPT);
+    bool emit_prompt(const string& prompt = DEFAULT_PROMPT) {
+      return emit(fmt::format("{}> ", prompt));
     }
 
     bool emit_banner() {
@@ -97,13 +97,13 @@ namespace primordia::mud {
       return cleaned.str();
     }
 
-  private:
+  public:
     inline static const ssize_t BUFFER_MAX_READ = 512;
     inline static const ssize_t BUFFER_PADDING = 128;
     inline static const ssize_t BUFFER_SIZE = BUFFER_MAX_READ + BUFFER_PADDING;
     inline static const string NEWLINE = "\n";
     inline static const string CR = format("{}", (char)0x0D);
-    inline static const string PROMPT = "pmud> ";
+    inline static const string DEFAULT_PROMPT = "pmud";
 
     inline static const vector<string> BANNER = { R"(                           _ )",
                                                   R"(                          | |)",
