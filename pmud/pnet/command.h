@@ -19,19 +19,18 @@ namespace primordia::mud {
 
   using namespace player;
 
-  class Command : public event_based_actor {
+  class Command : public UserClient {
   public:
     Command(actor_config& cfg, strong_actor_ptr connection_actor, int connection)
-        : event_based_actor(cfg) {
+        : UserClient(cfg, connection_actor) {
       state.connection = connection;
-      state.connection_actor = connection_actor;
       state.active_controller = nullptr;
     }
 
     behavior make_behavior() override {
       return {
         [this](PerformWelcome) {
-          auto login_controller = spawn(LoginController, actor_cast<strong_actor_ptr>(this));
+          auto login_controller = spawn<LoginController>(actor_cast<strong_actor_ptr>(this));
           state.active_controller = actor_cast<strong_actor_ptr>(login_controller);
           send(login_controller, LoginControllerStart_v);
         },
@@ -51,14 +50,6 @@ namespace primordia::mud {
           prompt_user();
         },
       };
-    }
-
-    void prompt_user(const string& prompt = CommStatic::DEFAULT_PROMPT) {
-      send(actor_cast<actor>(state.connection_actor), ToUserPrompt_v, prompt);
-    }
-
-    void emit_user(const string& emission = "") {
-      send(actor_cast<actor>(state.connection_actor), ToUserEmit_v, emission);
     }
 
   private:

@@ -11,8 +11,6 @@ namespace primordia::mud::player {
   struct LoginState {
     string username;
     string password;
-    strong_actor_ptr command_actor;
-    strong_actor_ptr connection_actor;
   };
 } // namespace primordia::mud::player
 

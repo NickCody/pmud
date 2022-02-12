@@ -33,7 +33,6 @@ namespace primordia::mud {
 
   struct CommandState {
     int connection;
-    strong_actor_ptr connection_actor;
     strong_actor_ptr active_controller;
   };
 
@@ -55,7 +54,7 @@ CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, FromUserGetInput)
 CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeConnection)
 
-// Command / Connection
+// UserClient (Command + Connection)
 CAF_ADD_ATOM(primorda_mud_caf_types, ToUserPrompt)
 CAF_ADD_ATOM(primorda_mud_caf_types, ToUserEmit)
 

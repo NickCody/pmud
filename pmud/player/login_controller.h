@@ -5,6 +5,7 @@
 #include "caf/all.hpp"
 #include "player_type_id.h"
 #include "pnet/server_state.h"
+#include "pnet/user_client.h"
 
 namespace primordia::mud::player {
 
@@ -16,26 +17,34 @@ namespace primordia::mud::player {
   const string SUPPRESS_ECHO_SEQUENCE = { (char)0xFF, (char)0xFB, (char)0x01 }; // IAC WON'T ECHO
   const string ENABLE_ECHO_SEQUENCE = { (char)0xFF, (char)0xFC, (char)0x01 };   // IAC WILL ECHO
 
-  behavior LoginController(stateful_actor<LoginState>* self, strong_actor_ptr command_actor) {
-    self->state.command_actor = command_actor;
+  class LoginController : public UserClient {
+  public:
+    LoginController(actor_config& cfg, strong_actor_ptr command_actor)
+        : UserClient(cfg, command_actor) {
+    }
 
-    return {
-      [=](LoginControllerStart) { self->send(actor_cast<actor>(self->state.command_actor), ToUserPrompt_v, "enter username"); },
-      [=](OnUserInput, string input) {
-        if (self->state.username.empty()) {
-          LOG_INFO("Got username {}", input);
-          self->state.username = input;
-          self->send(actor_cast<actor>(self->state.command_actor), ToUserEmit_v, SUPPRESS_ECHO_SEQUENCE);
-          self->send(actor_cast<actor>(self->state.command_actor), ToUserPrompt_v, "enter password");
-        } else {
-          LOG_INFO_1("Got password!");
-          self->state.password = input;
-          self->send(actor_cast<actor>(self->state.command_actor), ToUserEmit_v, ENABLE_ECHO_SEQUENCE);
-          self->send(actor_cast<actor>(self->state.command_actor), ToUserEmit_v, fmt::format("Welcome {}!", self->state.username));
-          self->send(actor_cast<actor>(self->state.command_actor), EndController_v);
-        }
-      },
-    };
-  }
+    behavior make_behavior() override {
+      return {
+        [this](LoginControllerStart) { prompt_user("enter username"); },
+        [this](OnUserInput, string input) {
+          if (state.username.empty()) {
+            LOG_INFO("Got username {}", input);
+            state.username = input;
+            emit_user(SUPPRESS_ECHO_SEQUENCE);
+            prompt_user("enter password");
+          } else {
+            LOG_INFO_1("Got password!");
+            state.password = input;
+            emit_user(ENABLE_ECHO_SEQUENCE);
+            emit_user(fmt::format("Welcome {}!", state.username));
+            end_controller();
+          }
+        },
+      };
+    }
+
+  private:
+    LoginState state;
+  };
 
 } // namespace primordia::mud::player
