@@ -20,10 +20,8 @@ CAF_BEGIN_TYPE_ID_BLOCK(player_caf_types, primordia::mud::type_id::first_player_
 
 CAF_ADD_TYPE_ID(player_caf_types, (primordia::mud::player::LoginState))
 
-CAF_ADD_ATOM(player_caf_types, StartLogin)
-CAF_ADD_ATOM(player_caf_types, AskUsername)
-CAF_ADD_ATOM(player_caf_types, AskPassword)
-CAF_ADD_ATOM(player_caf_types, EndLogin)
+CAF_ADD_ATOM(player_caf_types, LoginControllerStart)
+CAF_ADD_ATOM(player_caf_types, EndController)
 
 CAF_END_TYPE_ID_BLOCK(player_caf_types)
 

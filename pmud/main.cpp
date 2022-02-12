@@ -82,7 +82,7 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
       LOG_INFO("Forcing connection to close: {}", actor_in_registry.first);
-      self->send(actor_cast<actor>(actor_in_registry.second), CloseConnection_v);
+      self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection_v);
       self->send_exit(actor_in_registry.second, exit_reason::user_shutdown);
     }
   }

@@ -24,7 +24,7 @@ namespace primordia::mud {
     self->state.connection = connection;
     self->state.break_count = 0;
     self->state.current_input = "";
-    self->state.command = actor_cast<strong_actor_ptr>(self->spawn(Command, actor_cast<strong_actor_ptr>(self), connection));
+    self->state.command = actor_cast<strong_actor_ptr>(self->spawn<Command>(actor_cast<strong_actor_ptr>(self), connection));
     self->state.registery_id = format("Connection({})", self->id());
     self->system().registry().put(self->state.registery_id, self);
 
@@ -33,20 +33,20 @@ namespace primordia::mud {
       bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
       if (!success) {
         LOG_INFO("Failed to send welcome to connection {}", self->state.connection);
-        // self->send(self, CloseConnection_v);
+        // self->send(self, GoodbyeConnection_v);
       }
     }
 
     LOG_INFO("Was able to send banner!", self->state.connection);
 
     return {
-      [=](Welcome) { self->send(actor_cast<actor>(self->state.command), Welcome_v); },
-      [=](Emit, string emission) { CommStatic(self->state.connection).emit_line(emission); },
-      [=](Prompt, string prompt) {
+      [=](PerformWelcome) { self->send(actor_cast<actor>(self->state.command), PerformWelcome_v); },
+      [=](ToUserEmit, string emission) { CommStatic(self->state.connection).emit_line(emission); },
+      [=](ToUserPrompt, string prompt) {
         CommStatic(self->state.connection).emit_prompt(prompt);
-        self->send(self, WaitForInput_v);
+        self->send(self, FromUserGetInput_v);
       },
-      [=](WaitForInput) {
+      [=](FromUserGetInput) {
         CommStatic comm(self->state.connection);
         if (comm.has_data()) {
           ssize_t bytes_read = 0;
@@ -56,38 +56,38 @@ namespace primordia::mud {
             if (self->state.break_count == 0) {
               // comm.emit_line("Detected quit, type again to quit!"); // todo: only do on virgin connection
               self->state.break_count++;
-              self->send(self, WaitForInput_v);
+              self->send(self, FromUserGetInput_v);
             } else {
               LOG_INFO("Connection {} quit", connection);
-              self->send(self, CloseConnection_v);
+              self->send(self, GoodbyeConnection_v);
             }
           } else {
             self->state.break_count = 0;
 
             if (user_read.find("\n") == string::npos) {
               self->state.current_input += user_read;
-              self->send(self, WaitForInput_v);
+              self->send(self, FromUserGetInput_v);
             } else {
               string final_user_read = comm.sanitize(self->state.current_input + user_read);
               self->state.current_input.clear();
 
               if (final_user_read == "quit" || final_user_read == "exit") {
-                self->send(self, CloseConnection_v);
+                self->send(self, GoodbyeConnection_v);
               } else {
                 // if (final_user_read.size() == 0)
                 //   comm.emit_line();
 
-                self->send(actor_cast<actor>(self->state.command), UserInput_v, final_user_read);
-                self->send(self, WaitForInput_v);
+                self->send(actor_cast<actor>(self->state.command), OnUserInput_v, final_user_read);
+                self->send(self, FromUserGetInput_v);
               }
             }
           }
         } else {
           this_thread::sleep_for(chrono::milliseconds(200));
-          self->send(self, WaitForInput_v);
+          self->send(self, FromUserGetInput_v);
         }
       },
-      [=](CloseConnection) {
+      [=](GoodbyeConnection) {
         LOG_INFO("Connection terminating: {}", self->state.connection);
         if (connection != -1) {
           CommStatic comm(self->state.connection);

@@ -46,17 +46,22 @@ CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ServerState))
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ConnectionState))
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::CommandState))
 
+// Server
 CAF_ADD_ATOM(primorda_mud_caf_types, AcceptConnection)
 CAF_ADD_ATOM(primorda_mud_caf_types, StartServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeServer)
-CAF_ADD_ATOM(primorda_mud_caf_types, WaitForInput)
-CAF_ADD_ATOM(primorda_mud_caf_types, Prompt)
-CAF_ADD_ATOM(primorda_mud_caf_types, Emit)
-CAF_ADD_ATOM(primorda_mud_caf_types, Welcome)
-CAF_ADD_ATOM(primorda_mud_caf_types, LoginUser)
-CAF_ADD_ATOM(primorda_mud_caf_types, CloseConnection)
 
-CAF_ADD_ATOM(primorda_mud_caf_types, UserInput)
+// Connection
+CAF_ADD_ATOM(primorda_mud_caf_types, FromUserGetInput)
+CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeConnection)
+
+// Command / Connection
+CAF_ADD_ATOM(primorda_mud_caf_types, ToUserPrompt)
+CAF_ADD_ATOM(primorda_mud_caf_types, ToUserEmit)
+
+// Command / Controllers
+CAF_ADD_ATOM(primorda_mud_caf_types, PerformWelcome)
+CAF_ADD_ATOM(primorda_mud_caf_types, OnUserInput)
 
 CAF_END_TYPE_ID_BLOCK(primorda_mud_caf_types)
 

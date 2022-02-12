@@ -19,34 +19,50 @@ namespace primordia::mud {
 
   using namespace player;
 
-  behavior Command(stateful_actor<CommandState>* self, strong_actor_ptr connection_actor, int connection) {
-    self->state.connection = connection;
-    self->state.connection_actor = connection_actor;
-    self->state.active_controller = nullptr;
+  class Command : public event_based_actor {
+  public:
+    Command(actor_config& cfg, strong_actor_ptr connection_actor, int connection)
+        : event_based_actor(cfg) {
+      state.connection = connection;
+      state.connection_actor = connection_actor;
+      state.active_controller = nullptr;
+    }
 
-    return {
-      [=](UserInput, string input) {
-        LOG_INFO("Received user input for connection {}: {}", self->state.connection, input);
-        if (self->state.active_controller == nullptr) {
-          CommStatic comm(self->state.connection);
-          self->send(actor_cast<actor>(self->state.connection_actor), Prompt_v, CommStatic::DEFAULT_PROMPT);
-          self->send(actor_cast<actor>(self->state.connection_actor), Prompt_v, CommStatic::DEFAULT_PROMPT);
-        } else {
-          self->send(actor_cast<actor>(self->state.active_controller), UserInput_v, input);
-        }
-      },
-      [=](Prompt, string prompt) { self->send(actor_cast<actor>(self->state.connection_actor), Prompt_v, prompt); },
-      [=](Emit, string emission) { self->send(actor_cast<actor>(self->state.connection_actor), Emit_v, emission); },
-      [=](Welcome) {
-        auto login_controller = self->spawn(LoginController, actor_cast<strong_actor_ptr>(self));
-        self->state.active_controller = actor_cast<strong_actor_ptr>(login_controller);
-        self->send(login_controller, StartLogin_v);
-      },
-      [=](EndLogin) {
-        self->state.active_controller = nullptr;
-        self->send(actor_cast<actor>(self->state.connection_actor), Prompt_v, CommStatic::DEFAULT_PROMPT);
-      },
-    };
-  }
+    behavior make_behavior() override {
+      return {
+        [this](PerformWelcome) {
+          auto login_controller = spawn(LoginController, actor_cast<strong_actor_ptr>(this));
+          state.active_controller = actor_cast<strong_actor_ptr>(login_controller);
+          send(login_controller, LoginControllerStart_v);
+        },
+        [this](OnUserInput, string input) {
+          LOG_INFO("Received user input for connection {}: {}", state.connection, input);
+          if (state.active_controller == nullptr) {
+            CommStatic comm(state.connection);
+            prompt_user();
+          } else {
+            send(actor_cast<actor>(state.active_controller), OnUserInput_v, input);
+          }
+        },
+        [this](ToUserPrompt, string prompt) { prompt_user(prompt); },
+        [this](ToUserEmit, string emission) { emit_user(emission); },
+        [this](EndController) {
+          state.active_controller = nullptr;
+          prompt_user();
+        },
+      };
+    }
+
+    void prompt_user(const string& prompt = CommStatic::DEFAULT_PROMPT) {
+      send(actor_cast<actor>(state.connection_actor), ToUserPrompt_v, prompt);
+    }
+
+    void emit_user(const string& emission = "") {
+      send(actor_cast<actor>(state.connection_actor), ToUserEmit_v, emission);
+    }
+
+  private:
+    CommandState state;
+  };
 
 } // namespace primordia::mud
