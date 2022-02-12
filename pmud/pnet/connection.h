@@ -4,17 +4,20 @@
 #include <arpa/inet.h>
 #include <fmt/format.h>
 
-#include "caf/all.hpp"
-
+#include "caf/stateful_actor.hpp"
 #include "server_state.h"
 #include "util.h"
 #include "logger/logger.h"
+
+// #include "player/login_coordinator.h"
 
 namespace primordia::mud {
 
   using namespace fmt;
   using namespace caf;
   using namespace std;
+
+  // using namespace player;
 
   behavior Connection(stateful_actor<ConnectionState>* self, const string welcome, int connection) {
     self->state.connection = connection;
@@ -54,12 +57,12 @@ namespace primordia::mud {
               self->state.break_count++;
               self->send(self, WaitForInput_v);
             } else {
-              comm.emit_line();
               LOG_INFO("Connection {} quit", connection);
-              close(self->state.connection);
-              self->state.connection = -1;
-              self->system().registry().erase(self->state.registery_id);
-              self->quit();
+              self->send(self, CloseConnection_v);
+              // comm.emit_line();
+              // close(self->state.connection);
+              // self->state.connection = -1;
+              // self->quit();
             }
           } else {
             self->state.break_count = 0;
@@ -72,7 +75,6 @@ namespace primordia::mud {
               self->state.current_input.clear();
 
               if (final_user_read == "quit" || final_user_read == "exit") {
-                comm.emit_line("Goodbye!");
                 self->send(self, CloseConnection_v);
               } else {
                 if (final_user_read.size() == 0) {
@@ -92,8 +94,12 @@ namespace primordia::mud {
       },
       [=](CloseConnection) {
         LOG_INFO("Connection terminating: {}", self->state.connection);
-        if (connection != -1)
+        if (connection != -1) {
+          CommStatic comm(self->state.connection);
+          comm.emit_line("Goodbye!");
           close(connection);
+        }
+        self->system().registry().erase(self->state.registery_id);
         self->state.connection = -1;
         self->quit();
       },

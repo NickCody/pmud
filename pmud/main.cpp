@@ -7,13 +7,15 @@
 #include <regex>
 #include "caf/all.hpp"
 
-#include "comm/comm_static.h"
-#include "comm/server_state.h"
-#include "comm/connection.h"
-#include "comm/server.h"
-#include "comm/util.h"
+#include "pnet/comm_static.h"
+#include "pnet/server_state.h"
+#include "pnet/connection.h"
+#include "pnet/server.h"
+#include "pnet/util.h"
 #include "storage/storage.h"
 #include "logger/logger.h"
+
+#include "player/player_type_id.h"
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 // Some references:
@@ -149,4 +151,4 @@ void caf_main(actor_system& sys) {
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
-CAF_MAIN(id_block::primorda_mud_caf_types)
+CAF_MAIN(id_block::primorda_mud_caf_types, id_block::player_caf_types)

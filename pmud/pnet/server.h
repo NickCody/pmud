@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <fmt/format.h>
 
-#include "caf/all.hpp"
+#include "caf/stateful_actor.hpp"
 
 #include "util.h"
 

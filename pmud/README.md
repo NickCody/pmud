@@ -21,6 +21,13 @@ bazel-bin/primordia-mud/pmud --config-file=.caf_pmud
 
 ## Feature Roadmap
 
+1. Create a GameEngine class
+    Take input from the existing asynchronous I/O layer and has abstractions around:
+        - New Connection
+        - Dropped Connection
+        - Login / Account Creation
+        - User Input
+        - Emit to User (both feedback from their input and async events of which user needs to be aware)
 1. Create abstraction around I/O
     - Move actors into classes (solve the initialization problem)
     - Create User class that persists user information
@@ -45,4 +52,4 @@ bazel-bin/primordia-mud/pmud --config-file=.caf_pmud
 Done:
 
 - [x] Implement redis client library
-- [x] Implement
+- [x] Implement logging facility with timestamp

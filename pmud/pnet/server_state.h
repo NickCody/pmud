@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
-#include "caf/all.hpp"
+#include <set>
+#include <optional>
 
+#include "caf/type_id.hpp"
+#include "common/global_type_id.h"
 
 namespace primordia::mud {
 
   using namespace caf;
-  
+
   struct MudConfig {
     std::string name;
     std::string address;
@@ -28,7 +31,7 @@ namespace primordia::mud {
   };
 } // namespace primordia::mud
 
-CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, first_custom_type_id)
+CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, primordia::mud::type_id::first_net_type_id)
 
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::MudConfig))
 CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ServerState))
@@ -39,7 +42,10 @@ CAF_ADD_ATOM(primorda_mud_caf_types, StartServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, GoodbyeServer)
 CAF_ADD_ATOM(primorda_mud_caf_types, WaitForInput)
 CAF_ADD_ATOM(primorda_mud_caf_types, PromptUser)
+CAF_ADD_ATOM(primorda_mud_caf_types, LoginUser)
 CAF_ADD_ATOM(primorda_mud_caf_types, CloseConnection)
+
+CAF_ADD_ATOM(primorda_mud_caf_types, NotifyUserInput)
 
 CAF_END_TYPE_ID_BLOCK(primorda_mud_caf_types)
 

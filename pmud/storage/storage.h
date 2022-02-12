@@ -7,7 +7,7 @@
 
 #include "hiredis/hiredis.h"
 
-#include "../comm/util.h"
+#include "pnet/util.h"
 #include "logger/logger.h"
 
 namespace primordia::mud::storage {
