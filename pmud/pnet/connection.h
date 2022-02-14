@@ -47,8 +47,6 @@ namespace primordia::mud {
           // send(self, GoodbyeConnection_v);
         }
       }
-
-      LOG_INFO("Was able to send banner!", state.connection);
     }
 
     behavior make_behavior() {
