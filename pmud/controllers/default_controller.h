@@ -18,10 +18,6 @@ namespace primordia::mud::player {
         : UserClient(cfg, command_actor, "DefaultController") {
     }
 
-    ~DefaultController() override {
-      LOG_INFO_1("~DefaultController()");
-    }
-
     behavior make_behavior() override {
       return {
         [this](OnUserInput, string input) {

@@ -126,7 +126,7 @@ void run(actor_system& sys) {
 
   LOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
 
-  auto server = sys.spawn(Server, config);
+  auto server = sys.spawn<Server>(config);
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {
