@@ -44,7 +44,6 @@ namespace primordia::mud {
           send(login_controller, LoginControllerStart_v);
         },
         [this](OnUserInput, string input) {
-          LOG_INFO("Received user input for connection {}: {}", state.connection, input);
           if (state.active_controller == nullptr) {
             CommStatic comm(state.connection);
             prompt_user();

@@ -26,6 +26,7 @@ namespace primordia::mud::player {
             prompt_user();
           } else {
             emit_user(fmt::format("Unknown command: {}", input));
+            prompt_user();
           }
         },
       };
@@ -33,11 +34,11 @@ namespace primordia::mud::player {
 
   private:
     void emit_help() {
-      emit_user("-=-=-=-=-=-=--=--==-==-=---=--=-==-==-=-=-=-===--=");
+      funky_banner();
       emit_user("Primordia MUD Help\n");
       emit_user("exit or quit             quits the MUD");
       emit_user("help                     this message");
-      emit_user("-=-=-=-=-=-=--=--==-==-=---=--=-==-==-=-=-=-===--=");
+      funky_banner();
       emit_user("\n");
     }
   };

@@ -96,7 +96,6 @@ namespace primordia::mud {
               }
             }
           } else {
-            this_thread::sleep_for(chrono::milliseconds(200));
             send(this, FromUserGetInput_v);
           }
         },

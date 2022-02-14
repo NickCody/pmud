@@ -31,6 +31,10 @@ namespace primordia::mud {
       send(actor_cast<actor>(m_user_client_actor), LoginControllerEnd_v);
     }
 
+    void funky_banner() {
+      emit_user("-=-=-=-=-=-=--=--==-==-=---=--=-==-==-=-=-=-===--=");
+    }
+
   private:
     strong_actor_ptr m_user_client_actor;
     string m_name;
