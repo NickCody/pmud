@@ -15,7 +15,11 @@ namespace primordia::mud::player {
   class DefaultController : public UserClient {
   public:
     DefaultController(actor_config& cfg, strong_actor_ptr command_actor)
-        : UserClient(cfg, command_actor) {
+        : UserClient(cfg, command_actor, "DefaultController") {
+    }
+
+    ~DefaultController() override {
+      LOG_INFO_1("~DefaultController()");
     }
 
     behavior make_behavior() override {

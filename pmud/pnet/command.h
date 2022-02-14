@@ -23,13 +23,15 @@ namespace primordia::mud {
   class Command : public UserClient {
   public:
     Command(actor_config& cfg, strong_actor_ptr connection_actor, int connection)
-        : UserClient(cfg, connection_actor) {
+        : UserClient(cfg, connection_actor, "Command") {
       state.connection = connection;
       state.active_controller = nullptr;
       state.default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
 
       attach_functor([this](const error& /*reason*/) {
+        send_exit(actor_cast<actor>(state.active_controller), exit_reason::user_shutdown);
         send_exit(actor_cast<actor>(state.default_controller), exit_reason::user_shutdown);
+        state.active_controller.reset();
         state.default_controller.reset();
       });
     }
@@ -54,6 +56,7 @@ namespace primordia::mud {
         [this](ToUserEmit, string emission) { emit_user(emission); },
         [this](LoginControllerEnd) {
           send_exit(actor_cast<actor>(state.active_controller), exit_reason::user_shutdown);
+          state.active_controller.reset();
           state.active_controller = actor_cast<strong_actor_ptr>(state.default_controller);
           prompt_user();
         },

@@ -20,7 +20,7 @@ namespace primordia::mud::player {
   class LoginController : public UserClient {
   public:
     LoginController(actor_config& cfg, strong_actor_ptr command_actor)
-        : UserClient(cfg, command_actor) {
+        : UserClient(cfg, command_actor, "LoginController") {
     }
 
     behavior make_behavior() override {

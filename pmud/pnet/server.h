@@ -80,7 +80,7 @@ namespace primordia::mud {
 
           LOG_INFO("Performing welcome for connection {}", c_id);
           string welcome = format("Welcome to {}\nVersion 0.1", self->state.config.name);
-          auto connection_actor = self->spawn(Connection, welcome, c_id);
+          auto connection_actor = self->spawn<Connection>(welcome, c_id);
           self->send(connection_actor, PerformWelcome_v);
         }
 
