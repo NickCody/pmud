@@ -28,6 +28,8 @@ namespace primordia::mud {
     self->state.registery_id = format("Connection({})", self->id());
     self->system().registry().put(self->state.registery_id, self);
 
+    self->attach_functor([=](const error& /*reason*/) { self->state.command.reset(); });
+
     {
       CommStatic comm(self->state.connection);
       bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
@@ -95,9 +97,9 @@ namespace primordia::mud {
           close(connection);
         }
         self->system().registry().erase(self->state.registery_id);
-        self->state.connection = -1;
-        self->state.command = nullptr;
-        self->quit();
+
+        self->send_exit(actor_cast<actor>(self->state.command), exit_reason::user_shutdown);
+        self->send_exit(actor_cast<actor>(self), exit_reason::user_shutdown);
       },
     };
   }

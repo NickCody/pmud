@@ -81,24 +81,20 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
   for (auto actor_in_registry : sys.registry().named_actors()) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
-      LOG_INFO("Forcing connection to close: {}", actor_in_registry.first);
+      LOG_INFO("App shutdown, forcing actor {} to close", actor_in_registry.first);
       self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection_v);
-      self->send_exit(actor_in_registry.second, exit_reason::user_shutdown);
     }
   }
 }
 
 void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   self->request(server, timeout, GoodbyeServer_v)
-      .receive([&](bool /*status*/) {}, [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
-  self->send_exit(server, exit_reason::user_shutdown);
+      .receive([&](bool status) { LOG_INFO("Server exit with status: {}", status); },
+               [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
 }
 
-// -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
-//
-void caf_main(actor_system& sys) {
+void run(actor_system& sys) {
   scoped_actor self{ sys };
-  primordia::mud::logger::Logger::init(&self);
 
   signal(SIGINT, signal_handler);
 
@@ -145,6 +141,16 @@ void caf_main(actor_system& sys) {
   quit_connection_actors(self, sys);
 
   kill_server(self, server, chrono::seconds(10));
+}
+
+// -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
+//
+void caf_main(actor_system& sys) {
+  primordia::mud::logger::Logger::init(sys);
+
+  run(sys);
+
+  sys.await_all_actors_done();
 
   LOG_INFO_1("Done");
 }

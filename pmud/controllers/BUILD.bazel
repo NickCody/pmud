@@ -5,9 +5,5 @@ cc_library(
     hdrs = glob(["*.h"]),
     strip_include_prefix = "//pmud",
     visibility = ["//visibility:public"],
-    deps = [
-        "//pmud/common:library",
-        "//pmud/controllers:library",
-        "//pmud/logger:library",
-    ],
+    deps = ["//pmud/common:library"],
 )

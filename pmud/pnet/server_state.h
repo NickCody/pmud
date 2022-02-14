@@ -34,6 +34,7 @@ namespace primordia::mud {
   struct CommandState {
     int connection;
     strong_actor_ptr active_controller;
+    strong_actor_ptr default_controller;
   };
 
 } // namespace primordia::mud

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "caf/all.hpp"
-#include "player_type_id.h"
+#include "player/player_type_id.h"
 #include "pnet/server_state.h"
 #include "pnet/user_client.h"
 

@@ -9,7 +9,8 @@
 #include "util.h"
 #include "logger/logger.h"
 
-#include "player/login_controller.h"
+#include "controllers/login_controller.h"
+#include "controllers/default_controller.h"
 
 namespace primordia::mud {
 
@@ -25,6 +26,12 @@ namespace primordia::mud {
         : UserClient(cfg, connection_actor) {
       state.connection = connection;
       state.active_controller = nullptr;
+      state.default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
+
+      attach_functor([this](const error& /*reason*/) {
+        send_exit(actor_cast<actor>(state.default_controller), exit_reason::user_shutdown);
+        state.default_controller.reset();
+      });
     }
 
     behavior make_behavior() override {
@@ -45,8 +52,9 @@ namespace primordia::mud {
         },
         [this](ToUserPrompt, string prompt) { prompt_user(prompt); },
         [this](ToUserEmit, string emission) { emit_user(emission); },
-        [this](EndController) {
-          state.active_controller = nullptr;
+        [this](LoginControllerEnd) {
+          send_exit(actor_cast<actor>(state.active_controller), exit_reason::user_shutdown);
+          state.active_controller = actor_cast<strong_actor_ptr>(state.default_controller);
           prompt_user();
         },
       };
@@ -54,6 +62,7 @@ namespace primordia::mud {
 
   private:
     CommandState state;
+    strong_actor_ptr default_controller = nullptr;
   };
 
 } // namespace primordia::mud

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <chrono>
 #include <iomanip>
+#include <memory>
 
 #define LOG_INFO(f, ...) primordia::mud::logger::Logger::log_info(fmt::format(f, __VA_ARGS__))
 #define LOG_DEBUG(f, ...) primordia::mud::logger::Logger::log_debug(fmt::format(f, __VA_ARGS__))
@@ -23,27 +24,34 @@ namespace primordia::mud::logger {
   using namespace std::chrono;
 
   class Logger {
-    inline static scoped_actor* _actor;
+    inline static strong_actor_ptr _actor;
+
+    static behavior logging_actor(event_based_actor* /*self*/) {
+      return {};
+    }
 
   public:
-    static void init(scoped_actor* actor) {
-      _actor = actor;
+    ~Logger() {
+    }
+
+    static void init(actor_system& sys) {
+      _actor = actor_cast<strong_actor_ptr>(sys.spawn(logging_actor));
     }
 
     static void log_info(const string& message) {
-      aout(*_actor) << utc_time() << " INFO " << message << endl;
+      aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " INFO " << message << endl;
     }
 
     static void log_error(const string& message) {
-      aout(*_actor) << utc_time() << " ERROR " << message << endl;
+      aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " ERROR " << message << endl;
     }
 
     static void log_warn(const string& message) {
-      aout(*_actor) << utc_time() << " WARN " << message << endl;
+      aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " WARN " << message << endl;
     }
 
     static void log_debug(const string& message) {
-      aout(*_actor) << utc_time() << " DEBUG " << message << endl;
+      aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " DEBUG " << message << endl;
     }
 
     static string utc_time() {

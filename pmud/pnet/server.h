@@ -90,7 +90,7 @@ namespace primordia::mud {
         LOG_INFO_1("Server actor terminating...");
         close(self->state.sockfd);
         self->state.sockfd = 0;
-        self->quit();
+        self->send_exit(actor_cast<actor>(self), exit_reason::user_shutdown);
         return true;
       },
     };
