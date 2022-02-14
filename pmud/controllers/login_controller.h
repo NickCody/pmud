@@ -28,16 +28,24 @@ namespace primordia::mud::player {
         [this](LoginControllerStart) { prompt_user("enter username"); },
         [this](OnUserInput, string input) {
           if (state.username.empty()) {
-            LOG_INFO("Got username {}", input);
             state.username = input;
             emit_user(SUPPRESS_ECHO_SEQUENCE);
             prompt_user("enter password");
-          } else {
-            LOG_INFO_1("Got password!");
+          } else if (state.password.empty()) {
             state.password = input;
-            emit_user(ENABLE_ECHO_SEQUENCE);
-            emit_user(fmt::format("Welcome {}!", state.username));
-            end_controller();
+            prompt_user("confirm password");
+          } else {
+            if (state.password == input) {
+              emit_user();
+              emit_user(fmt::format("Welcome to Primordia {}!", state.username));
+              emit_user();
+              end_controller();
+            } else {
+              emit_user();
+              emit_user(fmt::format("Passwords don't match, please try again.", state.username));
+              emit_user(SUPPRESS_ECHO_SEQUENCE);
+              prompt_user("enter password");
+            }
           }
         },
       };
