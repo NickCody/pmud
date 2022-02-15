@@ -1,0 +1,16 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@//:global_copts.bzl", "global_cppopts")
+
+cc_binary(
+    name = "RedisDeleter",
+    srcs = ["RedisDeleter.cpp"],
+    copts = global_cppopts(),
+    linkopts = [
+        "-pthread",
+        "-lstdc++fs",
+    ],
+    deps = [
+        "@fmt//:main",
+        "@hiredis//:main",
+    ],
+)

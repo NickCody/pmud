@@ -14,6 +14,7 @@ namespace primordia::mud::storage {
 
   using namespace std;
 
+  
   class Storage {
   public:
     virtual ~Storage(){};
@@ -31,6 +32,10 @@ namespace primordia::mud::storage {
     RedisStorage(const string& host, int port)
         : m_host(host),
           m_port(port) {
+    }
+
+    ~RedisStorage() {
+
     }
 
     bool init(const string& env) {
