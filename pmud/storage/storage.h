@@ -4,7 +4,8 @@
 #include <string>
 #include <netdb.h>
 #include <arpa/inet.h>
-
+#include <limits.h>
+#include <ctime>
 #include "hiredis/hiredis.h"
 
 #include "pnet/util.h"
@@ -14,18 +15,33 @@ namespace primordia::mud::storage {
 
   using namespace std;
 
-  
+  struct RedisReplyDeleter {
+    void operator()(void* reply) const {
+      freeReplyObject(reply);
+    }
+  };
+
+  struct RedisContextDeleter {
+    void operator()(redisContext* context) const {
+      redisFree(context);
+    }
+  };
+
+  using RedisContextUniquePtr = std::unique_ptr<redisContext, RedisContextDeleter>;
+  using RedisReplyUniquePtr = std::unique_ptr<void, RedisReplyDeleter>;
+
   class Storage {
   public:
     virtual ~Storage(){};
-    // virtual bool store(const string& key, const string& value);
-    // virtual bool store(const string& key, int value);
+    virtual bool value_store(const string& key, const string& value) = 0;
+    virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
+    virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
   };
 
   class RedisStorage : public Storage {
     const string& m_host;
     int m_port;
-    unique_ptr<redisContext> m_connection;
+    RedisContextUniquePtr m_context;
     string env;
 
   public:
@@ -35,7 +51,6 @@ namespace primordia::mud::storage {
     }
 
     ~RedisStorage() {
-
     }
 
     bool init(const string& env) {
@@ -48,20 +63,46 @@ namespace primordia::mud::storage {
       LOG_INFO("Redis host {} = ip {}", m_host, ip);
 
       this->env = env;
-      m_connection = unique_ptr<redisContext>(redisConnect(ip.c_str(), m_port));
-      if (m_connection == nullptr || m_connection->err) {
-        if (m_connection) {
-          LOG_INFO("Error: {}", m_connection->errstr);
+      m_context = RedisContextUniquePtr(redisConnect(ip.c_str(), m_port));
+      if (m_context == nullptr || m_context->err) {
+        if (m_context) {
+          LOG_INFO("Error: {}", m_context->errstr);
         } else {
           LOG_INFO_1("Can't allocate redis context");
         }
         return false;
       }
+
+      value_store("server_last_connected", fmt::format("{}", (long)std::time(0)));
       return true;
     }
 
-    // bool store(const string& key, const string& value) override {}
-    // bool store(const string& key, int value) override {}
+    RedisReplyUniquePtr command(const string& cmd) {
+      LOG_DEBUG("Sending [{}] to redis...", cmd);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), cmd.c_str()));
+      if (!reply) {
+        LOG_ERROR("Error running command [{}], code {}: {}", cmd, m_context->err, m_context->errstr);
+      }
+      return reply;
+    }
+
+    bool value_store(const string& key, const string& value) override {
+      return command(fmt::format("SET {} {}", key, value)) != nullptr;
+    }
+
+    bool map_store(const string& map_name, const string& key, const string& value) override {
+      return command(fmt::format("HSET {} {} {}", map_name, key, value)) != nullptr;
+    }
+
+    bool map_store(const string& map_name, const map<string, string> pairs) override {
+      ostringstream cmd;
+      for (auto pair : pairs) {
+        cmd << _replace_all(pair.first, " ", "_") << " \"" << pair.second << "\" "
+            << " ";
+      }
+
+      return command(fmt::format("HMSET {} {}", map_name, cmd.str())) != nullptr;
+    }
 
   private:
     int hostname_to_ip(const string& hostname, string& ip) {
@@ -75,7 +116,7 @@ namespace primordia::mud::storage {
 
       addr_list = (struct in_addr**)he->h_addr_list;
 
-      char buffer[100];
+      char buffer[PATH_MAX];
       for (i = 0; addr_list[i] != NULL; i++) {
         // Return the first one;
         strcpy(buffer, inet_ntoa(*addr_list[i]));
@@ -84,6 +125,14 @@ namespace primordia::mud::storage {
       }
 
       return -1;
+    }
+
+    string _replace_all(const string& text, const string& from, const string& to) {
+      string replaced = text;
+      for (auto at = replaced.find(from, 0); at != std::string::npos; at = replaced.find(from, at + to.length())) {
+        replaced.replace(at, from.length(), to);
+      }
+      return replaced;
     }
   };
 

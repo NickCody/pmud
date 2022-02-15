@@ -12,3 +12,4 @@ export VSCODE_CONTAINER_GIT_USER="nick.codignotto@gmail.com"
 export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
 
 export ACTIVE_SHELL_CONFIG=""
+alias tel='rlwrap telnet'
