@@ -9,6 +9,7 @@
 #include "util.h"
 #include "logger/logger.h"
 #include "command.h"
+#include "system/pmud_system.h"
 
 // #include "player/login_coordinator.h"
 
@@ -17,19 +18,21 @@ namespace primordia::mud {
   using namespace fmt;
   using namespace caf;
   using namespace std;
+  using namespace system;
 
   // using namespace player;
 
   class Connection : public event_based_actor {
   public:
-    Connection(actor_config& cfg, const string welcome, int connection)
+    Connection(actor_config& cfg, MudSystemPtr mud, const string welcome, int connection)
         : event_based_actor(cfg),
-          m_welcome(welcome) {
+          m_welcome(welcome),
+          m_mud(mud) {
 
       state.connection = connection;
       state.break_count = 0;
       state.current_input = "";
-      state.command = actor_cast<strong_actor_ptr>(spawn<Command>(actor_cast<strong_actor_ptr>(this), connection));
+      state.command = actor_cast<strong_actor_ptr>(spawn<Command>(mud, actor_cast<strong_actor_ptr>(this), connection));
       state.registery_id = format("Connection({})", id());
       system().registry().put(state.registery_id, this);
 
@@ -114,6 +117,7 @@ namespace primordia::mud {
   private:
     const string& m_welcome;
     ConnectionState state;
+    MudSystemPtr m_mud;
   };
 
 } // namespace primordia::mud

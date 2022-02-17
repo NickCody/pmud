@@ -9,6 +9,7 @@
 #include "caf/stateful_actor.hpp"
 
 #include "util.h"
+#include "system/pmud_system.h"
 
 namespace primordia::mud {
 
@@ -18,10 +19,11 @@ namespace primordia::mud {
 
   class Server : public event_based_actor {
   public:
-    Server(actor_config& cfg, const MudConfig& _config)
+    Server(actor_config& cfg, const MudConfig& _config, MudSystemPtr mud)
         : event_based_actor(cfg) {
       state.config = _config;
       state.sockfd = 0;
+      m_mud = mud;
     }
 
     behavior make_behavior() {
@@ -85,7 +87,7 @@ namespace primordia::mud {
 
             LOG_INFO("Performing welcome for connection {}", c_id);
             string welcome = format("Welcome to {}\nVersion 0.1", state.config.name);
-            auto connection_actor = spawn<Connection>(welcome, c_id);
+            auto connection_actor = spawn<Connection>(m_mud, welcome, c_id);
             send(connection_actor, PerformWelcome_v);
           }
 
@@ -103,6 +105,7 @@ namespace primordia::mud {
 
   private:
     ServerState state;
+    MudSystemPtr m_mud;
   };
 
 } // namespace primordia::mud

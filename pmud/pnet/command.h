@@ -12,6 +12,8 @@
 #include "controllers/login_controller.h"
 #include "controllers/default_controller.h"
 
+#include "system/pmud_system.h"
+
 namespace primordia::mud {
 
   using namespace fmt;
@@ -22,8 +24,9 @@ namespace primordia::mud {
 
   class Command : public UserClient {
   public:
-    Command(actor_config& cfg, strong_actor_ptr connection_actor, int connection)
-        : UserClient(cfg, connection_actor, "Command") {
+    Command(actor_config& cfg, MudSystemPtr mud, strong_actor_ptr connection_actor, int connection)
+        : UserClient(cfg, connection_actor, "Command"),
+          m_mud(mud) {
       state.connection = connection;
       state.active_controller = nullptr;
       state.default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
@@ -39,7 +42,7 @@ namespace primordia::mud {
     behavior make_behavior() override {
       return {
         [this](PerformWelcome) {
-          auto login_controller = spawn<LoginController>(actor_cast<strong_actor_ptr>(this));
+          auto login_controller = spawn<LoginController>(m_mud, actor_cast<strong_actor_ptr>(this));
           state.active_controller = actor_cast<strong_actor_ptr>(login_controller);
           send(login_controller, LoginControllerStart_v);
         },
@@ -65,6 +68,7 @@ namespace primordia::mud {
   private:
     CommandState state;
     strong_actor_ptr default_controller = nullptr;
+    MudSystemPtr m_mud;
   };
 
 } // namespace primordia::mud

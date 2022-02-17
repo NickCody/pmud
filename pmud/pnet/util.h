@@ -1,5 +1,5 @@
 #pragma once
-
+#include "caf/actor.hpp"
 #include <iostream>
 #include <sstream>
 #include <chrono>
@@ -11,6 +11,7 @@
 namespace primordia::mud {
 
   using namespace std;
+  using namespace caf;
 
   void initialize_sockaddr(const std::string& address, uint16_t port, sockaddr_in& sa) {
     sa.sin_family = AF_INET;

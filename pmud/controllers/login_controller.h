@@ -6,11 +6,13 @@
 #include "player/player_type_id.h"
 #include "pnet/server_state.h"
 #include "pnet/user_client.h"
+#include "system/pmud_system.h"
 
 namespace primordia::mud::player {
 
   using namespace caf;
   using namespace std;
+  using namespace system;
 
   constexpr chrono::seconds LOGIN_TIMEOUT = 60s;
 
@@ -19,8 +21,9 @@ namespace primordia::mud::player {
 
   class LoginController : public UserClient {
   public:
-    LoginController(actor_config& cfg, strong_actor_ptr command_actor)
-        : UserClient(cfg, command_actor, "LoginController") {
+    LoginController(actor_config& cfg, MudSystemPtr mud, strong_actor_ptr command_actor)
+        : UserClient(cfg, command_actor, "LoginController"),
+          m_mud(mud) {
     }
 
     behavior make_behavior() override {
@@ -53,6 +56,7 @@ namespace primordia::mud::player {
 
   private:
     LoginState state;
+    MudSystemPtr m_mud;
   };
 
 } // namespace primordia::mud::player

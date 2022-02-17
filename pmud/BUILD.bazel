@@ -43,6 +43,7 @@ cc_binary(
         "//pmud/player:library",
         "//pmud/pnet:library",
         "//pmud/storage:library",
+        "//pmud/system:library",
         "@caf//:main",
         "@fmt//:main",
         "@hiredis//:main",

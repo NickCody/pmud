@@ -9,5 +9,6 @@ cc_library(
         "//pmud/common:library",
         "//pmud/controllers:library",
         "//pmud/logger:library",
+        "//pmud/system:library",
     ],
 )

@@ -23,6 +23,7 @@ namespace primordia::mud::storage {
 
   struct RedisContextDeleter {
     void operator()(redisContext* context) const {
+      LOG_INFO_1("Shutting down redis");
       redisFree(context);
     }
   };
@@ -33,10 +34,13 @@ namespace primordia::mud::storage {
   class Storage {
   public:
     virtual ~Storage(){};
+    virtual bool init(const string& env) = 0;
     virtual bool value_store(const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
   };
+
+  using StoragePtr = shared_ptr<Storage>;
 
   class RedisStorage : public Storage {
     const string& m_host;

@@ -14,8 +14,8 @@
 #include "pnet/util.h"
 #include "storage/storage.h"
 #include "logger/logger.h"
-
 #include "player/player_type_id.h"
+#include "system/pmud_system.h"
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 // Some references:
@@ -34,6 +34,8 @@ using namespace primordia::mud;
 using namespace std;
 using namespace caf;
 using namespace fmt;
+using namespace primordia::mud::storage;
+using namespace primordia::mud::system;
 
 string YAML_CONFIG = "primordia-mud.yaml";
 
@@ -93,7 +95,36 @@ void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeou
                [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
 }
 
-void run(actor_system& sys) {
+StoragePtr initialize_storage() {
+  char* e_redis_host = getenv("REDIS_HOST");
+  char* e_redis_port = getenv("REDIS_PORT");
+  char* e_env = getenv("ENV");
+
+  if (!e_redis_host || !e_redis_port) {
+    LOG_ERROR_1("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
+    return nullptr;
+  }
+
+  if (!e_env) {
+    LOG_ERROR_1("Error, ENV needs to be set!");
+    return nullptr;
+  }
+
+  const string& redis_host = e_redis_host;
+  uint16_t redis_port = (uint16_t)stoul(e_redis_port);
+  StoragePtr storage = make_shared<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
+
+  if (!storage->init(e_env)) {
+    LOG_ERROR("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
+    return nullptr;
+  }
+
+  LOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
+
+  return storage;
+}
+
+void run(actor_system& sys, MudSystemPtr mud) {
   scoped_actor self{ sys };
 
   signal(SIGINT, signal_handler);
@@ -101,32 +132,7 @@ void run(actor_system& sys) {
   YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
   MudConfig config = parse_yaml(YAML_CONFIG);
 
-  char* e_redis_host = getenv("REDIS_HOST");
-  char* e_redis_port = getenv("REDIS_PORT");
-  char* e_env = getenv("ENV");
-
-  if (!e_redis_host || !e_redis_port) {
-    LOG_INFO_1("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
-    exit(1);
-  }
-
-  if (!e_env) {
-    LOG_INFO_1("Error, ENV needs to be set!");
-    exit(1);
-  }
-
-  const string& redis_host = e_redis_host;
-  uint16_t redis_port = (uint16_t)stoul(e_redis_port);
-  primordia::mud::storage::RedisStorage storage(redis_host, redis_port);
-
-  if (!storage.init(e_env)) {
-    LOG_INFO("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
-    exit(1);
-  }
-
-  LOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
-
-  auto server = sys.spawn<Server>(config);
+  auto server = sys.spawn<Server>(config, mud);
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {
@@ -148,11 +154,19 @@ void run(actor_system& sys) {
 void caf_main(actor_system& sys) {
   primordia::mud::logger::Logger::init(sys);
 
-  run(sys);
+  StoragePtr storage = initialize_storage();
+  if (!storage) {
+    LOG_ERROR_1("Exiting due to storage initialization failure!");
+    exit(-1);
+  }
+
+  MudSystemPtr mud_system = make_shared<MudSystem>(storage, sys);
+
+  run(sys, mud_system);
 
   sys.await_all_actors_done();
 
-  LOG_INFO_1("Done");
+  LOG_INFO_1("Exiting main");
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
