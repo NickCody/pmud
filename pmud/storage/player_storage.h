@@ -4,8 +4,7 @@ namespace primordia::mud::storage {
 
   class PlayerStorage {
   public:
-    PlayerStorage(StoragePtr storage)
-        : m_storage(storage) {}
-  }
+    PlayerStorage() {}
+  };
 
 } // namespace primordia::mud::storage

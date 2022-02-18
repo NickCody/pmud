@@ -12,7 +12,7 @@
 #include "pnet/connection.h"
 #include "pnet/server.h"
 #include "pnet/util.h"
-#include "storage/storage.h"
+#include "storage/storage_actor.h"
 #include "logger/logger.h"
 #include "player/player_type_id.h"
 #include "system/pmud_system.h"
@@ -95,26 +95,20 @@ void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeou
                [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
 }
 
-StoragePtr initialize_storage() {
+unique_ptr<Storage> initialize_storage() {
   char* e_redis_host = getenv("REDIS_HOST");
   char* e_redis_port = getenv("REDIS_PORT");
-  char* e_env = getenv("ENV");
 
   if (!e_redis_host || !e_redis_port) {
     LOG_ERROR_1("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
     return nullptr;
   }
 
-  if (!e_env) {
-    LOG_ERROR_1("Error, ENV needs to be set!");
-    return nullptr;
-  }
-
   const string& redis_host = e_redis_host;
   uint16_t redis_port = (uint16_t)stoul(e_redis_port);
-  StoragePtr storage = make_shared<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
+  auto storage = make_unique<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
 
-  if (!storage->init(e_env)) {
+  if (!storage->init()) {
     LOG_ERROR("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
     return nullptr;
   }
@@ -129,10 +123,7 @@ void run(actor_system& sys, MudSystemPtr mud) {
 
   signal(SIGINT, signal_handler);
 
-  YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
-  MudConfig config = parse_yaml(YAML_CONFIG);
-
-  auto server = sys.spawn<Server>(config, mud);
+  auto server = sys.spawn<Server>(mud);
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {
@@ -154,13 +145,18 @@ void run(actor_system& sys, MudSystemPtr mud) {
 void caf_main(actor_system& sys) {
   primordia::mud::logger::Logger::init(sys);
 
-  StoragePtr storage = initialize_storage();
+  YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
+  MudConfig config = parse_yaml(YAML_CONFIG);
+
+  unique_ptr<Storage> storage = initialize_storage();
   if (!storage) {
     LOG_ERROR_1("Exiting due to storage initialization failure!");
     exit(-1);
   }
 
-  MudSystemPtr mud_system = make_shared<MudSystem>(storage, sys);
+  auto storage_actor = sys.spawn<StorageActor>(move(storage));
+
+  MudSystemPtr mud_system = make_shared<MudSystem>(sys, config, actor_cast<strong_actor_ptr>(storage_actor));
 
   run(sys, mud_system);
 

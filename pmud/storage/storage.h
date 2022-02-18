@@ -34,19 +34,16 @@ namespace primordia::mud::storage {
   class Storage {
   public:
     virtual ~Storage(){};
-    virtual bool init(const string& env) = 0;
+    virtual bool init() = 0;
     virtual bool value_store(const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
   };
 
-  using StoragePtr = shared_ptr<Storage>;
-
   class RedisStorage : public Storage {
     const string& m_host;
     int m_port;
     RedisContextUniquePtr m_context;
-    string env;
 
   public:
     RedisStorage(const string& host, int port)
@@ -55,7 +52,7 @@ namespace primordia::mud::storage {
 
     ~RedisStorage() {}
 
-    bool init(const string& env) {
+    bool init() {
       string ip;
       if (hostname_to_ip(m_host, ip) == -1) {
         LOG_INFO("Could not resolve hostname {} to IP address!", m_host);
@@ -64,7 +61,6 @@ namespace primordia::mud::storage {
 
       LOG_INFO("Redis host {} = ip {}", m_host, ip);
 
-      this->env = env;
       m_context = RedisContextUniquePtr(redisConnect(ip.c_str(), m_port));
       if (m_context == nullptr || m_context->err) {
         if (m_context) {

@@ -11,21 +11,27 @@ namespace primordia::mud::system {
 
   class MudSystem {
   public:
-    MudSystem(StoragePtr storage, actor_system& caf_system)
-        : m_storage(storage),
-          m_actor_system(caf_system) {}
-
-    StoragePtr storage() {
-      return m_storage;
-    }
+    MudSystem(actor_system& caf_system, MudConfig& mud_config, strong_actor_ptr storage_actor)
+        : m_actor_system(caf_system),
+          m_mud_config(mud_config),
+          m_storage_actor(storage_actor) {}
 
     actor_system& actorsystem() {
       return m_actor_system;
     }
 
+    const MudConfig& get_config() {
+      return m_mud_config;
+    }
+
+    strong_actor_ptr get_storage() {
+      return m_storage_actor;
+    }
+
   private:
-    StoragePtr m_storage;
     actor_system& m_actor_system;
+    MudConfig m_mud_config;
+    strong_actor_ptr m_storage_actor;
   };
 
   using MudSystemPtr = shared_ptr<MudSystem>;
