@@ -31,8 +31,7 @@ namespace primordia::mud::logger {
     }
 
   public:
-    ~Logger() {
-    }
+    ~Logger() {}
 
     static void init(actor_system& sys) {
       _actor = actor_cast<strong_actor_ptr>(sys.spawn(logging_actor));

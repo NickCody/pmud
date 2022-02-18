@@ -13,8 +13,7 @@ namespace primordia::mud::system {
   public:
     MudSystem(StoragePtr storage, actor_system& caf_system)
         : m_storage(storage),
-          m_actor_system(caf_system) {
-    }
+          m_actor_system(caf_system) {}
 
     StoragePtr storage() {
       return m_storage;

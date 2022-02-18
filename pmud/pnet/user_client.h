@@ -12,8 +12,7 @@ namespace primordia::mud {
     UserClient(actor_config& cfg, strong_actor_ptr user_client_actor, const string& name)
         : event_based_actor(cfg),
           m_user_client_actor(user_client_actor),
-          m_name(name) {
-    }
+          m_name(name) {}
 
     virtual ~UserClient() {
       m_user_client_actor.reset();

@@ -51,11 +51,9 @@ namespace primordia::mud::storage {
   public:
     RedisStorage(const string& host, int port)
         : m_host(host),
-          m_port(port) {
-    }
+          m_port(port) {}
 
-    ~RedisStorage() {
-    }
+    ~RedisStorage() {}
 
     bool init(const string& env) {
       string ip;

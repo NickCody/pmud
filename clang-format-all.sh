@@ -1,2 +1,5 @@
 #!/bin/bash
-(shopt -s globstar;  /usr/lib/llvm-14/bin/clang-format -i **/*.{h,cc,cpp})
+
+shopt -s globstar
+clang-format -i **/*.{h,cc,cpp}
+

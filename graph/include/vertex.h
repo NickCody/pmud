@@ -24,8 +24,7 @@ namespace cody {
     public:
       Vertex(int index, std::optional<D> data = nullopt)
           : _index(index),
-            data(data) {
-      }
+            data(data) {}
 
       Vertex() = delete;
 

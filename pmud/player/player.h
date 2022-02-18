@@ -13,12 +13,10 @@ namespace primordia::mud::player {
 
   public:
     Player(actor_config& config)
-        : event_based_actor(cfg) {
-    }
+        : event_based_actor(cfg) {}
 
     behavior make_behavior() override {
-      return {
-      }
+      return {}
     }
   };
 
