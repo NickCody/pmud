@@ -121,8 +121,6 @@ unique_ptr<Storage> initialize_storage() {
 void run(actor_system& sys, MudSystemPtr mud) {
   scoped_actor self{ sys };
 
-  signal(SIGINT, signal_handler);
-
   auto server = sys.spawn<Server>(mud);
 
   int server_status = start_server(self, server, chrono::seconds(10));
@@ -144,6 +142,7 @@ void run(actor_system& sys, MudSystemPtr mud) {
 //
 void caf_main(actor_system& sys) {
   primordia::mud::logger::Logger::init(sys);
+  signal(SIGINT, signal_handler);
 
   YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
   MudConfig config = parse_yaml(YAML_CONFIG);
@@ -154,11 +153,13 @@ void caf_main(actor_system& sys) {
     exit(-1);
   }
 
-  auto storage_actor = sys.spawn<StorageActor>(move(storage));
+  {
+    auto storage_actor = sys.spawn<StorageActor>(move(storage));
 
-  MudSystemPtr mud_system = make_shared<MudSystem>(sys, config, actor_cast<strong_actor_ptr>(storage_actor));
+    MudSystemPtr mud_system = make_shared<MudSystem>(sys, config, actor_cast<strong_actor_ptr>(storage_actor));
 
-  run(sys, mud_system);
+    run(sys, mud_system);
+  }
 
   sys.await_all_actors_done();
 

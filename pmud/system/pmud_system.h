@@ -16,6 +16,10 @@ namespace primordia::mud::system {
           m_mud_config(mud_config),
           m_storage_actor(storage_actor) {}
 
+    ~MudSystem() {
+      m_storage_actor.reset();
+    }
+
     actor_system& actorsystem() {
       return m_actor_system;
     }
