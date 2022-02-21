@@ -98,10 +98,9 @@
     "//...",
   ],
   "editor.formatOnSave": true,
+  "editor.tabSize": 2,
   "clang-format.executable": "/usr/bin/clang-format",
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "terminal.integrated.scrollback": 100000,
-  "[markdown]": {
-    "editor.tabSize": 4
-  }
+  "editor.detectIndentation": false,
 }

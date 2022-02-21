@@ -1,0 +1,13 @@
+---
+module:
+  name: Forgotten Crypt
+maps:
+  -
+    name: Forgotten Crypt
+    place.realm: Material
+    place.planet: Primordia
+    place.landmass: Tarria
+    archtype.place.region: Tarrian Highlands
+    archtype.place.nation: Lumerok
+    archtype.place.population-center: Trulum
+...
