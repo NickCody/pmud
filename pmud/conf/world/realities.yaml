@@ -1,0 +1,93 @@
+---
+realities:
+  - name: Prime Reality
+    planets:
+      - name: Primordia
+        tech: medieval
+        oceans:
+          - name: Oelder Ocean
+        landmasses:
+          - name: Tarria
+            regions:
+              - name: Alterian Mountains
+                nations: [Feudelus, Lumerok]
+              - name: Vast Wood
+                nations: [Feudelus, Draken]
+              - name: Barrier Peaks
+              - name: Bellowlands
+              - name: Dangerlands
+              - name: Hand of Death
+              - name: Highlands of Haldizar
+              - name: Midforest of Game
+              - name: Colderian Plateau
+              - name: Humewood Marshes
+              - name: Haltic Mountains
+            bodies-of-water:
+              - name: Bay of Fortunes
+                kind: Bay
+              - name: Gulf of Talistor
+                kind: Gulf
+              - name: Gulf of the Burning Sun
+                kind: Gulf
+              - name: Lake Tusk
+                kind: Lake
+              - name: Lake Bariol
+                kind: Lake
+              - name: Lake Gulster
+                kind: Lake
+              - name: Lake Washburn
+                kind: Lake
+            nations:
+              - name: Annexia
+              - name: Baelandrah
+              - name: Colderian
+              - name: Daelandra
+              - name: Draken
+              - name: Elduria
+                population-centers:
+                  - name: Tymaria
+                    kind: City
+                  - name: Andae
+                    kind: City
+              - name: Folerun
+              - name: Fuedelus
+              - name: Heshmau
+              - name: Ildorschia
+              - name: Isacus
+              - name: Isle of the Western Breeze
+              - name: Lumerok
+                alias: Theocracy of the Star
+                population-centers:
+                  - name: Trulum
+                    kind: City
+                    position: [23, Q]
+                  - name: Peace
+                    kind: City
+                    position: [19, S]
+              - name: Messabia
+              - name: Morrea
+                population-centers:
+                  - name: Owindport
+                    kind: City
+                  - name: Rattlebrand
+                    kind: City
+                  - name: Karpus
+                    kind: City
+              - name: Mysteria
+                population-centers:
+                  - name: Encre
+                    kind: City
+                  - name: Karey
+                    kind: City
+              - name: Olindi
+                population-centers:
+                  - name: Kronyth
+                    kind: City
+                  - name: Berole
+                    kind: City
+                  - name: Shibalm
+                    kind: City
+              - name: Xandrein
+      - name: Cordona
+  - name: Celestial Reality
+  - name: Infernal Reality

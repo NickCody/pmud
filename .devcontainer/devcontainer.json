@@ -32,7 +32,8 @@
 		"ms-vscode.cpptools",
 		"matepek.vscode-catch2-test-adapter",
 		"jeff-hykin.better-cpp-syntax",
-		"xaver.clang-format"
+		"xaver.clang-format",
+    "redhat.vscode-yaml"
 	],
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
