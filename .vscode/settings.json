@@ -105,5 +105,7 @@
   "editor.detectIndentation": false,
   "yaml.schemas": {
     "pmud/schema/items-schema.json": "items.yml",
+    "pmud/schema/monsters-schema.json": "monsters.yml",
+    "pmud/schema/places-schema.json": "places.yml"
   }
 }

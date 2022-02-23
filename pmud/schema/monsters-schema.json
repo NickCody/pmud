@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://primordia.com/pmud/schema/monsters-schema.json",
+  "title": "pmud monsters",
+  "description": "A list of monsters",
+  "type": "object",
+  "properties": {
+    "monster-kind": {
+      "description": "Kind of monster",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "monsters": {
+      "description": "Monster Compendium",
+      "type": "array",
+      "items": {
+        "$ref": "monster-schema.json"
+      }
+    }
+  }
+}

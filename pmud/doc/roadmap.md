@@ -32,3 +32,11 @@ Done:
 
 - [x] Implement redis client library
 - [x] Implement logging facility with timestamp
+
+
+Topics:
+
+- abstractions - user interactions
+- storage layer and dependency injection
+- coordinate system for positions on the map
+- Yaml schema validation using JSON schema

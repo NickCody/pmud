@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://primordia.com/pmud/schema/monster-schema.json",
+  "title": "pmud monster",
+  "description": "Monster Properties",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Name for the monster",
+      "type": "string"
+    },
+    "kind": {
+      "description": "Base kind of monster",
+      "type": "string",
+      "enum": [
+        "undead",
+        "feral",
+        "magical",
+        "demonic",
+        "celestial"
+      ]
+    },
+    "hit dice": {
+      "description": "Hit dice of monster",
+      "type": "string",
+      "pattern": "[0-9]+d[0-9]+"
+    }
+  },
+  "required": [
+    "name",
+    "kind",
+    "hit dice"
+  ]
+}

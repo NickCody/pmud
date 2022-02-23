@@ -5,7 +5,7 @@ realities:
       - name: Primordia
         tech: medieval
         oceans:
-          - name: Oelder Ocean
+          - Oelder Ocean
         landmasses:
           - name: Tarria
             regions:
@@ -24,70 +24,86 @@ realities:
               - name: Haltic Mountains
             bodies-of-water:
               - name: Bay of Fortunes
-                kind: Bay
+                kind: bay
               - name: Gulf of Talistor
-                kind: Gulf
+                kind: gulf
               - name: Gulf of the Burning Sun
-                kind: Gulf
+                kind: gulf
               - name: Lake Tusk
-                kind: Lake
+                kind: lake
               - name: Lake Bariol
-                kind: Lake
+                kind: lake
               - name: Lake Gulster
-                kind: Lake
+                kind: lake
               - name: Lake Washburn
-                kind: Lake
+                kind: lake
             nations:
               - name: Annexia
+                population-centers: []
               - name: Baelandrah
+                population-centers: []
               - name: Colderian
+                population-centers: []
               - name: Daelandra
+                population-centers: []
               - name: Draken
+                population-centers: []
               - name: Elduria
                 population-centers:
                   - name: Tymaria
-                    kind: City
+                    kind: city
                   - name: Andae
-                    kind: City
+                    kind: city
               - name: Folerun
+                population-centers: []
               - name: Fuedelus
+                population-centers: []
               - name: Heshmau
+                population-centers: []
               - name: Ildorschia
+                population-centers: []
               - name: Isacus
+                population-centers: []
               - name: Isle of the Western Breeze
+                population-centers: []
               - name: Lumerok
                 alias: Theocracy of the Star
                 population-centers:
                   - name: Trulum
-                    kind: City
-                    position: [23, Q]
+                    kind: city
+                    position: 23Q
                   - name: Peace
-                    kind: City
-                    position: [19, S]
+                    kind: city
+                    position: 19S
               - name: Messabia
+                population-centers: []
               - name: Morrea
                 population-centers:
                   - name: Owindport
-                    kind: City
+                    kind: city
                   - name: Rattlebrand
-                    kind: City
+                    kind: city
                   - name: Karpus
-                    kind: City
+                    kind: city
               - name: Mysteria
                 population-centers:
                   - name: Encre
-                    kind: City
+                    kind: city
                   - name: Karey
-                    kind: City
+                    kind: city
               - name: Olindi
                 population-centers:
                   - name: Kronyth
-                    kind: City
+                    kind: city
                   - name: Berole
-                    kind: City
+                    kind: city
                   - name: Shibalm
-                    kind: City
+                    kind: city
               - name: Xandrein
+                population-centers: []
       - name: Cordona
+        tech: "nuclear"
+        oceans: []
+        landmasses: []
   - name: Celestial Reality
   - name: Infernal Reality

@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://primordia.com/pmud/schema/places-schema.json",
+  "title": "pmud places",
+  "description": "A list of places",
+  "type": "object",
+  "properties": {
+    "realities": {
+      "type": "array",
+      "description": "List of realities",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the reality"
+          },
+          "planets": {
+            "type": "array",
+            "description": "List of planets in the reality",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the planet"
+                },
+                "tech": {
+                  "type": "string",
+                  "description": "Level of technology",
+                  "enum": [
+                    "stone-age",
+                    "medieval",
+                    "nuclear",
+                    "space",
+                    "starfaring"
+                  ]
+                },
+                "oceans": {
+                  "type": "array",
+                  "description": "List of oceans on the planet",
+                  "items": {
+                    "type": "string",
+                    "description": "Name of the ocean"
+                  }
+                },
+                "landmasses": {
+                  "type": "array",
+                  "description": "List of landmasses on the planet",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the landmass"
+                      },
+                      "regions": {
+                        "type": "array",
+                        "description": "List of regions within the landmass",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Name of the region"
+                            },
+                            "nations": {
+                              "type": "array",
+                              "description": "Nations within the region",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
+                      },
+                      "bodies-of-water": {
+                        "type": "array",
+                        "description": "List of bodies of water within the landmass",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Name of the body of water"
+                            },
+                            "kind": {
+                              "type": "string",
+                              "description": "Kind of body of water",
+                              "enum": [
+                                "pond",
+                                "lake",
+                                "bay",
+                                "gulf",
+                                "sea"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "kind"
+                          ]
+                        }
+                      },
+                      "nations": {
+                        "type": "array",
+                        "description": "List of nations within the landmass",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Name of the nation"
+                            },
+                            "alias": {
+                              "type": "string",
+                              "description": "Alternate name for the nation"
+                            },
+                            "population-centers": {
+                              "type": "array",
+                              "description": "List of cities, towns, and villages in the nation",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Name of the population-center"
+                                  },
+                                  "kind": {
+                                    "type": "string",
+                                    "description": "Kind of population-center, e.g. city",
+                                    "enum": [
+                                      "village",
+                                      "town",
+                                      "city"
+                                    ]
+                                  },
+                                  "position": {
+                                    "type": "string",
+                                    "description": "Coordinates of the population-center, e.g. 14S",
+                                    "pattern": "[0-9]+[A-Za-z]+"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "kind"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "population-centers"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "regions",
+                      "bodies-of-water",
+                      "nations"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "tech",
+                "oceans",
+                "landmasses"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  }
+}

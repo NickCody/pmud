@@ -8,93 +8,139 @@ monster-kind:
 monsters:
   - name: abominable snowman
     kind: feral
+    hit dice: "4d6"
   - name: banshee
     kind: magical
+    hit dice: "4d10"
   - name: basilisk
     kind: magical
+    hit dice: "4d10"
   - name: beelzebub
     kind: demonic
+    hit dice: "4d6"
   - name: blob
     kind: feral
+    hit dice: "4d6"
   - name: bugbear
     kind: feral
+    hit dice: "4d6"
   - name: centaur
     kind: feral
+    hit dice: "4d6"
   - name: chimera
     kind: magical
+    hit dice: "4d10"
   - name: cyclops
     kind: magical
+    hit dice: "4d10"
   - name: dracula
     kind: undead
+    hit dice: "4d6"
   - name: dragon
     kind: magical
+    hit dice: "4d10"
   - name: gargoyle
     kind: magical
+    hit dice: "4d10"
   - name: genie
     kind: magical
+    hit dice: "4d10"
   - name: ghost
     kind: undead
+    hit dice: "4d6"
   - name: ghoul
     kind: undead
+    hit dice: "4d6"
   - name: giant
     kind: feral
+    hit dice: "4d6"
   - name: goblins
     kind: feral
+    hit dice: "4d6"
   - name: golem
     kind: magical
+    hit dice: "4d10"
   - name: gremlin
     kind: magical
+    hit dice: "4d10"
   - name: griffin
     kind: magical
+    hit dice: "4d10"
   - name: hobgoblin
     kind: feral
+    hit dice: "4d6"
   - name: hydra
     kind: magical
+    hit dice: "4d10"
   - name: incubus
     kind: demonic
+    hit dice: "4d6"
   - name: kobold
     kind: feral
+    hit dice: "4d6"
   - name: kraken
     kind: magical
+    hit dice: "4d10"
   - name: leprechaun
     kind: magical
+    hit dice: "1d10"
   - name: leviathan
     kind: feral
+    hit dice: "4d6"
   - name: manticore
     kind: magical
+    hit dice: "4d10"
   - name: medusa
     kind: magical
+    hit dice: "4d10"
   - name: minotaur
     kind: magical
+    hit dice: "4d10"
   - name: mummy
     kind: undead
+    hit dice: "4d6"
   - name: ogre
     kind: feral
+    hit dice: "4d6"
   - name: orc
     kind: feral
+    hit dice: "4d6"
   - name: phoenix
     kind: magical
+    hit dice: "4d10"
   - name: sandworm
     kind: feral
+    hit dice: "4d6"
   - name: sasquatch
     kind: feral
+    hit dice: "4d6"
   - name: siren
     kind: magical
+    hit dice: "4d10"
   - name: succubus
     kind: magical
+    hit dice: "4d10"
   - name: troll
     kind: magical
+    hit dice: "4d10"
   - name: vampire
     kind: undead
+    hit dice: "4d6"
   - name: werewolf
     kind: magical
+    hit dice: "4d10"
   - name: witch
     kind: magical
+    hit dice: "4d10"
   - name: wraith
     kind: undead
+    hit dice: "4d6"
   - name: wyvern
     kind: magical
+    hit dice: "6d10"
   - name: yeti
     kind: feral
+    hit dice: "4d6"
   - name: zombie
     kind: undead
+    hit dice: "1d8"
