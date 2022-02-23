@@ -1,0 +1,100 @@
+---
+monster-kind:
+  - undead
+  - feral
+  - magical
+  - demonic
+  - celestial
+monsters:
+  - name: abominable snowman
+    kind: feral
+  - name: banshee
+    kind: magical
+  - name: basilisk
+    kind: magical
+  - name: beelzebub
+    kind: demonic
+  - name: blob
+    kind: feral
+  - name: bugbear
+    kind: feral
+  - name: centaur
+    kind: feral
+  - name: chimera
+    kind: magical
+  - name: cyclops
+    kind: magical
+  - name: dracula
+    kind: undead
+  - name: dragon
+    kind: magical
+  - name: gargoyle
+    kind: magical
+  - name: genie
+    kind: magical
+  - name: ghost
+    kind: undead
+  - name: ghoul
+    kind: undead
+  - name: giant
+    kind: feral
+  - name: goblins
+    kind: feral
+  - name: golem
+    kind: magical
+  - name: gremlin
+    kind: magical
+  - name: griffin
+    kind: magical
+  - name: hobgoblin
+    kind: feral
+  - name: hydra
+    kind: magical
+  - name: incubus
+    kind: demonic
+  - name: kobold
+    kind: feral
+  - name: kraken
+    kind: magical
+  - name: leprechaun
+    kind: magical
+  - name: leviathan
+    kind: feral
+  - name: manticore
+    kind: magical
+  - name: medusa
+    kind: magical
+  - name: minotaur
+    kind: magical
+  - name: mummy
+    kind: undead
+  - name: ogre
+    kind: feral
+  - name: orc
+    kind: feral
+  - name: phoenix
+    kind: magical
+  - name: sandworm
+    kind: feral
+  - name: sasquatch
+    kind: feral
+  - name: siren
+    kind: magical
+  - name: succubus
+    kind: magical
+  - name: troll
+    kind: magical
+  - name: vampire
+    kind: undead
+  - name: werewolf
+    kind: magical
+  - name: witch
+    kind: magical
+  - name: wraith
+    kind: undead
+  - name: wyvern
+    kind: magical
+  - name: yeti
+    kind: feral
+  - name: zombie
+    kind: undead

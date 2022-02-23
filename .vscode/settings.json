@@ -103,4 +103,7 @@
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "terminal.integrated.scrollback": 100000,
   "editor.detectIndentation": false,
+  "yaml.schemas": {
+    "pmud/schema/items-schema.json": "items.yml",
+  }
 }

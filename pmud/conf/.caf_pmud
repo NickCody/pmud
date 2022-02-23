@@ -5,7 +5,7 @@
 
 
 pmud {
-  yaml_config = "primordia-mud.yaml"
+  yaml_config = "primordia-mud.yml"
 }
 
 caf {

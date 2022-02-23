@@ -1,0 +1,158 @@
+---
+weapons:
+  basic melee weapons:
+    - club
+    - dagger
+    - greatclub
+    - handaxe
+    - javelin
+    - light hammer
+    - mace
+    - sickle
+    - spear
+    - staff
+  basic ranged weapons:
+    - dart
+    - light crossbow
+    - shortbow
+    - sling
+  heavy melee weapons:
+    - bullwhip
+    - flail
+    - glaive
+    - greataxe
+    - greatsword
+    - halberd
+    - heavy pick
+    - lance
+    - longsword
+    - maul
+    - morningstar
+    - pike
+    - rapier
+    - saber
+    - shortsword
+    - trident
+    - war hammer
+armor:
+  light armor:
+    - leather armor
+    - small shield
+  medium armor:
+    - chain mail armor
+    - scale mail armor
+    - medium shield
+  heavy armor:
+    - plate mail armor
+    - large shield
+gear:
+  - ammunition
+  - arrow
+  - backpack
+  - barrel
+  - basket
+  - battering ram
+  - bedroll
+  - bell
+  - beltpouch
+  - blanket
+  - book
+  - bottle of ink
+  - bucket
+  - candle
+  - chain
+  - chalk
+  - chest
+  - climbing piton
+  - common clothes
+  - cooking supplies
+  - crossbow bolts
+  - crowbar
+  - crystal
+  - fancy clothes
+  - empty flask
+  - flask of oil
+  - glass bottle
+  - grappling hook
+  - hammer
+  - hemp rope
+  - holy symbol
+  - hourglass
+  - iron spikes
+  - jug
+  - key
+  - ladder
+  - lamp
+  - lantern
+  - lock
+  - long pole
+  - magnifying glass
+  - manacles
+  - miner's pick
+  - mirror
+  - orb
+  - pauper cloths
+  - perfume (vial)
+  - pitcher
+  - pouch
+  - quill
+  - quiver
+  - rations
+  - robes
+  - rod
+  - rope, silk
+  - sack
+  - scrollcase
+  - shovel
+  - silk rope
+  - sledgehammer
+  - sling bullets
+  - soap
+  - spyglass
+  - staff
+  - tent
+  - tinderbox
+  - torch
+  - vial
+  - vial of acid
+  - vial of antitoxin
+  - vial of holy water
+  - vial of poison
+  - wand
+  - waterskin
+  - wax
+  - weight scale
+  - whetstone
+  - whistle
+  - writing paper
+  - writing parchment
+coins:
+  - copper
+  - silver
+  - gold
+  - platinum
+treasure:
+  - name: chalice
+    weight: 1
+    cost: "3cp"
+  - name: necklace
+    weight: 1
+    cost: "3cp"
+  - name: jewel
+    weight: 1
+    cost: "3cp"
+  - name: ring
+    weight: 1
+    cost: "3cp"
+  - name: bracelet
+    weight: 1
+    cost: "3cp"
+  - name: earring
+    weight: 1
+    cost: "3cp"
+  - name: broach
+    weight: 1
+    cost: "3cp"
+  - name: pendant
+    weight: 1
+    cost: "3cp"

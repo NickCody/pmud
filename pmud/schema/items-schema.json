@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://primordia.com/pmud/schema/items-schema.json",
+  "title": "pmud items",
+  "description": "A list of game items",
+  "type": "object",
+  "properties": {
+    "weapons": {
+      "description": "weapons",
+      "type": "object",
+      "properties": {
+        "basic melee weapons": {
+          "description": "basic melee weapons",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "basic ranged weapons": {
+          "description": "basic ranged weapons",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "heavy melee weapons": {
+          "description": "heavy melee weapons",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "basic melee weapons",
+        "basic ranged weapons",
+        "heavy melee weapons"
+      ]
+    },
+    "armor": {
+      "description": "armor",
+      "type": "object",
+      "properties": {
+        "light armor": {
+          "description": "light armor",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "medium armor": {
+          "description": "medium armor",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "heavy armor": {
+          "description": "heavy armor",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "light armor",
+        "medium armor",
+        "heavy armor"
+      ]
+    },
+    "gear": {
+      "description": "adventuring gear",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "coins": {
+      "description": "coinage",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "treasure": {
+      "description": "treasure",
+      "type": "array",
+      "items": {
+        "$ref": "gear-schema.json"
+      },
+      "minItems": 5
+    }
+  },
+  "required": [
+    "weapons",
+    "armor",
+    "gear",
+    "coins",
+    "treasure"
+  ]
+}

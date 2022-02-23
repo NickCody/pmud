@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://primordia.com/pmud/schema/gear-schema.json",
+  "title": "pmud gear",
+  "description": "Adventuring Gear Properties",
+  "type": "object",
+  "properties": {
+    "weight": {
+      "type": "number",
+      "minimum": 0
+    },
+    "cost": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "weight",
+    "cost"
+  ]
+}
