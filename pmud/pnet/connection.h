@@ -7,7 +7,7 @@
 #include "caf/stateful_actor.hpp"
 #include "server_state.h"
 #include "util.h"
-#include "logger/logger.h"
+#include "spdlog/spdlog.h"
 #include "command.h"
 #include "system/pmud_system.h"
 
@@ -37,7 +37,7 @@ namespace primordia::mud {
       system().registry().put(state.registery_id, this);
 
       attach_functor([this](const error& /*reason*/) {
-        LOG_INFO("Connection actor exiting...", state.connection);
+        SPDLOG_INFO("Connection actor exiting...", state.connection);
         send_exit(actor_cast<actor>(state.command), exit_reason::user_shutdown);
         state.command.reset();
       });
@@ -46,7 +46,7 @@ namespace primordia::mud {
         CommStatic comm(state.connection);
         bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
         if (!success) {
-          LOG_INFO("Failed to send welcome to connection {}", state.connection);
+          SPDLOG_INFO("Failed to send welcome to connection {}", state.connection);
           // send(self, GoodbyeConnection_v);
         }
       }
@@ -72,7 +72,7 @@ namespace primordia::mud {
                 state.break_count++;
                 send(this, FromUserGetInput_v);
               } else {
-                LOG_INFO("Connection {} quit", state.connection);
+                SPDLOG_INFO("Connection {} quit", state.connection);
                 send(this, GoodbyeConnection_v);
               }
             } else {

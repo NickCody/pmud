@@ -5,8 +5,7 @@
 #include <chrono>
 #include <iomanip>
 #include <regex>
-
-#include "logger/logger.h"
+#include <spdlog/spdlog.h>
 
 namespace primordia::mud {
 
@@ -28,7 +27,7 @@ namespace primordia::mud {
       }
     }
 
-    LOG_ERROR("Could not find connection actor for {}", connection);
+    SPDLOG_ERROR("Could not find connection actor for {}", connection);
     return nullopt;
   }
 

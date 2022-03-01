@@ -8,7 +8,6 @@ cc_library(
     deps = [
         "//pmud/common:library",
         "//pmud/controllers:library",
-        "//pmud/logger:library",
         "//pmud/system:library",
     ],
 )

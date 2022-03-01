@@ -2,9 +2,15 @@
 #include <cstdlib>
 #include <stdlib.h>
 #include <unistd.h>
+#include <regex>
+
+#include <unistd.h>
+#include <stdio.h>
+#include <limits.h>
+
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
-#include <regex>
+
 #include "caf/all.hpp"
 
 #include "pnet/comm_static.h"
@@ -13,7 +19,7 @@
 #include "pnet/server.h"
 #include "pnet/util.h"
 #include "storage/storage_actor.h"
-#include "logger/logger.h"
+#include "spdlog/spdlog.h"
 #include "player/player_type_id.h"
 #include "system/pmud_system.h"
 
@@ -42,7 +48,10 @@ string YAML_CONFIG = "primordia-mud.yaml";
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
 MudConfig parse_yaml(const string& filename) {
-
+  char cwd[PATH_MAX];
+  if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    SPDLOG_INFO("Loading yaml {} from current working dir: {}", filename, cwd);
+  }
   const YAML::Node config = YAML::LoadFile(filename);
 
   return {
@@ -72,7 +81,7 @@ void signal_handler(int signal) {
 int start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   int server_success = 0;
   self->request(server, timeout, StartServer_v)
-      .receive([&](int status) { server_success = status; }, [&](const error& err) { LOG_INFO("Error: {}", to_string(err)); });
+      .receive([&](int status) { server_success = status; }, [&](const error& err) { SPDLOG_INFO("Error: {}", to_string(err)); });
 
   return server_success;
 }
@@ -83,7 +92,7 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
   for (auto actor_in_registry : sys.registry().named_actors()) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
-      LOG_INFO("App shutdown, forcing actor {} to close", actor_in_registry.first);
+      SPDLOG_INFO("App shutdown, forcing actor {} to close", actor_in_registry.first);
       self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection_v);
     }
   }
@@ -91,31 +100,8 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
 
 void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   self->request(server, timeout, GoodbyeServer_v)
-      .receive([&](bool status) { LOG_INFO("Server exit with status: {}", status); },
+      .receive([&](bool status) { SPDLOG_INFO("Server exit with status: {}", status); },
                [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
-}
-
-unique_ptr<Storage> initialize_storage() {
-  char* e_redis_host = getenv("REDIS_HOST");
-  char* e_redis_port = getenv("REDIS_PORT");
-
-  if (!e_redis_host || !e_redis_port) {
-    LOG_ERROR_1("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
-    return nullptr;
-  }
-
-  const string& redis_host = e_redis_host;
-  uint16_t redis_port = (uint16_t)stoul(e_redis_port);
-  auto storage = make_unique<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
-
-  if (!storage->init()) {
-    LOG_ERROR("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
-    return nullptr;
-  }
-
-  LOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
-
-  return storage;
 }
 
 void run(actor_system& sys, MudSystemPtr mud) {
@@ -125,7 +111,7 @@ void run(actor_system& sys, MudSystemPtr mud) {
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {
-    LOG_INFO_1("Server failed to start!");
+    SPDLOG_INFO("Server failed to start!");
     exit(server_status);
   }
 
@@ -141,15 +127,14 @@ void run(actor_system& sys, MudSystemPtr mud) {
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
 void caf_main(actor_system& sys) {
-  primordia::mud::logger::Logger::init(sys);
   signal(SIGINT, signal_handler);
 
-  YAML_CONFIG = get_or(sys.config(), "primordia-mud.yaml_config", YAML_CONFIG);
+  YAML_CONFIG = get_or(sys.config(), "pmud.yaml_config", YAML_CONFIG);
   MudConfig config = parse_yaml(YAML_CONFIG);
 
-  unique_ptr<Storage> storage = initialize_storage();
+  unique_ptr<Storage> storage = initialize_redis_storage();
   if (!storage) {
-    LOG_ERROR_1("Exiting due to storage initialization failure!");
+    SPDLOG_ERROR("Exiting due to storage initialization failure!");
     exit(-1);
   }
 
@@ -163,7 +148,7 @@ void caf_main(actor_system& sys) {
 
   sys.await_all_actors_done();
 
-  LOG_INFO_1("Exiting main");
+  SPDLOG_INFO("Exiting main");
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=

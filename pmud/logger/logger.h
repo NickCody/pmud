@@ -7,15 +7,15 @@
 #include <iomanip>
 #include <memory>
 
-#define LOG_INFO(f, ...) primordia::mud::logger::Logger::log_info(fmt::format(f, __VA_ARGS__))
-#define LOG_DEBUG(f, ...) primordia::mud::logger::Logger::log_debug(fmt::format(f, __VA_ARGS__))
-#define LOG_ERROR(f, ...) primordia::mud::logger::Logger::log_error(fmt::format(f, __VA_ARGS__))
-#define LOG_WARN(f, ...) primordia::mud::logger::Logger::log_warn(fmt::format(f, __VA_ARGS__))
+#define ALOG_INFO(f, ...) primordia::mud::logger::Logger::SPDLOG_INFO(fmt::format(f, __VA_ARGS__))
+#define ALOG_DEBUG(f, ...) primordia::mud::logger::Logger::SPDLOG_DEBUG(fmt::format(f, __VA_ARGS__))
+#define ALOG_ERROR(f, ...) primordia::mud::logger::Logger::SPDLOG_ERROR(fmt::format(f, __VA_ARGS__))
+#define ALOG_WARN(f, ...) primordia::mud::logger::Logger::SPDLOG_WARN(fmt::format(f, __VA_ARGS__))
 
-#define LOG_INFO_1(f) primordia::mud::logger::Logger::log_info(f)
-#define LOG_DEBUG_1(f) primordia::mud::logger::Logger::log_debug(f)
-#define LOG_ERROR_1(f) primordia::mud::logger::Logger::log_error(f)
-#define LOG_WARN_1(f) primordia::mud::logger::Logger::log_warn(f)
+#define ALOG_INFO_1(f) primordia::mud::logger::Logger::SPDLOG_INFO(f)
+#define ALOG_DEBUG_1(f) primordia::mud::logger::Logger::SPDLOG_DEBUG(f)
+#define ALOG_ERROR_1(f) primordia::mud::logger::Logger::SPDLOG_ERROR(f)
+#define ALOG_WARN_1(f) primordia::mud::logger::Logger::SPDLOG_WARN(f)
 
 namespace primordia::mud::logger {
 
@@ -37,19 +37,19 @@ namespace primordia::mud::logger {
       _actor = actor_cast<strong_actor_ptr>(sys.spawn(logging_actor));
     }
 
-    static void log_info(const string& message) {
+    static void SPDLOG_INFO(const string& message) {
       aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " INFO " << message << endl;
     }
 
-    static void log_error(const string& message) {
+    static void SPDLOG_ERROR(const string& message) {
       aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " ERROR " << message << endl;
     }
 
-    static void log_warn(const string& message) {
+    static void SPDLOG_WARN(const string& message) {
       aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " WARN " << message << endl;
     }
 
-    static void log_debug(const string& message) {
+    static void SPDLOG_DEBUG(const string& message) {
       aout(actor_cast<event_based_actor*>(_actor)) << utc_time() << " DEBUG " << message << endl;
     }
 

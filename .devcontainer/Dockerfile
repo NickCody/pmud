@@ -41,6 +41,14 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
+RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz \
+  && tar xvfz v1.9.2.tar.gz \
+  && cd spdlog-1.9.2 && mkdir build && cd build \
+  && cmake -G "Ninja" .. \
+  && ninja install \
+  && cd ../.. \
+  && rm -rf spdlog-1.9.2
+
 RUN curl -L -O https://golang.org/dl/go1.15.5.linux-amd64.tar.gz \
   && tar -C /usr/local -xzf go1.15.5.linux-amd64.tar.gz \
   && rm go1.15.5.linux-amd64.tar.gz

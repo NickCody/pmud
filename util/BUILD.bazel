@@ -22,3 +22,15 @@ cc_binary(
         "@ncurses//:main",
     ],
 )
+
+cc_binary(
+    name = "yaml-redis-loader",
+    srcs = ["yaml-redis-loader.cpp"],
+    copts = global_cppopts(),
+    deps = [
+        "//pmud/storage:library",
+        "@fmt//:main",
+        "@hiredis//:main",
+        "@ncurses//:main",
+    ],
+)

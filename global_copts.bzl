@@ -26,6 +26,7 @@ def global_cppopts(unwanted_options = []):
         "-pedantic",
         "-Og",
         "-g",
+        "-DSPDLOG_FMT_EXTERNAL",
     ]
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]

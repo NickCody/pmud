@@ -7,7 +7,7 @@
 #include "caf/stateful_actor.hpp"
 #include "server_state.h"
 #include "util.h"
-#include "logger/logger.h"
+#include "spdlog/spdlog.h"
 
 #include "controllers/login_controller.h"
 #include "controllers/default_controller.h"

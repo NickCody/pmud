@@ -2,14 +2,15 @@
 
 #include <memory>
 #include <string>
+#include <map>
+#include <sstream>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <limits.h>
 #include <ctime>
 #include "hiredis/hiredis.h"
 
-#include "pnet/util.h"
-#include "logger/logger.h"
+#include "spdlog/spdlog.h"
 
 namespace primordia::mud::storage {
 
@@ -23,7 +24,7 @@ namespace primordia::mud::storage {
 
   struct RedisContextDeleter {
     void operator()(redisContext* context) const {
-      LOG_INFO_1("Shutting down redis");
+      SPDLOG_INFO("Shutting down redis");
       redisFree(context);
     }
   };
@@ -55,18 +56,18 @@ namespace primordia::mud::storage {
     bool init() {
       string ip;
       if (hostname_to_ip(m_host, ip) == -1) {
-        LOG_INFO("Could not resolve hostname {} to IP address!", m_host);
+        SPDLOG_INFO("Could not resolve hostname {} to IP address!", m_host);
         return false;
       }
 
-      LOG_INFO("Redis host {} = ip {}", m_host, ip);
+      SPDLOG_INFO("Redis host {} = ip {}", m_host, ip);
 
       m_context = RedisContextUniquePtr(redisConnect(ip.c_str(), m_port));
       if (m_context == nullptr || m_context->err) {
         if (m_context) {
-          LOG_INFO("Error: {}", m_context->errstr);
+          SPDLOG_INFO("Error: {}", m_context->errstr);
         } else {
-          LOG_INFO_1("Can't allocate redis context");
+          SPDLOG_INFO("Can't allocate redis context");
         }
         return false;
       }
@@ -76,10 +77,10 @@ namespace primordia::mud::storage {
     }
 
     RedisReplyUniquePtr command(const string& cmd) {
-      LOG_DEBUG("Sending [{}] to redis...", cmd);
+      SPDLOG_DEBUG("Sending [{}] to redis...", cmd);
       auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), cmd.c_str()));
       if (!reply) {
-        LOG_ERROR("Error running command [{}], code {}: {}", cmd, m_context->err, m_context->errstr);
+        SPDLOG_ERROR("Error running command [{}], code {}: {}", cmd, m_context->err, m_context->errstr);
       }
       return reply;
     }
@@ -133,5 +134,28 @@ namespace primordia::mud::storage {
       return replaced;
     }
   };
+
+  inline unique_ptr<Storage> initialize_redis_storage() {
+    char* e_redis_host = getenv("REDIS_HOST");
+    char* e_redis_port = getenv("REDIS_PORT");
+
+    if (!e_redis_host || !e_redis_port) {
+      SPDLOG_ERROR("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
+      return nullptr;
+    }
+
+    const string& redis_host = e_redis_host;
+    uint16_t redis_port = (uint16_t)stoul(e_redis_port);
+    auto storage = make_unique<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
+
+    if (!storage->init()) {
+      SPDLOG_ERROR("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
+      return nullptr;
+    }
+
+    SPDLOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
+
+    return storage;
+  }
 
 } // namespace primordia::mud::storage

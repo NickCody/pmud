@@ -5,4 +5,5 @@ cc_library(
     hdrs = glob(["*.h"]),
     strip_include_prefix = "//pmud",
     visibility = ["//visibility:public"],
+    deps = ["//pmud/pnet:library"],
 )

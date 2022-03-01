@@ -39,7 +39,6 @@ cc_binary(
     deps = [
         "//graph:library",
         "//pmud/common:library",
-        "//pmud/logger:library",
         "//pmud/player:library",
         "//pmud/pnet:library",
         "//pmud/storage:library",

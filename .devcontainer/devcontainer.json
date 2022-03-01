@@ -28,12 +28,12 @@
   "extensions": [
     "galexite.bazel-cpp-tools",
     "ms-azuretools.vscode-docker",
-    "bazelbuild.vscode-bazel",
     "ms-vscode.cpptools",
     "matepek.vscode-catch2-test-adapter",
     "jeff-hykin.better-cpp-syntax",
     "xaver.clang-format",
     "redhat.vscode-yaml",
+    "stackbuild.bazel-stack-vscode"
   ],
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
