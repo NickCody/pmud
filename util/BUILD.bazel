@@ -28,9 +28,11 @@ cc_binary(
     srcs = ["yaml-redis-loader.cpp"],
     copts = global_cppopts(),
     deps = [
+        "//pmud/common:library",
         "//pmud/storage:library",
         "@fmt//:main",
         "@hiredis//:main",
         "@ncurses//:main",
+        "@yaml-cpp//:main",
     ],
 )
