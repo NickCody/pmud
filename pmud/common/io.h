@@ -2,10 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <string>
-#include <cstring>
-
-#include "fmt/format.h"
+#include "fmt/core.h"
 
 namespace primordia::mud::common {
 

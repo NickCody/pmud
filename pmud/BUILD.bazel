@@ -8,7 +8,7 @@ filegroup(
     name = "conf",
     srcs = [
         "conf/.caf_pmud",
-        "conf/primordia-mud.yaml",
+        "conf/primordia-mud.yml",
         "conf/redis.conf",
     ],
 )

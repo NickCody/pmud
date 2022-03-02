@@ -2,7 +2,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <fmt/format.h>
+#include <fmt/core.h>
 
 #include "caf/stateful_actor.hpp"
 #include "server_state.h"

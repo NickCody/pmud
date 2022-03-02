@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <limits.h>
 
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <yaml-cpp/yaml.h>
 
 #include "caf/all.hpp"

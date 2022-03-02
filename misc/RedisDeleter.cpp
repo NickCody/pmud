@@ -1,5 +1,5 @@
 #include <memory>
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <iostream>
 #include <sstream>
 
