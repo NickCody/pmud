@@ -95,6 +95,9 @@ alias l='ls -CF'
 alias yq='docker run -i --rm mikefarah/yq'
 alias yl='yamllint'
 
+alias gitg='git log --graph --pretty=format:"%C(yellow)%h %Cred%ad%Cgreen%d %Creset%s %Cblue(%an)" --date=short'
+alias gitga='git log --all --graph --pretty=format:"%C(yellow)%h %Cred%ad%Cgreen%d %Creset%s %Cblue(%an)" --date=short'
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
