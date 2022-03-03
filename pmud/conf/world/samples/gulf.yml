@@ -1,0 +1,9 @@
+---
+realities:
+  - name: Prime Reality
+    planets:
+      - name: Primordia
+        landmasses:
+          bodies-of-water:
+            - name: Gulf of the Burning Sun
+              kind: gulf

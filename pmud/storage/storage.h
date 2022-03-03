@@ -38,7 +38,6 @@ namespace primordia::mud::storage {
     virtual bool init() = 0;
     virtual bool value_store(const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
-    // virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
     virtual bool list_store(const string& list_name, const string& value) = 0;
   };
 
@@ -77,40 +76,31 @@ namespace primordia::mud::storage {
       return true;
     }
 
-    RedisReplyUniquePtr command(const string& cmd) {
-      spdlog::debug("To redis => {}", cmd);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), cmd.c_str()));
-      if (!reply) {
-        SPDLOG_ERROR("Error running command [{}], code {}: {}", cmd, m_context->err, m_context->errstr);
-      }
-      return reply;
-    }
-
     bool value_store(const string& key, const string& value) override {
-      auto _key = _replace_all(key, " ", "_");
-      return command(fmt::format(R"(SET {} "{}")", _key, value)) != nullptr;
+      spdlog::debug("redis: SET {} {}", key, value);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "SET %s %s", key.c_str(), value.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+      }
+      return reply != nullptr;
     }
 
     bool map_store(const string& map_name, const string& key, const string& value) override {
-      auto _map_name = _replace_all(map_name, " ", "_");
-      auto _key = _replace_all(key, " ", "_");
-      return command(fmt::format(R"(HSET {} {} "{}")", _map_name, _key, value)) != nullptr;
+      spdlog::debug("redis: HSET {} {} {}", map_name, key, value);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+      }
+      return reply != nullptr;
     }
 
-    // bool map_store(const string& map_name, const map<string, string> pairs) override {
-    //   auto _map_name = _replace_all(map_name, " ", "_");
-    //   ostringstream cmd;
-    //   for (auto pair : pairs) {
-    //     cmd << _replace_all(pair.first, " ", "_") << " \"" << pair.second << "\" "
-    //         << " ";
-    //   }
-
-    //   return command(fmt::format(R"(HMSET {} "{}")", _map_name, cmd.str())) != nullptr;
-    // }
-
     bool list_store(const string& list_name, const string& value) override {
-      auto _list_name = _replace_all(list_name, " ", "_");
-      return command(fmt::format(R"(RPUSH {} "{}")", _list_name, value)) != nullptr;
+      spdlog::debug("redis: RPUSH {} {}", list_name, value);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "RPUSH %s %s", list_name.c_str(), value.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+      }
+      return reply != nullptr;
     }
 
   private:
