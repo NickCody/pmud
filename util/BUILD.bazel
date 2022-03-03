@@ -36,3 +36,14 @@ cc_binary(
         "@yaml-cpp//:main",
     ],
 )
+
+cc_binary(
+    name = "yaml-print",
+    srcs = ["yaml-print.cpp"],
+    copts = global_cppopts(),
+    deps = [
+        "//pmud/common:library",
+        "@fmt//:main",
+        "@yaml-cpp//:main",
+    ],
+)

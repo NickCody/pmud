@@ -1,6 +1,6 @@
 #include "spdlog/spdlog.h"
 #include "common/io.h"
-#include "common/yaml_util.h"
+#include "common/yaml_storage.h"
 #include "storage/storage.h"
 
 using namespace std;
@@ -13,9 +13,12 @@ void usage() {
 }
 
 int main(int argc, char** argv) {
+  spdlog::set_level(spdlog::level::debug);
+
+  spdlog::debug("Starting!");
 
   string filename;
-  string prefix;
+  string prefix = "pmud";
 
   int c;
   opterr = 0;
@@ -46,9 +49,6 @@ int main(int argc, char** argv) {
   auto input = stdout_or_file(filename.c_str());
 
   YAML::Node config = YAML::Load(*input);
-
-  auto buffer = fmt::memory_buffer();
-  node_to_buffer(buffer, config);
-  fmt::print("{}", buffer.data());
+  yaml_to_storage(storage.get(), prefix, config, DataStructure::String);
   return EXIT_SUCCESS;
 }

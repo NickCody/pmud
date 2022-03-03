@@ -38,7 +38,8 @@ namespace primordia::mud::storage {
     virtual bool init() = 0;
     virtual bool value_store(const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
-    virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
+    // virtual bool map_store(const string& map_name, const map<string, string> pairs) = 0;
+    virtual bool list_store(const string& list_name, const string& value) = 0;
   };
 
   class RedisStorage : public Storage {
@@ -77,7 +78,7 @@ namespace primordia::mud::storage {
     }
 
     RedisReplyUniquePtr command(const string& cmd) {
-      SPDLOG_DEBUG("Sending [{}] to redis...", cmd);
+      spdlog::debug("To redis => {}", cmd);
       auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), cmd.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command [{}], code {}: {}", cmd, m_context->err, m_context->errstr);
@@ -86,21 +87,30 @@ namespace primordia::mud::storage {
     }
 
     bool value_store(const string& key, const string& value) override {
-      return command(fmt::format("SET {} {}", key, value)) != nullptr;
+      auto _key = _replace_all(key, " ", "_");
+      return command(fmt::format(R"(SET {} "{}")", _key, value)) != nullptr;
     }
 
     bool map_store(const string& map_name, const string& key, const string& value) override {
-      return command(fmt::format("HSET {} {} {}", map_name, key, value)) != nullptr;
+      auto _map_name = _replace_all(map_name, " ", "_");
+      auto _key = _replace_all(key, " ", "_");
+      return command(fmt::format(R"(HSET {} {} "{}")", _map_name, _key, value)) != nullptr;
     }
 
-    bool map_store(const string& map_name, const map<string, string> pairs) override {
-      ostringstream cmd;
-      for (auto pair : pairs) {
-        cmd << _replace_all(pair.first, " ", "_") << " \"" << pair.second << "\" "
-            << " ";
-      }
+    // bool map_store(const string& map_name, const map<string, string> pairs) override {
+    //   auto _map_name = _replace_all(map_name, " ", "_");
+    //   ostringstream cmd;
+    //   for (auto pair : pairs) {
+    //     cmd << _replace_all(pair.first, " ", "_") << " \"" << pair.second << "\" "
+    //         << " ";
+    //   }
 
-      return command(fmt::format("HMSET {} {}", map_name, cmd.str())) != nullptr;
+    //   return command(fmt::format(R"(HMSET {} "{}")", _map_name, cmd.str())) != nullptr;
+    // }
+
+    bool list_store(const string& list_name, const string& value) override {
+      auto _list_name = _replace_all(list_name, " ", "_");
+      return command(fmt::format(R"(RPUSH {} "{}")", _list_name, value)) != nullptr;
     }
 
   private:
