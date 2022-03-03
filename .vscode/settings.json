@@ -116,5 +116,6 @@
     "shared_mutex": "cpp",
     "span": "cpp",
     "valarray": "cpp"
-  }
+  },
+  "files.autoSave": "onFocusChange"
 }
