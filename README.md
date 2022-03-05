@@ -68,7 +68,7 @@ See [README.md](pmud/README.md) in `pmud/` folder.
 bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-See [README.md](life/README.md) in `life/` folder.
+See [README.md](life/) in `life/` folder.
 
 ### > graph
 
