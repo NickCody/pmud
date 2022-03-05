@@ -20,19 +20,55 @@ This repo contains the Primordia MUD source code packaged in a devcontainer that
     - export VSCODE_CONTAINER_GIT_USER="nick.codignotto@gmail.com"
     - export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
 
-## > pmud
+## Tech Stack
+
+Compilers and IDE and Build Tools
+
+- [C++ 20](https://gcc.gnu.org/)
+- [Bazel](https://bazel.build/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
+- [ninja](https://ninja-build.org/)
+- [npm](https://www.npmjs.com/)
+
+Actor Framework
+
+- [CAF Actor Framework](https://www.actor-framework.org/) 
+
+Databases and Embedded Language
+
+- [Redis](https://redis.io/)
+- [Lua](https://www.lua.org/)
+
+Libraries:
+
+- [fmt](https://fmt.dev/latest/index.html)
+- [spdlog](https://github.com/gabime/spdlog)
+- [GoogleTest](https://github.com/google/googletest)
+- [Yaml](https://yaml.org/)
+- [hiredis](https://github.com/redis/hiredis)
+- [ncurses](https://tldp.org/HOWTO/NCURSES-Programming-HOWTO/intro.html)
+
+Utilities
+
+- [graphviz](http://www.graphviz.org/)
+
+## Projects
+
+### > pmud
 
 This is the Primordia MUD, a multiplayer text-based adventure game.
 
 See [README.md](pmud/README.md) in pmud folder.
 
-## > life
+### > life
 
 ```bash
 bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-## > graph
+### > graph
 
 ```bash
 bazel run //graph/application:fully-connected -- 10           # complete graph (dot output)
@@ -42,7 +78,7 @@ bazel run //graph/application:structure --  10 100            # prints adj-list 
 bazel run //graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
 ```
 
-## > util
+### > util
 
 Multiple small utilities and test programs.
 
