@@ -5,8 +5,8 @@
   "description": "Monster Properties",
   "type": "object",
   "properties": {
-    "name": {
-      "description": "Name for the monster",
+    "alias": {
+      "description": "Alias for the monster",
       "type": "string"
     },
     "kind": {
@@ -20,15 +20,14 @@
         "celestial"
       ]
     },
-    "hit dice": {
+    "hit-dice": {
       "description": "Hit dice of monster",
       "type": "string",
       "pattern": "[0-9]+d[0-9]+"
     }
   },
   "required": [
-    "name",
     "kind",
-    "hit dice"
+    "hit-dice"
   ]
 }

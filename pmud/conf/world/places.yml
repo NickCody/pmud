@@ -1,109 +1,163 @@
 ---
 realities:
-  - name: Prime Reality
-    planets:
-      - name: Primordia
-        tech: medieval
-        oceans:
-          - Oelder Ocean
-        landmasses:
-          - name: Tarria
-            regions:
-              - name: Alterian Mountains
-                nations: [Feudelus, Lumerok]
-              - name: Vast Wood
-                nations: [Feudelus, Draken]
-              - name: Barrier Peaks
-              - name: Bellowlands
-              - name: Dangerlands
-              - name: Hand of Death
-              - name: Highlands of Haldizar
-              - name: Midforest of Game
-              - name: Colderian Plateau
-              - name: Humewood Marshes
-              - name: Haltic Mountains
-            bodies-of-water:
-              - name: Bay of Fortunes
-                kind: bay
-              - name: Gulf of Talistor
-                kind: gulf
-              - name: Gulf of the Burning Sun
-                kind: gulf
-              - name: Lake Tusk
-                kind: lake
-              - name: Lake Bariol
-                kind: lake
-              - name: Lake Gulster
-                kind: lake
-              - name: Lake Washburn
-                kind: lake
-            nations:
-              - name: Annexia
-                population-centers: []
-              - name: Baelandrah
-                population-centers: []
-              - name: Colderian
-                population-centers: []
-              - name: Daelandra
-                population-centers: []
-              - name: Draken
-                population-centers: []
-              - name: Elduria
-                population-centers:
-                  - name: Tymaria
-                    kind: city
-                  - name: Andae
-                    kind: city
-              - name: Folerun
-                population-centers: []
-              - name: Fuedelus
-                population-centers: []
-              - name: Heshmau
-                population-centers: []
-              - name: Ildorschia
-                population-centers: []
-              - name: Isacus
-                population-centers: []
-              - name: Isle of the Western Breeze
-                population-centers: []
-              - name: Lumerok
-                alias: Theocracy of the Star
-                population-centers:
-                  - name: Trulum
-                    kind: city
-                    position: 23Q
-                  - name: Peace
-                    kind: city
-                    position: 19S
-              - name: Messabia
-                population-centers: []
-              - name: Morrea
-                population-centers:
-                  - name: Owindport
-                    kind: city
-                  - name: Rattlebrand
-                    kind: city
-                  - name: Karpus
-                    kind: city
-              - name: Mysteria
-                population-centers:
-                  - name: Encre
-                    kind: city
-                  - name: Karey
-                    kind: city
-              - name: Olindi
-                population-centers:
-                  - name: Kronyth
-                    kind: city
-                  - name: Berole
-                    kind: city
-                  - name: Shibalm
-                    kind: city
-              - name: Xandrein
-                population-centers: []
-      - name: Cordona
-        tech: "nuclear"
-        oceans: []
-        landmasses: []
-  - name: Celestial Reality
-  - name: Infernal Reality
+  - Prime
+  - Celestial
+  - Infernal
+
+reality_Prime:
+  alias: Prime Reality
+
+reality_Celestial:
+  alias: Heaven
+
+reality_Infernal:
+  alias: Hell
+
+planets:
+  - Primordia
+  - Cordona
+
+planet_Primordia:
+  tech: medieval
+  oceans: "Oelder Ocean"
+
+planet_Cordona:
+  tech: nuclear
+
+landmasses:
+  - Tarria
+
+landmass_Tarria:
+  alias: "Continent of Tarria"
+
+regions:
+  - Alterian Mountains
+  - Vast Wood
+  - Barrier Peaks
+  - Bellowlands
+  - Dangerlands
+  - Hand of Death
+  - Highlands of Haldizar
+  - Midforest of Game
+  - Colderian Plateau
+  - Humewood Marshes
+  - Haltic Mountains
+
+region_Alterian Mountains:
+  nations: "Feudelus, Lumerok"
+region_Vast Wood:
+  nations: "Feudelus, Draken"
+region_Barrier Peaks:
+region_Bellowlands:
+region_Dangerlands:
+region_Hand of Death:
+region_Highlands of Haldizar:
+region_Midforest of Game:
+region_Colderian Plateau:
+region_Humewood Marshes:
+region_Haltic Mountains:
+
+bodies-of-water:
+  - Bay of Fortunes
+  - Gulf of Talistor
+  - Gulf of the Burning Sun
+  - Lake Tusk
+  - Lake Bariol
+  - Lake Gulster
+  - Lake Washburn
+
+waterbody_Bay of Fortunes:
+  kind: bay
+waterbody_Gulf of Talistor:
+  kind: gulf
+waterbody_Gulf of the Burning Sun:
+  kind: gulf
+waterbody_Lake Tusk:
+  kind: lake
+waterbody_Lake Bariol:
+  kind: lake
+waterbody_Lake Gulster:
+  kind: lake
+waterbody_Lake Washburn:
+  kind: lake
+
+nations:
+  - Annexia
+  - Baelandrah
+  - Colderian
+  - Daelandra
+  - Draken
+  - Elduria
+  - Folerun
+  - Fuedelus
+  - Heshmau
+  - Ildorschia
+  - Isacus
+  - Isle of the Western Breeze
+  - Lumerok
+  - Messabia
+  - Morrea
+  - Mysteria
+  - Olindi
+  - Xandrein
+
+nation_Annexia:
+  population_centers: ""
+nation_Baelandrah:
+  population_centers: ""
+nation_Colderian:
+  population_centers: ""
+nation_Daelandra:
+  population_centers: ""
+nation_Draken:
+  population_centers: "Tymaria, Andae"
+nation_Elduria:
+  population_centers: ""
+nation_Folerun:
+  population_centers: ""
+nation_Fuedelus:
+  population_centers: ""
+nation_Heshmau:
+  population_centers: ""
+nation_Ildorschia:
+  population_centers: ""
+nation_Isacus:
+  population_centers: ""
+nation_Isle of the Western Breeze:
+  population_centers: ""
+nation_Lumerok:
+  population_centers: "Trulum, Peace"
+nation_Messabia:
+  population_centers: ""
+nation_Morrea:
+  population_centers: "Owindport, Rattlebrand, Karpus"
+nation_Mysteria:
+  population_centers: ""
+nation_Olindi:
+  population_centers: ""
+nation_Xandrein:
+  population_centers: ""
+
+population-centers:
+  - Tymaria
+  - Andae
+  - Trulum
+  - Peace
+  - Owindport
+  - Rattlebrand
+  - Karpus
+
+population-center_Tymaria:
+  kind: city
+population-center_Andae:
+  kind: city
+population-center_Trulum:
+  kind: city
+population-center_Peace:
+  kind: city
+population-center_Owindport:
+  kind: city
+population-center_Rattlebrand:
+  kind: city
+population-center_Karpus:
+  kind: city

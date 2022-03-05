@@ -9,176 +9,125 @@
       "type": "array",
       "description": "List of realities",
       "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of the reality"
-          },
-          "planets": {
-            "type": "array",
-            "description": "List of planets in the reality",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Name of the planet"
-                },
-                "tech": {
-                  "type": "string",
-                  "description": "Level of technology",
-                  "enum": [
-                    "stone-age",
-                    "medieval",
-                    "nuclear",
-                    "space",
-                    "starfaring"
-                  ]
-                },
-                "oceans": {
-                  "type": "array",
-                  "description": "List of oceans on the planet",
-                  "items": {
-                    "type": "string",
-                    "description": "Name of the ocean"
-                  }
-                },
-                "landmasses": {
-                  "type": "array",
-                  "description": "List of landmasses on the planet",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "description": "Name of the landmass"
-                      },
-                      "regions": {
-                        "type": "array",
-                        "description": "List of regions within the landmass",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string",
-                              "description": "Name of the region"
-                            },
-                            "nations": {
-                              "type": "array",
-                              "description": "Nations within the region",
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "required": [
-                            "name"
-                          ]
-                        }
-                      },
-                      "bodies-of-water": {
-                        "type": "array",
-                        "description": "List of bodies of water within the landmass",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string",
-                              "description": "Name of the body of water"
-                            },
-                            "kind": {
-                              "type": "string",
-                              "description": "Kind of body of water",
-                              "enum": [
-                                "pond",
-                                "lake",
-                                "bay",
-                                "gulf",
-                                "sea"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "name",
-                            "kind"
-                          ]
-                        }
-                      },
-                      "nations": {
-                        "type": "array",
-                        "description": "List of nations within the landmass",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string",
-                              "description": "Name of the nation"
-                            },
-                            "alias": {
-                              "type": "string",
-                              "description": "Alternate name for the nation"
-                            },
-                            "population-centers": {
-                              "type": "array",
-                              "description": "List of cities, towns, and villages in the nation",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "name": {
-                                    "type": "string",
-                                    "description": "Name of the population-center"
-                                  },
-                                  "kind": {
-                                    "type": "string",
-                                    "description": "Kind of population-center, e.g. city",
-                                    "enum": [
-                                      "village",
-                                      "town",
-                                      "city"
-                                    ]
-                                  },
-                                  "position": {
-                                    "type": "string",
-                                    "description": "Coordinates of the population-center, e.g. 14S",
-                                    "pattern": "[0-9]+[A-Za-z]+"
-                                  }
-                                },
-                                "required": [
-                                  "name",
-                                  "kind"
-                                ]
-                              }
-                            }
-                          },
-                          "required": [
-                            "name",
-                            "population-centers"
-                          ]
-                        }
-                      }
-                    },
-                    "required": [
-                      "name",
-                      "regions",
-                      "bodies-of-water",
-                      "nations"
-                    ]
-                  }
-                }
-              },
-              "required": [
-                "name",
-                "tech",
-                "oceans",
-                "landmasses"
-              ]
-            }
-          }
+        "type": "string"
+      }
+    },
+    "planets": {
+      "type": "array",
+      "description": "List of planets",
+      "items": {
+        "type": "string"
+      }
+    },
+    "landmasses": {
+      "type": "array",
+      "description": "List of landmasses/continents",
+      "items": {
+        "type": "string"
+      }
+    },
+    "regions": {
+      "type": "array",
+      "description": "List of regions",
+      "items": {
+        "type": "string"
+      }
+    },
+    "nations": {
+      "type": "array",
+      "description": "List of nations",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bodies-of-water": {
+      "type": "array",
+      "description": "List of bodies of water",
+      "items": {
+        "type": "string"
+      }
+    },
+    "population-centers": {
+      "type": "array",
+      "description": "List of population centers",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "patternProperties": {
+    "reality_.*$": {
+      "description": "Properties of a reality",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias for the reality"
+        }
+      }
+    },
+    "planet_.*$": {
+      "description": "Properties of a planet",
+      "type": "object",
+      "properties": {
+        "tech": {
+          "type": "string",
+          "description": "technology level"
         },
-        "required": [
-          "name"
-        ]
+        "oceans": {
+          "type": "string",
+          "description": "Comma-separated list of Ocean names"
+        }
+      }
+    },
+    "region_.*$": {
+      "description": "Properties of a region",
+      "type": "object",
+      "properties": {
+        "nations": {
+          "type": "string",
+          "description": "Comma-separated list of nations within the region's borders"
+        }
+      }
+    },
+    "nation_.*$": {
+      "description": "Properties of a nation",
+      "type": "object",
+      "properties": {
+        "population_centers": {
+          "type": "string",
+          "description": "Comma-separated list of population centers (cities, towns, etc.)"
+        }
+      }
+    },
+    "landmass_.*$": {
+      "description": "Properties of a landmass/continent",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias for the landmass"
+        }
+      }
+    },
+    "waterbody_.*$": {
+      "description": "Properties of a body of water",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "Kind of waterbody (pond, lake, sea, ocean)"
+        }
+      }
+    },
+    "population-center_.*$": {
+      "description": "Properties of a population center",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "Kind of population center (village, town, city)"
+        }
       }
     }
   }

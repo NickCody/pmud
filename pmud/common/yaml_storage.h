@@ -10,7 +10,7 @@ namespace primordia::mud::common {
   using namespace std;
   using namespace primordia::mud::storage;
 
-  inline void yaml_to_storage(Storage* storage, const string& path, const YAML::Node node) {
+  inline void yaml_to_storage(Storage* storage, const string& path, const string& property, const YAML::Node node) {
 
     switch (node.Type()) {
     case YAML::NodeType::Null:
@@ -25,21 +25,17 @@ namespace primordia::mud::common {
         if (entry.IsScalar()) {
           storage->list_store(path, entry.as<string>());
         } else {
-          yaml_to_storage(storage, path, entry);
+          yaml_to_storage(storage, path, property, entry);
         }
       }
       break;
 
     case YAML::NodeType::Map: {
-
       for (const auto& entry : node) {
-
         if (entry.second.IsScalar()) {
-          auto p = path + ":" + node["name"].as<string>();
-          storage->map_store(p, entry.first.as<string>(), entry.second.as<string>());
+          storage->map_store(path, entry.first.as<string>(), entry.second.as<string>());
         } else {
-          auto p = path + ":" + entry.first.as<string>();
-          yaml_to_storage(storage, p, entry.second);
+          yaml_to_storage(storage, path + ":" + entry.first.as<string>(), "", entry.second);
         }
       }
       break;

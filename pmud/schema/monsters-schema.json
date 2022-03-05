@@ -11,13 +11,13 @@
       "items": {
         "type": "string"
       }
-    },
-    "monsters": {
-      "description": "Monster Compendium",
-      "type": "array",
-      "items": {
-        "$ref": "monster-schema.json"
-      }
+    }
+  },
+  "patternProperties": {
+    "monster_.*$": {
+      "description": "Properties of a monster",
+      "type": "object",
+      "$ref": "monster-schema.json"
     }
   }
 }
