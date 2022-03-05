@@ -60,13 +60,15 @@ Utilities
 
 This is the Primordia MUD, a multiplayer text-based adventure game.
 
-See [README.md](pmud/README.md) in pmud folder.
+See [README.md](pmud/README.md) in `pmud/` folder.
 
 ### > life
 
 ```bash
 bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
+
+See [README.md](life/README.md) in `life/` folder.
 
 ### > graph
 
