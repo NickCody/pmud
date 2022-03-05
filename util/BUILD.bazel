@@ -47,3 +47,15 @@ cc_binary(
         "@yaml-cpp//:main",
     ],
 )
+
+cc_binary(
+    name = "lua",
+    srcs = ["lua.cpp"],
+    copts = global_cppopts(),
+    linkopts = ["-ldl"],  # lua-specific
+    deps = [
+        "//pmud/common:library",
+        "@fmt//:main",
+        "@lua//:main",
+    ],
+)

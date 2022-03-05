@@ -38,6 +38,8 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   iputils-ping \
   ssh-askpass \
   npm \
+  lua5.4 \
+  liblua5.4-dev \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 

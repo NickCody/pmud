@@ -37,3 +37,9 @@ new_local_repository(
     build_file = "yaml-cpp.BUILD",
     path = "/usr/local",
 )
+
+new_local_repository(
+    name = "lua",
+    build_file = "lua.BUILD",
+    path = "/usr",
+)
