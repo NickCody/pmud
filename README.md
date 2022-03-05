@@ -1,10 +1,13 @@
-# cpp-game
+# Primordia MUD
 
-A collection of simple games and experiments written in C++, ncurses, graphviz and built by bazel.
+Welcome to the Primordia MUD
 
-## Setup
+This repo contains the Primordia MUD source code packaged in a devcontainer that has all of the necessary tools and facilities to compile, build, and deploy Primordia MUD.
 
-1. Make sure vbscode and docker desktop are installed.
+## Prerequisites / Setup
+
+1. All you need are vcscode and docker desktop for your platform.
+
 2. You'll need these directories as they are mounted by the devcontainer:
 
     - ${localEnv:HOME}/.ssh
@@ -17,19 +20,19 @@ A collection of simple games and experiments written in C++, ncurses, graphviz a
     - export VSCODE_CONTAINER_GIT_USER="nick.codignotto@gmail.com"
     - export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
 
-## Projects
+## > pmud
 
-### pmud
+This is the Primordia MUD, a multiplayer text-based adventure game.
 
 See [README.md](pmud/README.md) in pmud folder.
 
-### life
+## > life
 
 ```bash
 bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-###  graph
+## > graph
 
 ```bash
 bazel run //graph/application:fully-connected -- 10           # complete graph (dot output)
@@ -39,8 +42,23 @@ bazel run //graph/application:structure --  10 100            # prints adj-list 
 bazel run //graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
 ```
 
-### util
+## > util
+
+Multiple small utilities and test programs.
 
 ```
-bazel run //util:cppversion
+bazel run //util:cppversion           # shows which C++ version is configured
+bazel run //util:lua                  # basic lua interpreter
+bazel run //util:scratch              # scratch, throwaway code
+bazel run //util:yaml-print           # prints a yaml file with some basic type information
+bazel run //util:taml-redis-loader    # loads yaml into redis
+bazel run //util:
 ```
+
+## nickcoding.com blog
+
+I'm blogging about my adventures here on my [blog](https://www.nickcoding.com)
+
+Posts:
+
+- [Building a MUD - Part I](https://www.nickcoding.com/2022/02/18/building-a-mud-part-1/)

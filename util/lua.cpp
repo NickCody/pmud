@@ -1,15 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#ifdef __cplusplus
-extern "C" {
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-}
-#endif //__cplusplus
-
-#include <lauxlib.h>
-#include <lualib.h>
+#include "lua.hpp"
 
 int main(void) {
   char buff[256];
@@ -21,7 +12,7 @@ int main(void) {
     error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);
     if (error) {
       fprintf(stderr, "%s", lua_tostring(L, -1));
-      lua_pop(L, 1); /* pop error message from the stack */
+      lua_pop(L, 1);
     }
   }
 
