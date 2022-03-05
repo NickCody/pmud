@@ -60,7 +60,7 @@ Utilities
 
 This is the Primordia MUD, a multiplayer text-based adventure game.
 
-See [README.md](pmud/README.md) in `pmud/` folder.
+See [README.md](pmud/) in `pmud/` folder.
 
 ### > life
 
