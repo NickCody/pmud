@@ -13,7 +13,7 @@ This repo contains the Primordia MUD source code packaged in a devcontainer that
     - ${localEnv:HOME}/.ssh
     - ${localEnv:HOME}/.config/gcloud
 
-        NOTE: You can just create an empty ~/.config/gcloud, as it's only required by some of the deploy scripts
+        NOTE: You can just create an empty `~/.config/gcloud`, as it's only required by some of the deploy scripts
 
 3. Also set these  up in your .bashrc and make sure they are loaded before invoking vscode:
 

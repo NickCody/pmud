@@ -117,5 +117,6 @@
     "span": "cpp",
     "valarray": "cpp"
   },
-  "files.autoSave": "onFocusChange"
+  "files.autoSave": "onFocusChange",
+  "terminal.integrated.shellIntegration.enabled": true
 }
