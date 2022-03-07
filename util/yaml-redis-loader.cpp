@@ -49,6 +49,6 @@ int main(int argc, char** argv) {
   auto input = stdout_or_file(filename.c_str());
 
   YAML::Node config = YAML::Load(*input);
-  yaml_to_storage(storage.get(), prefix, "", config);
+  yaml_to_storage(storage.get(), prefix, config);
   return EXIT_SUCCESS;
 }

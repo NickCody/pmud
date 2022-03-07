@@ -39,6 +39,8 @@ namespace primordia::mud::storage {
     virtual bool value_store(const string& key, const string& value) = 0;
     virtual bool map_store(const string& map_name, const string& key, const string& value) = 0;
     virtual bool list_store(const string& list_name, const string& value) = 0;
+    virtual bool set_store(const string& set_name, const string& value) = 0;
+    virtual bool del_key(const string& key) = 0;
   };
 
   class RedisStorage : public Storage {
@@ -80,7 +82,7 @@ namespace primordia::mud::storage {
       spdlog::debug("redis: SET {} {}", key, value);
       auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "SET %s %s", key.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+        SPDLOG_ERROR("Error running command value_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -89,7 +91,7 @@ namespace primordia::mud::storage {
       spdlog::debug("redis: HSET {} {} {}", map_name, key, value);
       auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+        SPDLOG_ERROR("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -98,32 +100,52 @@ namespace primordia::mud::storage {
       spdlog::debug("redis: RPUSH {} {}", list_name, value);
       auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "RPUSH %s %s", list_name.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command: code {}: {}", m_context->err, m_context->errstr);
+        SPDLOG_ERROR("Error running command list_store: code {}: {}", m_context->err, m_context->errstr);
+      }
+      return reply != nullptr;
+    }
+
+    bool set_store(const string& set_name, const string& value) override {
+      spdlog::debug("redis: SADD {} {}", set_name, value);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "SADD %s %s", set_name.c_str(), value.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+      }
+      return reply != nullptr;
+    }
+
+    bool del_key(const string& key) override {
+      spdlog::debug("redis: DEL {}", key);
+      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "DEL %s", key.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
 
   private:
     int hostname_to_ip(const string& hostname, string& ip) {
-      struct hostent* he;
-      struct in_addr** addr_list;
-      int i;
+      struct sockaddr whereto;
+      struct hostent* hp;
+      struct sockaddr_in* to;
 
-      if ((he = gethostbyname(hostname.c_str())) == NULL) {
-        return -1;
+      memset(&whereto, 0, sizeof(struct sockaddr));
+      to = (struct sockaddr_in*)&whereto;
+      to->sin_family = AF_INET;
+      to->sin_addr.s_addr = inet_addr(hostname.c_str());
+      if (to->sin_addr.s_addr != (in_addr_t)(-1)) {
+        ip = hostname;
+      } else {
+        hp = gethostbyname(hostname.c_str());
+        if (!hp) {
+          spdlog::warn("Unknown host {}", hostname);
+          return -1;
+        }
+        to->sin_family = hp->h_addrtype;
+        memcpy(&(to->sin_addr.s_addr), hp->h_addr, hp->h_length);
+        ip = hp->h_name;
       }
-
-      addr_list = (struct in_addr**)he->h_addr_list;
-
-      char buffer[PATH_MAX];
-      for (i = 0; addr_list[i] != NULL; i++) {
-        // Return the first one;
-        strcpy(buffer, inet_ntoa(*addr_list[i]));
-        ip = buffer;
-        return 0;
-      }
-
-      return -1;
+      return 0;
     }
 
     string _replace_all(const string& text, const string& from, const string& to) {
