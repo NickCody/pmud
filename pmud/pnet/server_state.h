@@ -41,11 +41,6 @@ namespace primordia::mud {
 
 CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, primordia::mud::type_id::first_net_type_id)
 
-CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::MudConfig))
-CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ServerState))
-CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::ConnectionState))
-CAF_ADD_TYPE_ID(primorda_mud_caf_types, (primordia::mud::CommandState))
-
 // Server
 CAF_ADD_ATOM(primorda_mud_caf_types, AcceptConnection)
 CAF_ADD_ATOM(primorda_mud_caf_types, StartServer)
@@ -64,28 +59,3 @@ CAF_ADD_ATOM(primorda_mud_caf_types, PerformWelcome)
 CAF_ADD_ATOM(primorda_mud_caf_types, OnUserInput)
 
 CAF_END_TYPE_ID_BLOCK(primorda_mud_caf_types)
-
-namespace primordia::mud {
-
-  template <class Inspector> bool inspect(Inspector& f, MudConfig& x) {
-
-    return f.object(x).fields(
-        f.field("name", x.name), f.field("address", x.address), f.field("port", x.port), f.field("max_queued_connections", x.max_queued_connections));
-  }
-
-  template <class Inspector> bool inspect(Inspector& f, ServerState& x) {
-
-    return f.object(x).fields(f.field("config", x.config), f.field("sockfd", x.sockfd));
-  }
-
-  template <class Inspector> bool inspect(Inspector& f, ConnectionState& x) {
-
-    return f.object(x).fields(f.field("connection", x.connection));
-  }
-
-  template <class Inspector> bool inspect(Inspector& f, CommandState& x) {
-
-    return f.object(x).fields(f.field("connection", x.connection));
-  }
-
-} // namespace primordia::mud
