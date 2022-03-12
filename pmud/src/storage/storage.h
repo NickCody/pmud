@@ -9,30 +9,15 @@
 #include <limits.h>
 #include <ctime>
 #include "hiredis/hiredis.h"
-
 #include "spdlog/spdlog.h"
 
 #include "common/pmud_net.h"
+#include "storage/redis_types.h"
+#include "storage/redis_stream_injestor.h"
 
 namespace primordia::mud::storage {
 
   using namespace std;
-
-  struct RedisReplyDeleter {
-    void operator()(void* reply) const {
-      freeReplyObject(reply);
-    }
-  };
-
-  struct RedisContextDeleter {
-    void operator()(redisContext* context) const {
-      SPDLOG_INFO("Shutting down redis");
-      redisFree(context);
-    }
-  };
-
-  using RedisContextUniquePtr = std::unique_ptr<redisContext, RedisContextDeleter>;
-  using RedisReplyUniquePtr = std::unique_ptr<void, RedisReplyDeleter>;
 
   class Storage {
   public:
@@ -43,6 +28,8 @@ namespace primordia::mud::storage {
     virtual bool list_store(const string& list_name, const string& value) = 0;
     virtual bool set_store(const string& set_name, const string& value) = 0;
     virtual bool del_key(const string& key) = 0;
+    virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos) = 0;
+    virtual string raw(const string& command) = 0;
   };
 
   class RedisStorage : public Storage {
@@ -82,7 +69,7 @@ namespace primordia::mud::storage {
 
     bool value_store(const string& key, const string& value) override {
       spdlog::debug("redis: SET {} {}", key, value);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "SET %s %s", key.c_str(), value.c_str()));
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SET %s %s", key.c_str(), value.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command value_store: code {}: {}", m_context->err, m_context->errstr);
       }
@@ -91,7 +78,7 @@ namespace primordia::mud::storage {
 
     bool map_store(const string& map_name, const string& key, const string& value) override {
       spdlog::debug("redis: HSET {} {} {}", map_name, key, value);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
       }
@@ -100,7 +87,7 @@ namespace primordia::mud::storage {
 
     bool list_store(const string& list_name, const string& value) override {
       spdlog::debug("redis: RPUSH {} {}", list_name, value);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "RPUSH %s %s", list_name.c_str(), value.c_str()));
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "RPUSH %s %s", list_name.c_str(), value.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command list_store: code {}: {}", m_context->err, m_context->errstr);
       }
@@ -109,7 +96,7 @@ namespace primordia::mud::storage {
 
     bool set_store(const string& set_name, const string& value) override {
       spdlog::debug("redis: SADD {} {}", set_name, value);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "SADD %s %s", set_name.c_str(), value.c_str()));
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SADD %s %s", set_name.c_str(), value.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
       }
@@ -118,11 +105,63 @@ namespace primordia::mud::storage {
 
     bool del_key(const string& key) override {
       spdlog::debug("redis: DEL {}", key);
-      auto reply = RedisReplyUniquePtr(redisCommand(m_context.get(), "DEL %s", key.c_str()));
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "DEL %s", key.c_str()));
       if (!reply) {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
+    }
+
+    vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos) override {
+
+      spdlog::debug("redis: XREAD BLOCK 0 STREAMS {} {}", stream_name, pos);
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "XREAD BLOCK 0 STREAMS %s %s", stream_name.c_str(), pos.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        return vector<StreamResponse>();
+      } else {
+        return construct_streams(reply.get());
+      }
+    }
+
+    string raw(const string& command) override {
+      spdlog::debug("redis (raw):{}", command);
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), command.c_str()));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        return "";
+      } else {
+        return redis_reply_dump(reply.get());
+      }
+    }
+
+  private:
+    string redis_reply_dump(redisReply* reply, const string& indent = "") {
+
+      ostringstream str;
+
+      switch (reply->type) {
+      case REDIS_REPLY_STATUS:
+        return fmt::format("{}REDIS_REPLY_STATUS: {}\n", indent, reply->str);
+      case REDIS_REPLY_ERROR:
+        return fmt::format("{}REDIS_REPLY_ERROR: {}\n", indent, reply->str);
+      case REDIS_REPLY_INTEGER:
+        return fmt::format("{}REDIS_REPLY_INTEGER: {}\n", indent, reply->integer);
+      case REDIS_REPLY_NIL:
+        return fmt::format("{}REDIS_REPLY_NIL\n", indent);
+      case REDIS_REPLY_STRING:
+        return fmt::format("{}REDIS_REPLY_STRING: {}", indent, reply->str);
+      case REDIS_REPLY_ARRAY:
+        str << fmt::format("{}REDIS_REPLY_ARRAY\n", indent);
+        for (size_t i = 0; i < reply->elements; i++) {
+          str << redis_reply_dump(reply->element[i], indent + "  ") << endl;
+        }
+        return str.str();
+      default:
+        break;
+      }
+
+      return "Unknown";
     }
   };
 

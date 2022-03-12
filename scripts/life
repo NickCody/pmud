@@ -8,5 +8,5 @@ set -o pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/..
-bazel build //life:main
+bazel build //misc/life:main
 bazel-bin/life/main "$@"

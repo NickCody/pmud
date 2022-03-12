@@ -56,8 +56,7 @@ Utilities
 
 ## Roadmap
 
-[roadmap.md](doc/roadmap.md)
-
+[roadmap.md](pmud/doc/roadmap.md)
 
 ## Projects
 
@@ -65,24 +64,23 @@ Utilities
 
 This is the Primordia MUD, a multiplayer text-based adventure game.
 
-See [README.md](pmud/) in `pmud/` folder.
+See  `pmud/`[README.md](pmud/).
 
 ### > life
 
 ```bash
-bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
+bazel run //misc/life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-See [README.md](life/) in `life/` folder.
-
+See `misc/life/`[README.md](misc/life/).
 ### > graph
 
 ```bash
-bazel run //graph/application:fully-connected -- 10           # complete graph (dot output)
-bazel run //graph/application:random-connected --  10 100     # randomly connected (dot output)
-bazel run //graph/application:matrix -- 10 100                # prints adjacency matrix representation (custom output)
-bazel run //graph/application:structure --  10 100            # prints adj-list structure (custom output)
-bazel run //graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
+bazel run //misc/graph/application:fully-connected -- 10           # complete graph (dot output)
+bazel run //misc/graph/application:random-connected --  10 100     # randomly connected (dot output)
+bazel run //misc/graph/application:matrix -- 10 100                # prints adjacency matrix representation (custom output)
+bazel run //misc/graph/application:structure --  10 100            # prints adj-list structure (custom output)
+bazel run //misc/graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
 ```
 
 ### > util

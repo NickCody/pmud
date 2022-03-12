@@ -24,34 +24,6 @@ struct RedisContextDeleter {
 using RedisContextUniquePtr = std::unique_ptr<redisContext, RedisContextDeleter>;
 using RedisReplyUniquePtr = std::unique_ptr<void, RedisReplyDeleter>;
 
-string redis_reply_dump(redisReply* reply) {
-
-  ostringstream str;
-
-  switch (reply->type) {
-  case REDIS_REPLY_STATUS:
-    return fmt::format("REDIS_REPLY_STATUS: {}\n", reply->str);
-  case REDIS_REPLY_ERROR:
-    return fmt::format("REDIS_REPLY_ERROR: {}\n", reply->str);
-  case REDIS_REPLY_INTEGER:
-    return fmt::format("REDIS_REPLY_INTEGER: {}\n", reply->integer);
-  case REDIS_REPLY_NIL:
-    return fmt::format("REDIS_REPLY_NIL\n");
-  case REDIS_REPLY_STRING:
-    return fmt::format("REDIS_REPLY_STRING: {}\n", reply->str);
-  case REDIS_REPLY_ARRAY:
-    str << fmt::format("REDIS_REPLY_ARRAY") << endl;
-    for (size_t i = 0; i < reply->elements; i++) {
-      str << redis_reply_dump(reply->element[i]) << endl;
-    }
-    return str.str();
-  default:
-    break;
-  }
-
-  return "Unknown";
-}
-
 int main() {
 
   RedisContextUniquePtr context(redisConnect("192.168.86.25", 6379));

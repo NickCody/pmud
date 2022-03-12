@@ -29,8 +29,8 @@ cc_binary(
     copts = global_cppopts(),
     visibility = ["//visibility:public"],
     deps = [
-        "//pmud/common:library",
-        "//pmud/storage:library",
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
         "@fmt//:main",
         "@hiredis//:main",
         "@ncurses//:main",
@@ -43,7 +43,7 @@ cc_binary(
     srcs = ["yaml-print.cpp"],
     copts = global_cppopts(),
     deps = [
-        "//pmud/common:library",
+        "//pmud/src/common:library",
         "@fmt//:main",
         "@yaml-cpp//:main",
     ],
@@ -55,8 +55,22 @@ cc_binary(
     copts = global_cppopts(),
     linkopts = ["-ldl"],  # lua-specific
     deps = [
-        "//pmud/common:library",
+        "//pmud/src/common:library",
         "@fmt//:main",
+        "@lua//:main",
+    ],
+)
+
+cc_binary(
+    name = "redis-streams-consumer",
+    srcs = ["redis-streams-consumer.cpp"],
+    copts = global_cppopts(),
+    linkopts = ["-ldl"],  # lua-specific
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
+        "@fmt//:main",
+        "@hiredis//:main",
         "@lua//:main",
     ],
 )
