@@ -40,6 +40,10 @@
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=delegated",
     "source=${localEnv:HOME}/.config/gcloud,target=/home/vscode/.config/gcloud,type=bind"
   ],
+  "containerEnv": {
+    "REDIS_HOST": "${localEnv:REDIS_HOST}",
+    "REDIS_PORT": "${localEnv:REDIS_PORT}"
+  },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.
