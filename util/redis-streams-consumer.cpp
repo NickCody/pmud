@@ -3,11 +3,13 @@
 #include "spdlog/spdlog.h"
 #include "common/pmud_io.h"
 #include "common/yaml_storage.h"
-#include "storage/storage.h"
+#include "storage/redis_storage.h"
 
 using namespace std;
 using namespace primordia::mud::storage;
 using namespace primordia::mud::common;
+
+namespace redis_storage = primordia::mud::storage::redis;
 
 void usage() {
   fmt::print("Usage: redis-streams-consumer [-s stream-name]\n\n");
@@ -39,7 +41,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  auto storage = initialize_redis_storage();
+  auto storage = redis_storage::initialize_redis_storage();
 
   if (!storage) {
     SPDLOG_ERROR("Failed to initialize redis storage.");
@@ -47,8 +49,8 @@ int main(int argc, char** argv) {
   }
 
   while (true) {
-    vector<StreamResponse> streams = storage->read_stream_block(stream_name, position);
-    for (auto response : streams) {
+    StreamResponses_t stream_responses = storage->read_stream_block(stream_name, position);
+    for (auto response : stream_responses) {
       fmt::print("stream: {}\n", response.stream_name);
       for (auto record : response.records) {
         for (auto tup : record.fields) {

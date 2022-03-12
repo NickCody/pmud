@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-namespace primordia::mud::storage {
+namespace primordia::mud::storage::redis {
 
   using namespace std;
 
@@ -23,14 +23,4 @@ namespace primordia::mud::storage {
   using RedisContextUniquePtr = std::unique_ptr<redisContext, RedisContextDeleter>;
   using RedisReplyUniquePtr = std::unique_ptr<redisReply, RedisReplyDeleter>;
 
-  struct StreamRecord {
-    string timestamp;
-    map<string, string> fields;
-  };
-
-  struct StreamResponse {
-    string stream_name;
-    vector<StreamRecord> records;
-  };
-
-} // namespace primordia::mud::storage
+} // namespace primordia::mud::storage::redis
