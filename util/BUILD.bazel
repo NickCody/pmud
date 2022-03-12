@@ -27,6 +27,7 @@ cc_binary(
     name = "yaml-redis-loader",
     srcs = ["yaml-redis-loader.cpp"],
     copts = global_cppopts(),
+    visibility = ["//visibility:public"],
     deps = [
         "//pmud/common:library",
         "//pmud/storage:library",

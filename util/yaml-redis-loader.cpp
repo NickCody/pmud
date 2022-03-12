@@ -47,6 +47,10 @@ int main(int argc, char** argv) {
   }
 
   auto input = stdout_or_file(filename.c_str());
+  if (!input) {
+    SPDLOG_INFO("Failed to open file: {}", filename);
+    return EXIT_FAILURE;
+  }
 
   YAML::Node config = YAML::Load(*input);
   yaml_to_storage(storage.get(), prefix, config);

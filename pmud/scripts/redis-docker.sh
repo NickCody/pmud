@@ -4,11 +4,11 @@ set -e
 set -u
 set -o pipefail
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-REDIS_VOLUME=$(readlink -f "$SCRIPT_DIR/../redis-volume")
+PMUD_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
+REDIS_VOLUME=$(readlink -f "$PMUD_DIR/../redis-volume")
 mkdir -p $REDIS_VOLUME/data
 mkdir -p $REDIS_VOLUME/conf 
-cp $SCRIPT_DIR/redis.conf $REDIS_VOLUME/conf
+cp $PMUD_DIR/conf/redis.conf $REDIS_VOLUME/conf
 
 docker container rm pmud-redis 2> /dev/null || true
 docker run \

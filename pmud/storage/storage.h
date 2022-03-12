@@ -130,13 +130,8 @@ namespace primordia::mud::storage {
     char* e_redis_host = getenv("REDIS_HOST");
     char* e_redis_port = getenv("REDIS_PORT");
 
-    if (!e_redis_host || !e_redis_port) {
-      SPDLOG_ERROR("Error, redis host and port should be specified with environment REDIS_HOST and REDIS_PORT");
-      return nullptr;
-    }
-
-    const string& redis_host = e_redis_host;
-    uint16_t redis_port = (uint16_t)stoul(e_redis_port);
+    const string& redis_host = e_redis_host ? e_redis_host : "localhost";
+    uint16_t redis_port = e_redis_port ? (uint16_t)stoul(e_redis_port) : 6379;
     auto storage = make_unique<primordia::mud::storage::RedisStorage>(redis_host, redis_port);
 
     if (!storage->init()) {

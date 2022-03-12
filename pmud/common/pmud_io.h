@@ -23,10 +23,13 @@ namespace primordia::mud::common {
     unique_ptr<istream, StreamDelete> is_ptr{ nullptr, deletor };
 
     if (filename == nullptr || strlen(filename) == 0) {
-      fmt::print(stderr, "Reading YAML from stdin...\n");
       is_ptr.reset(&cin);
     } else {
-      is_ptr.reset(new ifstream(filename));
+      auto ifs = new ifstream(filename);
+      if (ifs->is_open())
+        is_ptr.reset(ifs);
+      else
+        is_ptr.release();
     }
 
     return is_ptr;
