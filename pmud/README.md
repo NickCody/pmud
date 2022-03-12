@@ -11,7 +11,7 @@ bazel build //primordia-mud:pmud
 Run this way:
 
 ```
-bazel-bin/primordia-mud/pmud --config-file=.caf_pmud 
+bazel-bin/primordia-mud/pmud --config-file=pmud.caf 
 ```
 
 ## Redis

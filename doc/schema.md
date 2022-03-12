@@ -5,7 +5,7 @@
 
 ### Simple Start
 
-[module-forgotten-crypt](./conf/module-forgotten-crypt.yaml)
+[module-forgotten-crypt](pmud/conf/module-forgotten-crypt.yaml)
 
 
 ### Game Archtypes

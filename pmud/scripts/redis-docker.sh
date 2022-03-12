@@ -18,4 +18,4 @@ docker run \
   -p 6379:6379 \
   -d \
   redis \
-  redis-server /usr/local/etc/redis/redis.conf --save 10 1 --loglevel warning
+  redis-server /usr/local/etc/redis/redis.conf --loglevel warning

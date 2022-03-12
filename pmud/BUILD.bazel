@@ -6,11 +6,9 @@ package(features = ["-default_compile_flags"])
 
 filegroup(
     name = "conf",
-    srcs = [
-        "conf/.caf_pmud",
-        "conf/primordia-mud.yml",
-        "conf/redis.conf",
-    ],
+    srcs = glob([
+        "conf/**",
+    ]),
 )
 
 filegroup(
@@ -63,4 +61,6 @@ pkg_tar(
     include_runfiles = True,
     mode = "0755",
     package_dir = "pmud",
+    remap_paths = {"pmud/_solib_k8/_U@caf_S_S_Cmain___Ulib": ""},
+    strip_prefix = ".",
 )

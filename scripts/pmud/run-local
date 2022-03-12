@@ -13,5 +13,5 @@ export ENV=dev
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/../..
 bazel build //pmud:pmud
-cd pmud/conf
-../../bazel-bin/pmud/pmud --config-file=".caf_pmud" "$@"
+cd pmud
+../bazel-bin/pmud/pmud --config-file="conf/pmud.caf" "$@"

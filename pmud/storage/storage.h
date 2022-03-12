@@ -12,6 +12,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include "common/pmud_net.h"
+
 namespace primordia::mud::storage {
 
   using namespace std;
@@ -57,7 +59,7 @@ namespace primordia::mud::storage {
 
     bool init() {
       string ip;
-      if (hostname_to_ip(m_host, ip) == -1) {
+      if (primordia::mud::common::hostname_to_ip(m_host, ip) == -1) {
         SPDLOG_INFO("Could not resolve hostname {} to IP address!", m_host);
         return false;
       }
@@ -121,39 +123,6 @@ namespace primordia::mud::storage {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
-    }
-
-  private:
-    int hostname_to_ip(const string& hostname, string& ip) {
-      struct sockaddr whereto;
-      struct hostent* hp;
-      struct sockaddr_in* to;
-
-      memset(&whereto, 0, sizeof(struct sockaddr));
-      to = (struct sockaddr_in*)&whereto;
-      to->sin_family = AF_INET;
-      to->sin_addr.s_addr = inet_addr(hostname.c_str());
-      if (to->sin_addr.s_addr != (in_addr_t)(-1)) {
-        ip = hostname;
-      } else {
-        hp = gethostbyname(hostname.c_str());
-        if (!hp) {
-          spdlog::warn("Unknown host {}", hostname);
-          return -1;
-        }
-        to->sin_family = hp->h_addrtype;
-        memcpy(&(to->sin_addr.s_addr), hp->h_addr, hp->h_length);
-        ip = hp->h_name;
-      }
-      return 0;
-    }
-
-    string _replace_all(const string& text, const string& from, const string& to) {
-      string replaced = text;
-      for (auto at = replaced.find(from, 0); at != std::string::npos; at = replaced.find(from, at + to.length())) {
-        replaced.replace(at, from.length(), to);
-      }
-      return replaced;
     }
   };
 

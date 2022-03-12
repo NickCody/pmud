@@ -21,7 +21,7 @@
   - [ ] Login interaction with user, user creation
   - [ ] Object model: User, Connection
 - [ ] yaml schema for magic and spells
-- [ ] Allow yaml to be specified at CLI, not in `.caf_pmud` file
+- [ ] Allow yaml to be specified at CLI, not in `pmud.caf` file
 - [ ] User Information
   -  [ ] Store ip and time of login
   -  [ ] Login, create username/password (write to data directory) 
