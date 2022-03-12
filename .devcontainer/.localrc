@@ -14,5 +14,5 @@ export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
 export ACTIVE_SHELL_CONFIG=""
 alias tel='rlwrap telnet'
 
-export REDIS_HOST=singularity # 192.168.86.25
+export REDIS_HOST=singularity.lan # 192.168.86.25
 export REDIS_PORT=6379

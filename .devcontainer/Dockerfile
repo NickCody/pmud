@@ -13,6 +13,8 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
   && sudo mv bazel.gpg /etc/apt/trusted.gpg.d/ \
   && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
+  && curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list \
   && apt-get update \
   && apt install -y software-properties-common \
   && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
@@ -21,27 +23,12 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && apt-get -y install --no-install-recommends \
   apt-transport-https \
   ca-certificates \
-  yamllint \
-  curl \
-  gnupg2 \
-  libssl-dev \
-  vim \
-  graphviz xdot \
   ninja-build \
-  clang-format \
-  docker-ce-cli \
+  libssl-dev \
   bazel \
-  tree \
-  moreutils \
-  telnet \
-  rlwrap \
-  iputils-ping \
-  ssh-askpass \
-  npm \
-  lua5.4 \
-  liblua5.4-dev \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt-get clean
+  redis
+# && rm -rf /var/lib/apt/lists/* \
+# && apt-get clean
 
 RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz \
   && tar xvfz v1.9.2.tar.gz \
@@ -89,6 +76,24 @@ RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
   && cd .. \
   && rm master.zip \
   && rm -rf hiredis-master
+
+RUN sudo apt install -y \
+  yamllint \
+  curl \
+  gnupg2 \
+  vim \
+  graphviz xdot \
+  clang-format \
+  docker-ce-cli \
+  tree \
+  moreutils \
+  telnet \
+  rlwrap \
+  iputils-ping \
+  ssh-askpass \
+  npm \
+  lua5.4 \
+  liblua5.4-dev 
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
