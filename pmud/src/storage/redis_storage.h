@@ -94,33 +94,38 @@ namespace primordia::mud::storage::redis {
     bool del_key(const string& key) override {
       spdlog::debug("redis: DEL {}", key);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "DEL %s", key.c_str()));
+
       if (!reply) {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
 
-    vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos) override {
+    vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout) override {
+      auto _timeout = std::to_string(timeout);
+      spdlog::debug("redis: XREAD BLOCK {} STREAMS {} {}", _timeout, stream_name, pos);
 
-      spdlog::debug("redis: XREAD BLOCK 0 STREAMS {} {}", stream_name, pos);
-      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "XREAD BLOCK 0 STREAMS %s %s", stream_name.c_str(), pos.c_str()));
+      auto reply = RedisReplyUniquePtr(
+          (redisReply*)redisCommand(m_context.get(), "XREAD BLOCK %s STREAMS %s %s", _timeout.c_str(), stream_name.c_str(), pos.c_str()));
+
       if (!reply) {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
         return vector<StreamResponse>();
       } else {
-        return construct_stream_responses(reply.get());
+        return construct_stream_responses(*reply.get());
       }
     }
 
-    string raw(const string& command) override {
+    unique_ptr<redisReply> raw(const string& command) {
       spdlog::debug("redis (raw):{}", command);
-      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), command.c_str()));
+
+      redisReply* reply = (redisReply*)redisCommand(m_context.get(), command.c_str());
+
       if (!reply) {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
-        return "";
-      } else {
-        return redis_reply_dump(reply.get());
       }
+
+      return unique_ptr<redisReply>(reply);
     }
 
   private:

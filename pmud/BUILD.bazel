@@ -41,6 +41,8 @@ cc_binary(
         "//pmud/src/pnet:library",
         "//pmud/src/storage:library",
         "//pmud/src/system:library",
+        "//util:redis-stream-in",
+        "//util:redis-stream-out",
         "//util:yaml-redis-loader",
         "@caf//:main",
         "@fmt//:main",

@@ -62,10 +62,26 @@ cc_binary(
 )
 
 cc_binary(
-    name = "redis-streams-consumer",
-    srcs = ["redis-streams-consumer.cpp"],
+    name = "redis-stream-out",
+    srcs = ["redis-stream-out.cpp"],
     copts = global_cppopts(),
     linkopts = ["-ldl"],  # lua-specific
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
+        "@fmt//:main",
+        "@hiredis//:main",
+        "@lua//:main",
+    ],
+)
+
+cc_binary(
+    name = "redis-stream-in",
+    srcs = ["redis-stream-in.cpp"],
+    copts = global_cppopts(),
+    linkopts = ["-ldl"],  # lua-specific
+    visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",
         "//pmud/src/storage:library",

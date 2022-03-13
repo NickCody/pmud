@@ -14,10 +14,8 @@ namespace primordia::mud::storage::redis {
 
       StreamRecordFields_t stream_fields;
 
-      size_t i = 0;
-      while (i < fields.elements) {
+      for (size_t i = 0; i < fields.elements; i += 2) {
         stream_fields[fields.element[i]->str] = fields.element[i + 1]->str;
-        i += 2;
       }
 
       return StreamRecord{ timestamp, stream_fields };
@@ -40,16 +38,16 @@ namespace primordia::mud::storage::redis {
     }
   } // namespace
 
-  vector<StreamResponse> construct_stream_responses(redisReply* reply) {
-    if (reply->type != REDIS_REPLY_ARRAY) {
+  vector<StreamResponse> construct_stream_responses(const redisReply& reply) {
+    if (reply.type != REDIS_REPLY_ARRAY) {
       SPDLOG_ERROR("Cannot construct stream response from non-array");
       return vector<StreamResponse>();
     }
 
     vector<StreamResponse> responses;
 
-    for (size_t i = 0; i < reply->elements; i++) {
-      auto top_elem = reply->element[i];
+    for (size_t i = 0; i < reply.elements; i++) {
+      auto top_elem = reply.element[i];
       if (top_elem->elements < 2) {
         SPDLOG_ERROR("Encountered invalid element count while constructing stream responses!");
       } else {

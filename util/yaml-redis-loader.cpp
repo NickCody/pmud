@@ -1,11 +1,13 @@
 #include "spdlog/spdlog.h"
 #include "common/pmud_io.h"
 #include "common/yaml_storage.h"
-#include "storage/storage.h"
+#include "storage/redis_storage.h"
 
 using namespace std;
 using namespace primordia::mud::storage;
 using namespace primordia::mud::common;
+
+namespace redis_storage = primordia::mud::storage::redis;
 
 void usage() {
   fmt::print("Usage: yaml-redis-loader [-f filename] [-p prefix]\n\n");
@@ -39,7 +41,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  auto storage = initialize_redis_storage();
+  auto storage = redis_storage::initialize_redis_storage();
 
   if (!storage) {
     SPDLOG_ERROR("Failed to initialize redis storage.");

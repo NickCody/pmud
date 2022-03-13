@@ -27,8 +27,7 @@ namespace primordia::mud::storage {
     virtual bool list_store(const string& list_name, const string& value) = 0;
     virtual bool set_store(const string& set_name, const string& value) = 0;
     virtual bool del_key(const string& key) = 0;
-    virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos) = 0;
-    virtual string raw(const string& command) = 0;
+    virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout = 0) = 0;
   };
 
 } // namespace primordia::mud::storage

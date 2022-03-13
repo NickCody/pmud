@@ -93,7 +93,8 @@ RUN sudo apt install -y \
   ssh-askpass \
   npm \
   lua5.4 \
-  liblua5.4-dev 
+  liblua5.4-dev \
+  tmux
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

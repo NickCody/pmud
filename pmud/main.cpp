@@ -22,6 +22,7 @@
 #include "spdlog/spdlog.h"
 #include "player/player_type_id.h"
 #include "system/pmud_system.h"
+#include "storage/redis_storage.h"
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 // Some references:
@@ -42,6 +43,8 @@ using namespace caf;
 using namespace fmt;
 using namespace primordia::mud::storage;
 using namespace primordia::mud::system;
+
+namespace redis_storage = primordia::mud::storage::redis;
 
 string YAML_CONFIG = "primordia-mud.yaml";
 
@@ -132,7 +135,7 @@ void caf_main(actor_system& sys) {
   YAML_CONFIG = get_or(sys.config(), "pmud.yaml_config", YAML_CONFIG);
   MudConfig config = parse_yaml(YAML_CONFIG);
 
-  unique_ptr<Storage> storage = initialize_redis_storage();
+  unique_ptr<Storage> storage = redis_storage::initialize_redis_storage();
   if (!storage) {
     SPDLOG_ERROR("Exiting due to storage initialization failure!");
     exit(-1);

@@ -33,7 +33,8 @@
     "jeff-hykin.better-cpp-syntax",
     "xaver.clang-format",
     "redhat.vscode-yaml",
-    "stackbuild.bazel-stack-vscode"
+    "stackbuild.bazel-stack-vscode",
+    "ambooth.git-rename"
   ],
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",

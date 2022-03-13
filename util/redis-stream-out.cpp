@@ -4,6 +4,7 @@
 #include "common/pmud_io.h"
 #include "common/yaml_storage.h"
 #include "storage/redis_storage.h"
+#include "spdlog/stopwatch.h"
 
 using namespace std;
 using namespace primordia::mud::storage;
@@ -12,12 +13,12 @@ using namespace primordia::mud::common;
 namespace redis_storage = primordia::mud::storage::redis;
 
 void usage() {
-  fmt::print("Usage: redis-streams-consumer [-s stream-name]\n\n");
+  fmt::print("Usage: redis-stream-out [-s stream-name]\n\n");
   fmt::print("NOTE:\n    REDIS_HOST and REDIS_PORT should be set in environment.\n\n");
 }
 
 int main(int argc, char** argv) {
-  spdlog::set_level(spdlog::level::debug);
+  spdlog::set_level(spdlog::level::info);
 
   string stream_name;
   string position = "$";
@@ -41,6 +42,11 @@ int main(int argc, char** argv) {
     }
   }
 
+  if (stream_name.empty()) {
+    SPDLOG_ERROR("Error, stream name must be specified with -s");
+    return EXIT_FAILURE;
+  }
+
   auto storage = redis_storage::initialize_redis_storage();
 
   if (!storage) {
@@ -48,17 +54,22 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
+  size_t counter = 0;
+  spdlog::stopwatch sw;
   while (true) {
     StreamResponses_t stream_responses = storage->read_stream_block(stream_name, position);
     for (auto response : stream_responses) {
-      fmt::print("stream: {}\n", response.stream_name);
       for (auto record : response.records) {
+        counter++;
         for (auto tup : record.fields) {
-          fmt::print("  {}:{}\n", tup.first, tup.second);
+        }
+        if (counter % 1000 == 0) {
+          auto elapsed = sw.elapsed();
+          SPDLOG_INFO("Wrote {} records in {} seconds ({}mps)", counter, sw, 1000 / elapsed.count());
+          sw.reset();
         }
       }
     }
-    this_thread::sleep_for(std::chrono::seconds(1));
   }
 
   return EXIT_SUCCESS;
