@@ -25,8 +25,8 @@ void usage() {
 const size_t DEFAULT_BATCH_SIZE = 10000;
 
 int main(int argc, char** argv) {
-  // auto console = spdlog::stdout_color_mt("console");
-  // spdlog::set_default_logger(console);
+  auto console = spdlog::stdout_color_mt("console");
+  spdlog::set_default_logger(console);
   spdlog::set_level(spdlog::level::info);
 
   string stream_name;
