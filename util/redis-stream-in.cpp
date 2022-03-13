@@ -51,13 +51,13 @@ int main(int argc, char** argv) {
   }
 
   redis_storage::RedisStorage* redis_storage = dynamic_cast<redis_storage::RedisStorage*>(storage.get());
-  size_t counter = 0;
+  size_t counter = 1;
   spdlog::stopwatch sw;
   while (true) {
     redis_storage->raw(fmt::format("XADD {} * sensor-id 1234 temperature {}", stream_name, counter++));
     if (counter % 1000 == 0) {
       auto elapsed = sw.elapsed();
-      SPDLOG_INFO("Wrote {} records in {} seconds ({}mps)", counter, sw, 1000 / elapsed.count());
+      SPDLOG_INFO("Sent {} records in {:.3} seconds ({:.3}mps)", counter, sw, 1000 / elapsed.count());
       sw.reset();
     }
   }

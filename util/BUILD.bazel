@@ -65,7 +65,11 @@ cc_binary(
     name = "redis-stream-out",
     srcs = ["redis-stream-out.cpp"],
     copts = global_cppopts(),
-    linkopts = ["-ldl"],  # lua-specific
+    linkopts = [
+        "-ldl",
+        "-pthread",
+        "-lstdc++fs",
+    ],  # lua-specific
     visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",

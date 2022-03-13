@@ -101,6 +101,19 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
+    vector<StreamResponse> read_stream_raw(const string& command) override {
+      spdlog::debug("redis:{}", command);
+
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), command.c_str()));
+
+      if (!reply) {
+        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        return vector<StreamResponse>();
+      } else {
+        return construct_stream_responses(*reply.get());
+      }
+    }
+
     vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout) override {
       auto _timeout = std::to_string(timeout);
       spdlog::debug("redis: XREAD BLOCK {} STREAMS {} {}", _timeout, stream_name, pos);

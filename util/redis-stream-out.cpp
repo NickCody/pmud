@@ -1,6 +1,11 @@
 #include <chrono>
+#include <stdlib.h>
 
 #include "spdlog/spdlog.h"
+#include "spdlog/async.h" //support for async logging.
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/stdout_sinks.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include "common/pmud_io.h"
 #include "common/yaml_storage.h"
 #include "storage/redis_storage.h"
@@ -17,21 +22,24 @@ void usage() {
   fmt::print("NOTE:\n    REDIS_HOST and REDIS_PORT should be set in environment.\n\n");
 }
 
+const size_t DEFAULT_BATCH_SIZE = 10000;
+
 int main(int argc, char** argv) {
+  // auto console = spdlog::stdout_color_mt("console");
+  // spdlog::set_default_logger(console);
   spdlog::set_level(spdlog::level::info);
 
   string stream_name;
-  string position = "$";
-
+  size_t batch_size = DEFAULT_BATCH_SIZE;
   int c;
   opterr = 0;
-  while ((c = getopt(argc, argv, "s:p:h")) != -1) {
+  while ((c = getopt(argc, argv, "s:b:h")) != -1) {
     switch (c) {
     case 's':
       stream_name = optarg;
       break;
-    case 'p':
-      position = optarg;
+    case 'b':
+      batch_size = atoi(optarg);
       break;
     case 'h':
       usage();
@@ -55,17 +63,26 @@ int main(int argc, char** argv) {
   }
 
   size_t counter = 0;
+  string position = "0";
   spdlog::stopwatch sw;
   while (true) {
-    StreamResponses_t stream_responses = storage->read_stream_block(stream_name, position);
+    StreamResponses_t stream_responses =
+        storage->read_stream_raw(fmt::format("XREAD BLOCK 0 COUNT {} STREAMS {} {}", batch_size, stream_name, position));
+
     for (auto response : stream_responses) {
       for (auto record : response.records) {
         counter++;
-        for (auto tup : record.fields) {
-        }
-        if (counter % 1000 == 0) {
+        position = record.timestamp;
+        // for (auto tup : record.fields) {
+        // }
+        if (counter % batch_size == 0) {
           auto elapsed = sw.elapsed();
-          SPDLOG_INFO("Wrote {} records in {} seconds ({}mps)", counter, sw, 1000 / elapsed.count());
+          SPDLOG_INFO("{} Read latest batch of records until {} in {:.3} seconds ({:.3f}mps) : {}",
+                      record.timestamp,
+                      counter,
+                      sw,
+                      batch_size / elapsed.count(),
+                      record.fields["temperature"]);
           sw.reset();
         }
       }
