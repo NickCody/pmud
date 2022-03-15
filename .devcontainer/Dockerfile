@@ -3,9 +3,8 @@ ARG VARIANT="bullseye"
 
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
+  && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
   && echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
   && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main"  >> /etc/apt/sources.list \
