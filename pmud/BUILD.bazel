@@ -13,7 +13,7 @@ filegroup(
 
 filegroup(
     name = "scripts",
-    srcs = glob(["scripts/*"]),
+    srcs = glob(["scripts/**"]),
 )
 
 filegroup(
@@ -43,6 +43,7 @@ cc_binary(
         "//pmud/src/system:library",
         "//util:redis-stream-in",
         "//util:redis-stream-out",
+        "//util:yaml-print",
         "//util:yaml-redis-loader",
         "@caf//:main",
         "@fmt//:main",

@@ -42,6 +42,7 @@ cc_binary(
     name = "yaml-print",
     srcs = ["yaml-print.cpp"],
     copts = global_cppopts(),
+    visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",
         "@fmt//:main",
