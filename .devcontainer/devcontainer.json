@@ -27,14 +27,16 @@
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "galexite.bazel-cpp-tools",
+    "extensions.vscode-clangd",
     "ms-azuretools.vscode-docker",
-    "ms-vscode.cpptools",
     "matepek.vscode-catch2-test-adapter",
     "jeff-hykin.better-cpp-syntax",
     "xaver.clang-format",
     "redhat.vscode-yaml",
     "stackbuild.bazel-stack-vscode",
-    "ambooth.git-rename"
+    "ambooth.git-rename",
+    "sumneko.lua",
+    "cweijan.vscode-database-client2"
   ],
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
@@ -51,5 +53,5 @@
   // "postCreateCommand": "gcc -v",
   // Comment out this line to run as root instead.
   "remoteUser": "vscode",
-  "postStartCommand": "git config --global user.email \"${localEnv:VSCODE_CONTAINER_GIT_EMAIL}\" && git config --global user.name \"${localEnv:VSCODE_CONTAINER_GIT_USER}\" && rm /home/vscode/.bashrc && ln -nsf /workspaces/cpp-game/.devcontainer/.bashrc /home/vscode/.bashrc && ln -nsf /workspaces/cpp-game/.devcontainer/.localrc /home/vscode/.localrc && ln -nsf /workspaces/cpp-game/.devcontainer/.vimrc /home/vscode/.vimrc"
+  "postStartCommand": "git config --global user.email \"${localEnv:VSCODE_CONTAINER_GIT_EMAIL}\" && git config --global user.name \"${localEnv:VSCODE_CONTAINER_GIT_USER}\" && rm /home/vscode/.bashrc && ln -nsf /workspaces/cpp-game/.devcontainer/.bashrc /home/vscode/.bashrc && ln -nsf /workspaces/cpp-game/.devcontainer/.localrc /home/vscode/.localrc && ln -nsf /workspaces/cpp-game/.devcontainer/.vimrc /home/vscode/.vimrc && ln -nsf /workspaces/cpp-game/.devcontainer/.tmux.conf /home/vscode/.tmux.conf"
 }
