@@ -118,5 +118,8 @@
     "valarray": "cpp"
   },
   "files.autoSave": "onFocusChange",
-  "terminal.integrated.shellIntegration.enabled": true
+  "terminal.integrated.shellIntegration.enabled": true,
+  "Lua.diagnostics.globals": [
+    "redis"
+  ]
 }
