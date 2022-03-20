@@ -43,3 +43,9 @@ new_local_repository(
     build_file = "lua.BUILD",
     path = "/usr",
 )
+
+new_local_repository(
+    name = "zeromq",
+    build_file = "zeromq.BUILD",
+    path = "/usr",
+)

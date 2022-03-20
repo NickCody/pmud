@@ -95,3 +95,31 @@ cc_binary(
         "@lua//:main",
     ],
 )
+
+cc_binary(
+    name = "zeromq-server",
+    srcs = ["zeromq-server.cpp"],
+    copts = global_cppopts(),
+    linkopts = [
+        "-ldl",
+        "-lzmq",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@zeromq//:main",
+    ],
+)
+
+cc_binary(
+    name = "zeromq-client",
+    srcs = ["zeromq-client.cpp"],
+    copts = global_cppopts(),
+    linkopts = [
+        "-ldl",
+        "-lzmq",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@zeromq//:main",
+    ],
+)

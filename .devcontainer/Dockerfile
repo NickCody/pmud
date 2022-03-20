@@ -3,6 +3,11 @@ ARG VARIANT="bullseye"
 
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
+RUN mv /etc/apt/sources.list /tmp/ \
+  && apt update \
+  && mv /tmp/sources.list /etc/apt/ \
+  && apt update
+
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
   && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
@@ -94,6 +99,21 @@ RUN sudo apt install -y \
   lua5.4 \
   liblua5.4-dev \
   tmux
+
+RUN apt install -y libzmq3-dev \
+  && git clone https://github.com/zeromq/libzmq.git \
+  && cd libzmq \
+  && ./autogen.sh \
+  && ./configure \
+  && make \
+  && make install 
+
+RUN git clone https://github.com/zeromq/cppzmq.git \
+  && cd cppzmq \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make -j4 install
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

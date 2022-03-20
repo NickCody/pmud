@@ -83,3 +83,4 @@ This was a bit underwhelming. I checked my CPU and it was mostly idle. I checked
 When I run source/sink on the redis hardware, the results are much better:
 
     ~ 7011.405656912864mps
+    
