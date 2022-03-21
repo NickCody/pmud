@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ostream>
 #include <limits.h>
 #include <queue>
 #include <memory>

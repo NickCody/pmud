@@ -1,6 +1,8 @@
+#include <string>
 #include <unistd.h>
 #include "common/pmud_io.h"
 #include "common/yaml_util.h"
+#include "fmt/format.h"
 
 using namespace std;
 using namespace primordia::mud::common;

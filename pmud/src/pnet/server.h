@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <fmt/core.h>
 
-#include "caf/stateful_actor.hpp"
+#include "caf/all.hpp"
 
 #include "util.h"
 #include "system/pmud_system.h"

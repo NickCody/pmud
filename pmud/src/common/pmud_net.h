@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <memory>
 #include <string>
 #include <netdb.h>
@@ -8,6 +9,8 @@
 #include "spdlog/spdlog.h"
 
 namespace primordia::mud::common {
+
+  using namespace std;
 
   int hostname_to_ip(const string& hostname, string& ip) {
     struct sockaddr whereto;

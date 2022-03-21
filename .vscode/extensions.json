@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "galexite.bazel-cpp-tools",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "ms-vscode.cpptools",
+    "ms-azuretools.vscode-docker",
+    "matepek.vscode-catch2-test-adapter",
+    "jeff-hykin.better-cpp-syntax",
+    "xaver.clang-format",
+    "redhat.vscode-yaml",
+    "stackbuild.bazel-stack-vscode",
+    "ambooth.git-rename",
+    "sumneko.lua",
+    "cweijan.vscode-database-client2"
+  ]
+}

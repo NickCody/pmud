@@ -5,7 +5,10 @@
 #include <chrono>
 #include <iomanip>
 #include <regex>
+#include <optional>
+
 #include <spdlog/spdlog.h>
+#include <fmt/format.h>
 
 namespace primordia::mud {
 
@@ -19,7 +22,7 @@ namespace primordia::mud {
     memset(&sa.sin_zero, 0, sizeof(sa.sin_zero));
   }
 
-  std::optional<actor> find_connection_actor(actor_system& sys, int connection) {
+  optional<actor> find_connection_actor(actor_system& sys, int connection) {
     for (auto actor_in_registry : sys.registry().named_actors()) {
       string name = fmt::format("Connection{}", connection);
       if (actor_in_registry.first == name) {
