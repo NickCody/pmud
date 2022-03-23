@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "galexite.bazel-cpp-tools",
-    "llvm-vs-code-extensions.vscode-clangd",
+    //"llvm-vs-code-extensions.vscode-clangd",
     "ms-vscode.cpptools",
     "ms-azuretools.vscode-docker",
     "matepek.vscode-catch2-test-adapter",
