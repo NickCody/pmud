@@ -44,14 +44,14 @@ namespace primordia::mud::pnet {
         [this](PerformWelcome) {
           auto login_controller = spawn<LoginController>(m_mud, actor_cast<strong_actor_ptr>(this));
           state.active_controller = actor_cast<strong_actor_ptr>(login_controller);
-          send(login_controller, LoginControllerStart_v);
+          send(login_controller, LoginControllerStart());
         },
         [this](OnUserInput, string input) {
           if (state.active_controller == nullptr) {
             CommStatic comm(state.connection);
             prompt_user();
           } else {
-            send(actor_cast<actor>(state.active_controller), OnUserInput_v, input);
+            send(actor_cast<actor>(state.active_controller), OnUserInput(), input);
           }
         },
         [this](ToUserPrompt, string prompt) { prompt_user(prompt); },

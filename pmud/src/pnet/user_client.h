@@ -19,15 +19,15 @@ namespace primordia::mud::pnet {
     }
 
     void prompt_user(const string& prompt = CommStatic::DEFAULT_PROMPT) {
-      send(actor_cast<actor>(m_connection_actor), ToUserPrompt_v, prompt);
+      send(actor_cast<actor>(m_connection_actor), ToUserPrompt(), prompt);
     }
 
     void emit_user(const string& emission = "") {
-      send(actor_cast<actor>(m_connection_actor), ToUserEmit_v, emission);
+      send(actor_cast<actor>(m_connection_actor), ToUserEmit(), emission);
     }
 
     void end_controller() {
-      send(actor_cast<actor>(m_connection_actor), LoginControllerEnd_v);
+      send(actor_cast<actor>(m_connection_actor), LoginControllerEnd());
     }
 
     void funky_banner() {

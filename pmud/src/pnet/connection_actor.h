@@ -45,18 +45,18 @@ namespace primordia::mud::pnet {
         bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
         if (!success) {
           SPDLOG_INFO("Failed to send welcome to connection {}", state.connection);
-          // send(self, GoodbyeConnection_v);
+          // send(self, GoodbyeConnection());
         }
       }
     }
 
     behavior make_behavior() {
       return {
-        [this](PerformWelcome) { send(actor_cast<actor>(state.command), PerformWelcome_v); },
+        [this](PerformWelcome) { send(actor_cast<actor>(state.command), PerformWelcome()); },
         [this](ToUserEmit, string emission) { CommStatic(state.connection).emit_line(emission); },
         [this](ToUserPrompt, string prompt) {
           CommStatic(state.connection).emit_prompt(prompt);
-          send(this, FromUserGetInput_v);
+          send(this, FromUserGetInput());
         },
         [this](FromUserGetInput) {
           CommStatic comm(state.connection);
@@ -68,34 +68,34 @@ namespace primordia::mud::pnet {
               if (state.break_count == 0) {
                 // comm.emit_line("Detected quit, type again to quit!"); // todo: only do on virgin connection
                 state.break_count++;
-                send(this, FromUserGetInput_v);
+                send(this, FromUserGetInput());
               } else {
                 SPDLOG_INFO("Connection {} quit", state.connection);
-                send(this, GoodbyeConnection_v);
+                send(this, GoodbyeConnection());
               }
             } else {
               state.break_count = 0;
 
               if (user_read.find("\n") == string::npos) {
                 state.current_input += user_read;
-                send(this, FromUserGetInput_v);
+                send(this, FromUserGetInput());
               } else {
                 string final_user_read = comm.sanitize(state.current_input + user_read);
                 state.current_input.clear();
 
                 if (final_user_read == "quit" || final_user_read == "exit") {
-                  send(this, GoodbyeConnection_v);
+                  send(this, GoodbyeConnection());
                 } else {
                   // if (final_user_read.size() == 0)
                   //   comm.emit_line();
 
-                  send(actor_cast<actor>(state.command), OnUserInput_v, final_user_read);
-                  send(this, FromUserGetInput_v);
+                  send(actor_cast<actor>(state.command), OnUserInput(), final_user_read);
+                  send(this, FromUserGetInput());
                 }
               }
             }
           } else {
-            send(this, FromUserGetInput_v);
+            send(this, FromUserGetInput());
           }
         },
         [this](GoodbyeConnection) {

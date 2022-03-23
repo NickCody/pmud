@@ -62,7 +62,7 @@ namespace primordia::mud::pnet {
           }
 
           SPDLOG_INFO("Listening on sockfd: {}", m_sockfd);
-          send(this, AcceptConnection_v);
+          send(this, AcceptConnection());
 
           return 0;
         },
@@ -90,10 +90,10 @@ namespace primordia::mud::pnet {
             SPDLOG_INFO("Performing welcome for connection {}", c_id);
             string welcome = format("Welcome to {}\nVersion 0.1", m_mud->get_config().name);
             auto connection_actor = spawn<ConnectionActor>(m_mud, welcome, c_id);
-            send(connection_actor, PerformWelcome_v);
+            send(connection_actor, PerformWelcome());
           }
 
-          send(this, AcceptConnection_v);
+          send(this, AcceptConnection());
         },
         [this](GoodbyeServer) -> bool {
           SPDLOG_INFO("Server actor terminating...");

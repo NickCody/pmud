@@ -84,7 +84,7 @@ void signal_handler(int signal) {
 //
 int start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   int server_success = 0;
-  self->request(server, timeout, StartServer_v)
+  self->request(server, timeout, StartServer())
       .receive([&](int status) { server_success = status; }, [&](const error& err) { SPDLOG_INFO("Error: {}", to_string(err)); });
 
   return server_success;
@@ -97,13 +97,13 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
       SPDLOG_INFO("App shutdown, forcing actor {} to close", actor_in_registry.first);
-      self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection_v);
+      self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection());
     }
   }
 }
 
 void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
-  self->request(server, timeout, GoodbyeServer_v)
+  self->request(server, timeout, GoodbyeServer())
       .receive([&](bool status) { SPDLOG_INFO("Server exit with status: {}", status); },
                [&](const error& err) { aout(self) << format("Error: {}", to_string(err)); });
 }
