@@ -18,11 +18,11 @@ namespace primordia::mud::pnet {
   using namespace std;
   using namespace primordia::mud::system;
 
-  class Server : public event_based_actor {
+  class ServerActor : public event_based_actor {
   public:
-    Server(actor_config& cfg, MudSystemPtr mud)
+    ServerActor(actor_config& cfg, MudSystemPtr mud)
         : event_based_actor(cfg) {
-      state.sockfd = 0;
+      m_sockfd = 0;
       m_mud = mud;
     }
 
@@ -32,21 +32,21 @@ namespace primordia::mud::pnet {
           SPDLOG_INFO("{} server starting up...", m_mud->get_config().name);
 
           // ZMQ:
-          state.sockfd = socket(AF_INET, SOCK_STREAM, 0);
-          if (state.sockfd == -1) {
+          m_sockfd = socket(AF_INET, SOCK_STREAM, 0);
+          if (m_sockfd == -1) {
             SPDLOG_INFO("Failed to create socket. errno: {}", errno);
             return errno;
           }
 
           // set socket to non-blocking
           //
-          int flags = fcntl(state.sockfd, F_GETFL);
-          fcntl(state.sockfd, F_SETFL, flags | O_NONBLOCK);
+          int flags = fcntl(m_sockfd, F_GETFL);
+          fcntl(m_sockfd, F_SETFL, flags | O_NONBLOCK);
 
           sockaddr_in sockaddr;
           initialize_sockaddr(m_mud->get_config().address.c_str(), m_mud->get_config().port, sockaddr);
 
-          if (bind(state.sockfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0) {
+          if (bind(m_sockfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) < 0) {
             SPDLOG_INFO("Failed to bind to port {}. errno: {}", m_mud->get_config().port, errno);
             return errno;
           }
@@ -56,18 +56,18 @@ namespace primordia::mud::pnet {
           SPDLOG_INFO("Listening on {}:{}", sockaddr_buffer, m_mud->get_config().port);
 
           // Start listening. Hold at most 10 connections in the queue
-          if (listen(state.sockfd, m_mud->get_config().max_queued_connections) < 0) {
+          if (listen(m_sockfd, m_mud->get_config().max_queued_connections) < 0) {
             SPDLOG_INFO("Failed to listen on socket. errno: {}", errno);
             return errno;
           }
 
-          SPDLOG_INFO("Listening on sockfd: {}", state.sockfd);
+          SPDLOG_INFO("Listening on sockfd: {}", m_sockfd);
           send(this, AcceptConnection_v);
 
           return 0;
         },
         [this](AcceptConnection) {
-          if (state.sockfd <= 0)
+          if (m_sockfd <= 0)
             return;
 
           // ZMQ:
@@ -75,7 +75,7 @@ namespace primordia::mud::pnet {
           initialize_sockaddr(m_mud->get_config().address.c_str(), m_mud->get_config().port, sockaddr);
 
           auto addrlen = sizeof(sockaddr);
-          int c_id = accept(state.sockfd, (struct sockaddr*)&sockaddr, (socklen_t*)&addrlen);
+          int c_id = accept(m_sockfd, (struct sockaddr*)&sockaddr, (socklen_t*)&addrlen);
           if (c_id == -1) {
             if (errno == EWOULDBLOCK || errno == EAGAIN) {
               this_thread::sleep_for(chrono::milliseconds(20));
@@ -89,7 +89,7 @@ namespace primordia::mud::pnet {
 
             SPDLOG_INFO("Performing welcome for connection {}", c_id);
             string welcome = format("Welcome to {}\nVersion 0.1", m_mud->get_config().name);
-            auto connection_actor = spawn<Connection>(m_mud, welcome, c_id);
+            auto connection_actor = spawn<ConnectionActor>(m_mud, welcome, c_id);
             send(connection_actor, PerformWelcome_v);
           }
 
@@ -100,8 +100,8 @@ namespace primordia::mud::pnet {
 
           // ZMQ:
           //
-          close(state.sockfd);
-          state.sockfd = 0;
+          close(m_sockfd);
+          m_sockfd = 0;
           send_exit(actor_cast<actor>(this), exit_reason::user_shutdown);
           return true;
         },
@@ -109,7 +109,8 @@ namespace primordia::mud::pnet {
     };
 
   private:
-    ServerState state;
+    MudConfig m_config;
+    int m_sockfd;
     MudSystemPtr m_mud;
   };
 

@@ -22,9 +22,9 @@ namespace primordia::mud::pnet {
   using namespace primordia::mud::system;
   using namespace primordia::mud::player;
 
-  class Command : public UserClient {
+  class CommandActor : public UserClient {
   public:
-    Command(actor_config& cfg, MudSystemPtr mud, strong_actor_ptr connection_actor, int connection)
+    CommandActor(actor_config& cfg, MudSystemPtr mud, strong_actor_ptr connection_actor, int connection)
         : UserClient(cfg, connection_actor, "Command"),
           m_mud(mud) {
       state.connection = connection;

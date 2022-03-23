@@ -15,8 +15,8 @@
 
 #include "pnet/comm_static.h"
 #include "pnet/server_state.h"
-#include "pnet/connection.h"
-#include "pnet/server.h"
+#include "pnet/connection_actor.h"
+#include "pnet/server_actor.h"
 #include "pnet/util.h"
 #include "storage/storage_actor.h"
 #include "spdlog/spdlog.h"
@@ -111,7 +111,7 @@ void kill_server(scoped_actor& self, const actor& server, chrono::seconds timeou
 void run(actor_system& sys, MudSystemPtr mud) {
   scoped_actor self{ sys };
 
-  auto server = sys.spawn<Server>(mud);
+  auto server = sys.spawn<ServerActor>(mud);
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {

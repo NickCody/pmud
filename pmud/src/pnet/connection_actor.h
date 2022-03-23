@@ -8,7 +8,7 @@
 #include "server_state.h"
 #include "util.h"
 #include "spdlog/spdlog.h"
-#include "command.h"
+#include "command_actor.h"
 #include "system/pmud_system.h"
 
 namespace primordia::mud::pnet {
@@ -20,9 +20,9 @@ namespace primordia::mud::pnet {
 
   // using namespace player;
 
-  class Connection : public event_based_actor {
+  class ConnectionActor : public event_based_actor {
   public:
-    Connection(actor_config& cfg, MudSystemPtr mud, const string welcome, int connection)
+    ConnectionActor(actor_config& cfg, MudSystemPtr mud, const string welcome, int connection)
         : event_based_actor(cfg),
           m_welcome(welcome),
           m_mud(mud) {
@@ -30,7 +30,7 @@ namespace primordia::mud::pnet {
       state.connection = connection;
       state.break_count = 0;
       state.current_input = "";
-      state.command = actor_cast<strong_actor_ptr>(spawn<Command>(mud, actor_cast<strong_actor_ptr>(this), connection));
+      state.command = actor_cast<strong_actor_ptr>(spawn<CommandActor>(mud, actor_cast<strong_actor_ptr>(this), connection));
       state.registery_id = format("Connection({})", id());
       system().registry().put(state.registery_id, this);
 

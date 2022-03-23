@@ -17,12 +17,6 @@ namespace primordia::mud::pnet {
     uint16_t max_queued_connections;
   };
 
-  struct ServerState {
-    MudConfig config;
-    // sockaddr_in sockaddr;
-    int sockfd;
-  };
-
   struct ConnectionState {
     int connection;
     std::string registery_id;

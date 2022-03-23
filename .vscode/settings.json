@@ -120,5 +120,7 @@
   "files.autoSave": "onFocusChange",
   "Lua.diagnostics.globals": [
     "redis"
-  ]
+  ],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active"
 }

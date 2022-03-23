@@ -9,25 +9,25 @@ namespace primordia::mud::pnet {
 
   class UserClient : public event_based_actor {
   public:
-    UserClient(actor_config& cfg, strong_actor_ptr user_client_actor, const string& name)
+    UserClient(actor_config& cfg, strong_actor_ptr connection_actor, const string& name)
         : event_based_actor(cfg),
-          m_user_client_actor(user_client_actor),
+          m_connection_actor(connection_actor),
           m_name(name) {}
 
     virtual ~UserClient() {
-      m_user_client_actor.reset();
+      m_connection_actor.reset();
     }
 
     void prompt_user(const string& prompt = CommStatic::DEFAULT_PROMPT) {
-      send(actor_cast<actor>(m_user_client_actor), ToUserPrompt_v, prompt);
+      send(actor_cast<actor>(m_connection_actor), ToUserPrompt_v, prompt);
     }
 
     void emit_user(const string& emission = "") {
-      send(actor_cast<actor>(m_user_client_actor), ToUserEmit_v, emission);
+      send(actor_cast<actor>(m_connection_actor), ToUserEmit_v, emission);
     }
 
     void end_controller() {
-      send(actor_cast<actor>(m_user_client_actor), LoginControllerEnd_v);
+      send(actor_cast<actor>(m_connection_actor), LoginControllerEnd_v);
     }
 
     void funky_banner() {
@@ -35,7 +35,7 @@ namespace primordia::mud::pnet {
     }
 
   private:
-    strong_actor_ptr m_user_client_actor;
+    strong_actor_ptr m_connection_actor;
     string m_name;
   };
 } // namespace primordia::mud::pnet
