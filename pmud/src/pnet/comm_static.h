@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 #include <fmt/format.h>
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
   using namespace fmt;
   using namespace std;
@@ -118,4 +118,4 @@ namespace primordia::mud {
     int _connection;
   };
 
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet

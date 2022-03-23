@@ -3,7 +3,7 @@
 #include "caf/all.hpp"
 #include "pnet/server_state.h"
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
   using namespace caf;
 
@@ -38,4 +38,4 @@ namespace primordia::mud {
     strong_actor_ptr m_user_client_actor;
     string m_name;
   };
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet

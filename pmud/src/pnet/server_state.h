@@ -6,7 +6,7 @@
 #include "caf/type_id.hpp"
 #include "common/global_type_id.h"
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
   using namespace caf;
 
@@ -37,7 +37,7 @@ namespace primordia::mud {
     strong_actor_ptr default_controller;
   };
 
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet
 
 CAF_BEGIN_TYPE_ID_BLOCK(primorda_mud_caf_types, primordia::mud::type_id::first_net_type_id)
 

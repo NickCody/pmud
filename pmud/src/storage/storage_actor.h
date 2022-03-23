@@ -16,6 +16,7 @@ CAF_END_TYPE_ID_BLOCK(storage_caf_types)
 namespace primordia::mud::storage {
 
   using namespace std;
+  using namespace caf;
 
   class StorageActor : public event_based_actor {
   public:

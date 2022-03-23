@@ -11,11 +11,12 @@
 #include "util.h"
 #include "system/pmud_system.h"
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
   using namespace fmt;
   using namespace caf;
   using namespace std;
+  using namespace primordia::mud::system;
 
   class Server : public event_based_actor {
   public:
@@ -107,4 +108,4 @@ namespace primordia::mud {
     MudSystemPtr m_mud;
   };
 
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet

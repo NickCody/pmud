@@ -43,6 +43,7 @@ using namespace caf;
 using namespace fmt;
 using namespace primordia::mud::storage;
 using namespace primordia::mud::system;
+using namespace primordia::mud::pnet;
 
 namespace redis_storage = primordia::mud::storage::redis;
 

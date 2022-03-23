@@ -11,12 +11,12 @@
 #include "command.h"
 #include "system/pmud_system.h"
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
   using namespace fmt;
   using namespace caf;
   using namespace std;
-  using namespace system;
+  using namespace primordia::mud::system;
 
   // using namespace player;
 
@@ -118,4 +118,4 @@ namespace primordia::mud {
     MudSystemPtr m_mud;
   };
 
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet

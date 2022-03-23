@@ -14,13 +14,13 @@
 
 #include "system/pmud_system.h"
 
-namespace primordia::mud {
+namespace primordia::mud::pnet {
 
+  using namespace std;
   using namespace fmt;
   using namespace caf;
-  using namespace std;
-
-  using namespace player;
+  using namespace primordia::mud::system;
+  using namespace primordia::mud::player;
 
   class Command : public UserClient {
   public:
@@ -71,4 +71,4 @@ namespace primordia::mud {
     MudSystemPtr m_mud;
   };
 
-} // namespace primordia::mud
+} // namespace primordia::mud::pnet
