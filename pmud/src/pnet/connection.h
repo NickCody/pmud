@@ -103,6 +103,9 @@ namespace primordia::mud::pnet {
             CommStatic comm(state.connection);
             comm.emit_line();
             comm.emit_line("Goodbye!");
+
+            // ZMQ:
+            //
             close(state.connection);
           }
           system().registry().erase(state.registery_id);

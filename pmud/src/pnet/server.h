@@ -31,6 +31,7 @@ namespace primordia::mud::pnet {
         [this](StartServer) -> int {
           SPDLOG_INFO("{} server starting up...", m_mud->get_config().name);
 
+          // ZMQ:
           state.sockfd = socket(AF_INET, SOCK_STREAM, 0);
           if (state.sockfd == -1) {
             SPDLOG_INFO("Failed to create socket. errno: {}", errno);
@@ -69,6 +70,7 @@ namespace primordia::mud::pnet {
           if (state.sockfd <= 0)
             return;
 
+          // ZMQ:
           sockaddr_in sockaddr;
           initialize_sockaddr(m_mud->get_config().address.c_str(), m_mud->get_config().port, sockaddr);
 
@@ -95,6 +97,9 @@ namespace primordia::mud::pnet {
         },
         [this](GoodbyeServer) -> bool {
           SPDLOG_INFO("Server actor terminating...");
+
+          // ZMQ:
+          //
           close(state.sockfd);
           state.sockfd = 0;
           send_exit(actor_cast<actor>(this), exit_reason::user_shutdown);
