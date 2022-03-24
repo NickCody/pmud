@@ -1,3 +1,9 @@
+/**
+ *  pmud_net.h
+ *
+ *  Created on Thu Mar 24 2022
+ */
+
 #pragma once
 
 #include <string>
@@ -11,6 +17,15 @@
 namespace primordia::mud::common {
 
   using namespace std;
+
+  /**
+   * \brief Returns a hostname from an ip address
+   *
+   * @param hostname hostname to resolve
+   * @param ip The ip address to return
+   * @return 0 on succeess, -1 on failure
+   *
+   */
 
   int hostname_to_ip(const string& hostname, string& ip) {
     struct sockaddr whereto;

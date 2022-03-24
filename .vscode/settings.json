@@ -122,5 +122,36 @@
     "redis"
   ],
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs": "active"
+  "editor.guides.bracketPairs": "active",
+  "fileHeaderComment.parameter": {
+    "*": {
+      "commentbegin": "/**",
+      "commentprefix": " *",
+      "commentend": " */",
+      "organization": "Primordia"
+    }
+  },
+  "fileHeaderComment.template": {
+    "file": [
+      "${commentbegin}",
+      // "${commentbegin} -=-=--=-===--=-=-=-=-=-==--=-==-==--=-=-====-=-=-=-=-=-=-=-=-=-=-=-=---=-==",
+      "${commentprefix}  ${filename}",
+      "${commentprefix}",
+      "${commentprefix}  Created on ${date}",
+      // "${commentprefix}  =-=-====-=-=-=-=-=-=-=-=-=-=-=-=--=-=-==--=-=-===-=-=-=-=-=--=-===-==-==-==",
+      "${commentend}"
+    ],
+    "*": [
+      "  ${commentbegin}",
+      // "  ${commentbegin} -=-=--=-===--=-=-=-=-=-==--=-==-==--=-=-====-=-=-=-=-=-=-=-=-=-=-=-=--",
+      "  ${commentprefix} \\brief Brief Description",
+      "  ${commentprefix} ",
+      "  ${commentprefix} Longer Description",
+      "  ${commentprefix} ",
+      "  ${commentprefix} @param dummy This is a parameter",
+      "  ${commentprefix} @return The test results",
+      "  ${commentprefix}",
+      "  ${commentend}"
+    ]
+  }
 }

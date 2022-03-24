@@ -11,6 +11,7 @@
     "stackbuild.bazel-stack-vscode",
     "ambooth.git-rename",
     "sumneko.lua",
-    "cweijan.vscode-database-client2"
+    "cweijan.vscode-database-client2",
+    "doi.fileheadercomment"
   ]
 }

@@ -343,3 +343,6 @@ bazel-cpp-game
 .cache/
 compile_commands.json
 *.swp
+
+# doxygen
+doxygen/

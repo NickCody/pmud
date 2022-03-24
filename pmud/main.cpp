@@ -128,8 +128,6 @@ void run(actor_system& sys, MudSystemPtr mud) {
   kill_server(self, server, chrono::seconds(10));
 }
 
-// -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
-//
 void caf_main(actor_system& sys) {
   signal(SIGINT, signal_handler);
 

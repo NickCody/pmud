@@ -1,3 +1,8 @@
+/**
+ *  pmud_io.h
+ *
+ *  Created on Thu Mar 24 2022
+ */
 
 #include <fstream>
 #include <iostream>
@@ -16,6 +21,14 @@ namespace primordia::mud::common {
       }
     }
   };
+
+  /**
+   * \brief Returns a file input stream or stdin if no file specified.
+   *
+   * @param filename Optional filename for which to open and create input stream
+   * @return The file input stream
+   *
+   */
 
   inline unique_ptr<istream, StreamDelete> stdout_or_file(const char* filename) {
 

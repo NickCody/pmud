@@ -115,6 +115,9 @@ RUN git clone https://github.com/zeromq/cppzmq.git \
   && cmake .. \
   && make -j4 install
 
+
+RUN apt install -y doxygen
+
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
