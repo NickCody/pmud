@@ -1,4 +1,4 @@
-# Documentation
+# Schema
 
 ## Data Files
 

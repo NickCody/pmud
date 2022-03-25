@@ -4,7 +4,7 @@ Welcome to the Primordia MUD
 
 This repo contains the Primordia MUD source code packaged in a devcontainer that has all of the necessary tools and facilities to compile, build, and deploy Primordia MUD.
 
-## Prerequisites / Setup
+## Getting Started
 
 1. All you need are vcscode and docker desktop for your platform.
 
@@ -20,7 +20,29 @@ This repo contains the Primordia MUD source code packaged in a devcontainer that
     - export VSCODE_CONTAINER_GIT_USER="nick.codignotto@gmail.com"
     - export VSCODE_CONTAINER_GIT_EMAIL="Nick Codignotto"
 
-## Tech Stack
+### Build and Run
+
+Build this way:
+
+```
+bazel build //mud:pmud
+```
+
+Run this way:
+
+```
+bazel-bin/pmud/pmud --config-file=pmud.caf 
+```
+
+### Redis
+
+You need a redis instance running and you need to set these variables in your environment:
+
+- `REDIS_HOST`
+- `REDIS_PORT`
+
+
+### Tech Stack
 
 Compilers and IDE and Build Tools
 
@@ -54,9 +76,10 @@ Utilities
 
 - [graphviz](http://www.graphviz.org/)
 
-## Roadmap
+### Auxilliary Documentation
 
-[roadmap.md](pmud/doc/roadmap.md)
+- Entity Schema documentation: [doc/schema](doc/schema.md)
+- Development roadmap: [doc/roadmap](doc/roadmap.md)
 
 ## Projects
 
@@ -64,23 +87,20 @@ Utilities
 
 This is the Primordia MUD, a multiplayer text-based adventure game.
 
-See  `pmud/`[README.md](pmud/).
-
 ### > life
 
 ```bash
-bazel run //misc/life:main -- -c 100 -r 50 -g 10000 -d 100
+bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-See `misc/life/`[README.md](misc/life/).
-### > graph
+See [life/README.md](life/README.md)
 
 ```bash
-bazel run //misc/graph/application:fully-connected -- 10           # complete graph (dot output)
-bazel run //misc/graph/application:random-connected --  10 100     # randomly connected (dot output)
-bazel run //misc/graph/application:matrix -- 10 100                # prints adjacency matrix representation (custom output)
-bazel run //misc/graph/application:structure --  10 100            # prints adj-list structure (custom output)
-bazel run //misc/graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
+bazel run //pmud/graph/application:fully-connected -- 10           # complete graph (dot output)
+bazel run //pmud/graph/application:random-connected --  10 100     # randomly connected (dot output)
+bazel run //pmud/graph/application:matrix -- 10 100                # prints adjacency matrix representation (custom output)
+bazel run //pmud/graph/application:structure --  10 100            # prints adj-list structure (custom output)
+bazel run //pmud/graph/application:bfs-search --  10 100           # Does a BFS from vertex 1 -> n
 ```
 
 ### > util
@@ -96,10 +116,7 @@ bazel run //util:taml-redis-loader    # loads yaml into redis
 bazel run //util:
 ```
 
-## nickcoding.com blog
+## Blog
 
-I'm blogging about my adventures here on my [blog](https://www.nickcoding.com)
+[nickcoding.com](https://www.nickcoding.com) has posts of my pmud project adventures.
 
-Posts:
-
-- [Building a MUD - Part I](https://www.nickcoding.com/2022/02/18/building-a-mud-part-1/)

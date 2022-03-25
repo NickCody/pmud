@@ -54,8 +54,8 @@ namespace cody {
         return *this;
       }
 
-      using iterator = vertices_t::iterator;
-      using const_iterator = vertices_t::const_iterator;
+      using iterator = typename vertices_t::iterator;
+      using const_iterator = typename vertices_t::const_iterator;
 
       iterator begin() {
         return vertices.begin();

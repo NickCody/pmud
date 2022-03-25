@@ -6,7 +6,7 @@ cc_test(
     srcs = glob(["**/*.cpp"]),
     copts = global_cppopts(),
     deps = [
-        "//misc/graph:library",
+        "//pmud/graph:library",
         "@googletest//:gtest_main",
     ],
 )

@@ -844,7 +844,7 @@ div.headertitle {
 
 div.header .title {
     font-weight: 600;
-    font-size: 210%;
+    font-size: 200%;
     padding: var(--spacing-medium) var(--spacing-large);
     word-break: break-word;
 }
