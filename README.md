@@ -93,7 +93,7 @@ This is the Primordia MUD, a multiplayer text-based adventure game.
 bazel run //life:main -- -c 100 -r 50 -g 10000 -d 100
 ```
 
-See [life/README.md](life/README.md)
+See [life/LIFE](life/LIFE.md)
 
 ```bash
 bazel run //pmud/graph/application:fully-connected -- 10           # complete graph (dot output)
