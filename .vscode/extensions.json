@@ -12,6 +12,7 @@
     "ambooth.git-rename",
     "sumneko.lua",
     "cweijan.vscode-database-client2",
-    "doi.fileheadercomment"
+    "doi.fileheadercomment",
+    "joaompinto.vscode-graphviz"
   ]
 }
