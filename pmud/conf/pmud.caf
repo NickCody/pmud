@@ -3,11 +3,6 @@
 # example, "caf.scheduler.max-threads" has no hard-coded default and instead
 # adjusts to the number of cores available.
 
-
-pmud {
-  yaml_config = "conf/primordia-mud.yml"
-}
-
 caf {
   # Parameters selecting a default scheduler.
   scheduler {

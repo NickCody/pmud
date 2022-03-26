@@ -131,7 +131,12 @@ void run(actor_system& sys, MudSystemPtr mud) {
 void caf_main(actor_system& sys) {
   signal(SIGINT, signal_handler);
 
-  YAML_CONFIG = get_or(sys.config(), "pmud.yaml_config", YAML_CONFIG);
+  auto [argc, argv] = sys.config().c_args_remainder();
+
+  if (argc > 1) {
+    YAML_CONFIG = argv[1];
+  }
+
   MudConfig config = parse_yaml(YAML_CONFIG);
 
   unique_ptr<Storage> storage = redis_storage::initialize_redis_storage();

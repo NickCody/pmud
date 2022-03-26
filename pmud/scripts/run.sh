@@ -24,7 +24,7 @@ echo "Waiting..."
 cd $PMUD_DIR
 
 while true; do 
-  ./pmud --config-file=conf/pmud.caf
+  ./pmud --config-file=conf/pmud.caf conf/primordia-mud.yml
   if [ $? -eq 98 ]; then
     echo "Waiting for port..."
     sleep 5
