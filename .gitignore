@@ -344,5 +344,8 @@ bazel-cpp-game
 compile_commands.json
 *.swp
 
+# redis
+*.rdb
+
 # doxygen
 doxygen/

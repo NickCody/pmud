@@ -29,8 +29,8 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
   ca-certificates \
   ninja-build \
   libssl-dev \
-  bazel \
-  redis
+  bazel
+## redis # installed manually below for 6.9/7.x
 # && rm -rf /var/lib/apt/lists/* \
 # && apt-get clean
 
@@ -115,6 +115,14 @@ RUN git clone https://github.com/zeromq/cppzmq.git \
   && cmake .. \
   && make -j4 install
 
+RUN wget https://github.com/redis/redis/archive/7.0-rc2.tar.gz \
+  && tar xvfz 7.0-rc2.tar.gz \
+  && cd redis-7.0-rc2 \
+  && make \
+  && make install \
+  && cd .. \
+  && rm -rf redis-7.0-rc2/ \
+  && rm 7.0-rc2.tar.gz
 
 RUN apt install -y doxygen
 

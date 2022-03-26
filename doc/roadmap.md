@@ -1,6 +1,5 @@
 # Feature Roadmap
 
-
 - Game Engine
   - Maintains clock and turns
   - Loops through actors and signals with update state and asks for input
@@ -21,7 +20,6 @@
   - [ ] Login interaction with user, user creation
   - [ ] Object model: User, Connection
 - [ ] yaml schema for magic and spells
-- [ ] Allow yaml to be specified at CLI, not in `pmud.caf` file
 - [ ] User Information
   -  [ ] Store ip and time of login
   -  [ ] Login, create username/password (write to data directory) 
@@ -45,6 +43,7 @@ Done:
     - [x] Login / Account Creation
     - [x] User Input
     - [x] Emit to User (both feedback from their input and async events of which user needs to be aware)
+- [x] Allow yaml to be specified at CLI, not in `pmud.caf` file
 
 
 Topics:

@@ -16,7 +16,17 @@ echo "REDIS_PORT=$REDIS_PORT"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
 cd $PMUD_DIR
+
+#
+# load functions
+#
+cat scripts/redis-functions/events.lua | redis-cli -h $REDIS_HOST -p $REDIS_PORT -x function load Lua events_lib replace description "event library"
+
+#
+# load data
+#
 pwd
 util/yaml-redis-loader -p places < conf/world/places.yml
 util/yaml-redis-loader -p items < conf/world/items.yml
 util/yaml-redis-loader -p monsters < conf/world/monsters.yml
+
