@@ -29,7 +29,7 @@ namespace primordia::mud::pnet {
       }
     }
 
-    SPDLOG_ERROR("Could not find connection actor for {}", connection);
+    spdlog::error("Could not find connection actor for {}", connection);
     return nullopt;
   }
 

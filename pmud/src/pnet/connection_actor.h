@@ -34,8 +34,8 @@ namespace primordia::mud::pnet {
       registery_id = format("Connection({})", id());
       system().registry().put(registery_id, this);
 
-      attach_functor([this](const error& /*reason*/) {
-        SPDLOG_INFO("Connection actor exiting...", this->connection);
+      attach_functor([this](const error& reason) {
+        spdlog::info("Connection actor ({}) exiting, reason={}", this->connection, to_string(reason));
         send_exit(actor_cast<actor>(command), exit_reason::user_shutdown);
         command.reset();
       });
@@ -44,7 +44,7 @@ namespace primordia::mud::pnet {
         CommStatic comm(connection);
         bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
         if (!success) {
-          SPDLOG_INFO("Failed to send welcome to connection {}", connection);
+          spdlog::info("Failed to send welcome to connection {}", connection);
           // send(self, GoodbyeConnection());
         }
       }
@@ -53,25 +53,24 @@ namespace primordia::mud::pnet {
     behavior make_behavior() {
       return {
         [this](PerformWelcome) {
-          SPDLOG_DEBUG("ConnectionActor::PerformWelcome({})", connection);
+          spdlog::debug("ConnectionActor::PerformWelcome({})", connection);
           send(actor_cast<actor>(command), PerformWelcome());
         },
         [this](ToUserEmit, string emission) {
-          SPDLOG_DEBUG("ConnectionActor::ToUserEmit({}) \"{}\" ", connection, emission);
+          spdlog::debug("ConnectionActor::ToUserEmit({}) \"{}\" ", connection, emission);
           CommStatic(connection).emit_line(emission);
         },
         [this](ToUserPrompt, string prompt) {
-          SPDLOG_DEBUG("ConnectionActor::ToUserPrompt({}) \"{}\" ", connection, prompt);
+          spdlog::debug("ConnectionActor::ToUserPrompt({}) \"{}\" ", connection, prompt);
           CommStatic(connection).emit_prompt(prompt);
           send(this, FromUserGetInput());
         },
         [this](FromUserGetInput) {
-          SPDLOG_DEBUG("ConnectionActor::FromUserGetInput({})", connection);
           CommStatic comm(connection);
           if (comm.has_data()) {
             ssize_t bytes_read = 0;
             string user_read = comm.read_from_user(bytes_read);
-            SPDLOG_DEBUG("ConnectionActor::FromUserGetInput({}) has_data \"{}\"", connection, user_read);
+            spdlog::debug("ConnectionActor::FromUserGetInput({}) has_data \"{}\"", connection, user_read);
 
             if (bytes_read == 0) {
               if (break_count == 0) {
@@ -79,7 +78,7 @@ namespace primordia::mud::pnet {
                 break_count++;
                 send(this, FromUserGetInput());
               } else {
-                SPDLOG_INFO("Connection {} quit", connection);
+                spdlog::info("Connection {} quit", connection);
                 send(this, GoodbyeConnection());
               }
             } else {
@@ -108,7 +107,7 @@ namespace primordia::mud::pnet {
           }
         },
         [this](GoodbyeConnection) {
-          SPDLOG_DEBUG("ConnectionActor::GoodbyeConnection({})", connection);
+          spdlog::debug("ConnectionActor::GoodbyeConnection({})", connection);
           if (connection != -1) {
             CommStatic comm(connection);
             comm.emit_line();

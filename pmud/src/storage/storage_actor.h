@@ -17,14 +17,27 @@ namespace primordia::mud::storage {
         : event_based_actor(cfg),
           m_storage(move(storage)) {
 
-      attach_functor([this](const error& reason) { SPDLOG_INFO("StorageActor exiting, reason: {}", to_string(reason)); });
+      attach_functor([this](const error& reason) { spdlog::info("StorageActor exiting, reason: {}", to_string(reason)); });
     }
 
     behavior make_behavior() {
       return {
-        [this](StorageValueStore, const string& key, const string& value) { m_storage->value_store(key, value); },
-        [this](StorageMapStore, const string& map_name, const string& key, const string& value) { m_storage->map_store(map_name, key, value); },
-        [this](StorageStreamStore, const string& stream_name, const StreamRecordFields_t& fields) { m_storage->stream_store(stream_name, fields); },
+        [this](StorageValueStore, const string& key, const string& value) {
+          spdlog::debug("StorageActor::StorageValueStore: {}={}", key, value);
+          m_storage->value_store(key, value);
+        },
+        [this](StorageMapStore, const string& map_name, const string& key, const string& value) {
+          spdlog::debug("StorageActor::StorageMapStore: map={}, key={}, value={}", map_name, key, value);
+          m_storage->map_store(map_name, key, value);
+        },
+        [this](StorageStreamStore, const string& stream_name, const StreamRecordFields_t& fields) {
+          spdlog::debug("StorageActor::StorageStreamStore: stream_name={}, size={}", stream_name, fields.size());
+          m_storage->stream_store(stream_name, fields);
+        },
+        [this](StorageEventStore, const string& event_name, const StreamRecordFields_t& fields) {
+          spdlog::debug("StorageActor::StorageEventStore: event_name={}, size={}", event_name, fields.size());
+          m_storage->event_store(event_name, fields);
+        },
       };
     }
 

@@ -51,14 +51,14 @@ int main(int argc, char** argv) {
   }
 
   if (stream_name.empty()) {
-    SPDLOG_ERROR("Error, stream name must be specified with -s");
+    spdlog::error("Error, stream name must be specified with -s");
     return EXIT_FAILURE;
   }
 
   auto storage = redis_storage::initialize_redis_storage();
 
   if (!storage) {
-    SPDLOG_ERROR("Failed to initialize redis storage.");
+    spdlog::error("Failed to initialize redis storage.");
     return EXIT_FAILURE;
   }
 
@@ -77,12 +77,12 @@ int main(int argc, char** argv) {
         // }
         if (counter % batch_size == 0) {
           auto elapsed = sw.elapsed();
-          SPDLOG_INFO("{} Read latest batch of records until {} in {:.3} seconds ({:.3f}mps) : {}",
-                      record.timestamp,
-                      counter,
-                      sw,
-                      batch_size / elapsed.count(),
-                      record.fields["temperature"]);
+          spdlog::info("{} Read latest batch of records until {} in {:.3} seconds ({:.3f}mps) : {}",
+                       record.timestamp,
+                       counter,
+                       sw,
+                       batch_size / elapsed.count(),
+                       record.fields["temperature"]);
           sw.reset();
         }
       }

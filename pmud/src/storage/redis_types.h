@@ -15,7 +15,7 @@ namespace primordia::mud::storage::redis {
 
   struct RedisContextDeleter {
     void operator()(redisContext* context) const {
-      SPDLOG_INFO("Shutting down redis connection");
+      spdlog::info("Shutting down redis connection");
       redisFree(context);
     }
   };

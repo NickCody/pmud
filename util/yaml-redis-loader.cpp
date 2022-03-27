@@ -44,13 +44,13 @@ int main(int argc, char** argv) {
   auto storage = redis_storage::initialize_redis_storage();
 
   if (!storage) {
-    SPDLOG_ERROR("Failed to initialize redis storage.");
+    spdlog::error("Failed to initialize redis storage.");
     return EXIT_FAILURE;
   }
 
   auto input = stdout_or_file(filename.c_str());
   if (!input) {
-    SPDLOG_INFO("Failed to open file: {}", filename);
+    spdlog::info("Failed to open file: {}", filename);
     return EXIT_FAILURE;
   }
 

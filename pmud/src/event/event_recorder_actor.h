@@ -21,29 +21,26 @@ namespace primordia::mud::event {
     EventRecorderActor(actor_config& cfg, strong_actor_ptr storage_actor)
         : event_based_actor(cfg),
           m_storage_actor(storage_actor) {
-      attach_functor([this](const error& reason) { SPDLOG_INFO("EventRecorderActor exiting, reason: {}", to_string(reason)); });
+      attach_functor([this](const error& reason) { spdlog::info("EventRecorderActor exiting, reason: {}", to_string(reason)); });
     }
 
     behavior make_behavior() {
       return {
-        [this](EventUserCreate, const string& username, const string& password) {
+        [this](EventUserCreate, const string& username) {
           StreamRecordFields_t fields;
-          fields["event"] = "EventUserCreate"; // TODO: use types
           fields["username"] = username;
-          fields["password"] = password;
-          send(actor_cast<actor>(m_storage_actor), StorageStreamStore(), EVENT_STREAM_NAME, fields);
+          // fields["password"] = password;
+          send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserCreate", fields);
         },
         [this](EventUserLogin, const string& username) {
           StreamRecordFields_t fields;
-          fields["event"] = "EventUserLogin"; // TODO: use types
           fields["username"] = username;
-          send(actor_cast<actor>(m_storage_actor), StorageStreamStore(), EVENT_STREAM_NAME, fields);
+          send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserLogin", fields);
         },
         [this](EventUserLogout, const string& username) {
           StreamRecordFields_t fields;
-          fields["event"] = "EventUserLogout"; // TODO: use types
           fields["username"] = username;
-          send(actor_cast<actor>(m_storage_actor), StorageStreamStore(), EVENT_STREAM_NAME, fields);
+          send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserLogout", fields);
         },
       };
     }

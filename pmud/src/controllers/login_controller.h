@@ -44,7 +44,7 @@ namespace primordia::mud::player {
               emit_user();
               emit_user(fmt::format("Welcome to Primordia {}!", username));
               emit_user();
-              record_event_user_create(username, password);
+              record_event_user_create(username);
               end_controller();
             } else {
               emit_user();

@@ -36,18 +36,18 @@ namespace primordia::mud::storage::redis {
     bool init() {
       string ip;
       if (primordia::mud::common::hostname_to_ip(m_host, ip) == -1) {
-        SPDLOG_INFO("Could not resolve hostname {} to IP address!", m_host);
+        spdlog::info("Could not resolve hostname {} to IP address!", m_host);
         return false;
       }
 
-      SPDLOG_INFO("Redis host {} = ip {}", m_host, ip);
+      spdlog::info("Redis host {} = ip {}", m_host, ip);
 
       m_context = RedisContextUniquePtr(redisConnect(ip.c_str(), m_port));
       if (m_context == nullptr || m_context->err) {
         if (m_context) {
-          SPDLOG_INFO("Error: {}", m_context->errstr);
+          spdlog::info("Error: {}", m_context->errstr);
         } else {
-          SPDLOG_INFO("Can't allocate redis context");
+          spdlog::info("Can't allocate redis context");
         }
         return false;
       }
@@ -60,7 +60,7 @@ namespace primordia::mud::storage::redis {
       spdlog::debug("redis: SET {} {}", key, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SET %s %s", key.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command value_store: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command value_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -69,7 +69,7 @@ namespace primordia::mud::storage::redis {
       spdlog::debug("redis: HSET {} {} {}", map_name, key, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -78,7 +78,7 @@ namespace primordia::mud::storage::redis {
       spdlog::debug("redis: RPUSH {} {}", list_name, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "RPUSH %s %s", list_name.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command list_store: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command list_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -87,7 +87,7 @@ namespace primordia::mud::storage::redis {
       spdlog::debug("redis: SADD {} {}", set_name, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SADD %s %s", set_name.c_str(), value.c_str()));
       if (!reply) {
-        SPDLOG_ERROR("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
     }
@@ -97,8 +97,36 @@ namespace primordia::mud::storage::redis {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "DEL %s", key.c_str()));
 
       if (!reply) {
-        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
+      return reply != nullptr;
+    }
+
+    bool event_store(const string& event_name, const StreamRecordFields_t& fields) override {
+      vector<string> arg_vector;
+      arg_vector.push_back("FCALL");
+      arg_vector.push_back(event_name);
+      arg_vector.push_back("1");
+      arg_vector.push_back("events");
+      for (auto const& [key, val] : fields) {
+        arg_vector.push_back(key);
+        arg_vector.push_back(val);
+      }
+
+      stringstream invoc;
+      for (const auto& arg : arg_vector) {
+        invoc << arg << " ";
+      }
+      spdlog::debug("event_store: {}", invoc.str());
+
+      std::vector<const char*> argv(arg_vector.size());
+      std::transform(arg_vector.begin(), arg_vector.end(), argv.begin(), [](string& str) { return str.c_str(); });
+
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommandArgv(m_context.get(), arg_vector.size(), argv.data(), NULL));
+      if (!reply) {
+        spdlog::error("Error running command event_store: code {}: {}", m_context->err, m_context->errstr);
+      }
+
       return reply != nullptr;
     }
 
@@ -118,7 +146,7 @@ namespace primordia::mud::storage::redis {
 
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommandArgv(m_context.get(), arg_vector.size(), argv.data(), NULL));
       if (!reply) {
-        SPDLOG_ERROR("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command stream_store: code {}: {}", m_context->err, m_context->errstr);
       }
 
       return reply != nullptr;
@@ -130,7 +158,7 @@ namespace primordia::mud::storage::redis {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), command.c_str()));
 
       if (!reply) {
-        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
         return vector<StreamResponse>();
       } else {
         return construct_stream_responses(*reply.get());
@@ -145,7 +173,7 @@ namespace primordia::mud::storage::redis {
           (redisReply*)redisCommand(m_context.get(), "XREAD BLOCK %s STREAMS %s %s", _timeout.c_str(), stream_name.c_str(), pos.c_str()));
 
       if (!reply) {
-        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
         return vector<StreamResponse>();
       } else {
         return construct_stream_responses(*reply.get());
@@ -158,7 +186,7 @@ namespace primordia::mud::storage::redis {
       redisReply* reply = (redisReply*)redisCommand(m_context.get(), command.c_str());
 
       if (!reply) {
-        SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
+        spdlog::error("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
 
       return unique_ptr<redisReply>(reply);
@@ -203,11 +231,11 @@ namespace primordia::mud::storage::redis {
     auto storage = make_unique<RedisStorage>(redis_host, redis_port);
 
     if (!storage->init()) {
-      SPDLOG_ERROR("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
+      spdlog::error("Error, could not connect to REDIS_HOST {} on REDIS_PORT {}", redis_host, redis_port);
       return nullptr;
     }
 
-    SPDLOG_INFO("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
+    spdlog::info("Successsfully connected to redis at {}:{}!", redis_host, redis_port);
 
     return storage;
   }

@@ -38,6 +38,7 @@ CAF_ADD_TYPE_ID(pmud_caf_types, (StreamRecordFields_t))
 CAF_ADD_ATOM(pmud_caf_types, StorageValueStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageMapStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageStreamStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageEventStore)
 
 // Events
 //
@@ -51,9 +52,3 @@ CAF_ADD_ATOM(pmud_caf_types, LoginControllerStart)
 CAF_ADD_ATOM(pmud_caf_types, LoginControllerEnd)
 
 CAF_END_TYPE_ID_BLOCK(pmud_caf_types)
-
-namespace primordia::mud::storage {
-  // template <class Inspector> bool inspect(Inspector& f, StreamRecordFields_t& x) {
-  //   return f.object(x).fields(f.field("size", x.size()));
-  // }
-} // namespace primordia::mud::storage

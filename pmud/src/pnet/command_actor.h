@@ -28,7 +28,8 @@ namespace primordia::mud::pnet {
       active_controller = nullptr;
       default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
 
-      attach_functor([this](const error& /*reason*/) {
+      attach_functor([this](const error& reason) {
+        spdlog::info("CommandActor({}) exiting, reason={}", this->connection, to_string(reason));
         if (active_controller)
           send_exit(actor_cast<actor>(active_controller), exit_reason::user_shutdown);
         if (default_controller)
@@ -41,14 +42,14 @@ namespace primordia::mud::pnet {
     behavior make_behavior() override {
       return {
         [this](PerformWelcome) {
-          SPDLOG_DEBUG("CommandActor::PerformWelcome({})", connection);
+          spdlog::debug("CommandActor::PerformWelcome({})", connection);
 
           auto login_controller = spawn<LoginController>(m_mud, actor_cast<strong_actor_ptr>(this));
           active_controller = actor_cast<strong_actor_ptr>(login_controller);
           send(login_controller, LoginControllerStart());
         },
         [this](OnUserInput, string input) {
-          SPDLOG_DEBUG("CommandActor::PerformWelcome({}) \"{}\"", connection, input);
+          spdlog::debug("CommandActor::PerformWelcome({}) \"{}\"", connection, input);
           if (active_controller == nullptr) {
             CommStatic comm(connection);
             prompt_user();
@@ -57,15 +58,15 @@ namespace primordia::mud::pnet {
           }
         },
         [this](ToUserPrompt, string prompt) {
-          SPDLOG_DEBUG("CommandActor::ToUserPrompt({}) \"{}\"", connection, prompt);
+          spdlog::debug("CommandActor::ToUserPrompt({}) \"{}\"", connection, prompt);
           prompt_user(prompt);
         },
         [this](ToUserEmit, string emission) {
-          SPDLOG_DEBUG("CommandActor::ToUserEmit({}) \"{}\"", connection, emission);
+          spdlog::debug("CommandActor::ToUserEmit({}) \"{}\"", connection, emission);
           emit_user(emission);
         },
         [this](LoginControllerEnd) {
-          SPDLOG_DEBUG("CommandActor::LoginControllerEnd({})", connection);
+          spdlog::debug("CommandActor::LoginControllerEnd({})", connection);
           send_exit(actor_cast<actor>(active_controller), exit_reason::user_shutdown);
           active_controller.reset();
           active_controller = actor_cast<strong_actor_ptr>(default_controller);

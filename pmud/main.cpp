@@ -1,7 +1,8 @@
+#include <spdlog/spdlog.h>
+
 #include <csignal>
 #include <fmt/core.h>
 #include <yaml-cpp/yaml.h>
-#include <spdlog/spdlog.h>
 #include <caf/all.hpp>
 
 #include "common/global_type_id.h"
@@ -29,7 +30,7 @@ string YAML_CONFIG = "primordia-mud.yaml";
 MudConfig parse_yaml(const string& filename) {
   char cwd[PATH_MAX];
   if (getcwd(cwd, sizeof(cwd)) != NULL) {
-    SPDLOG_INFO("Loading yaml {} from current working dir: {}", filename, cwd);
+    spdlog::info("Loading yaml {} from current working dir: {}", filename, cwd);
   }
   const YAML::Node config = YAML::LoadFile(filename);
 
@@ -60,7 +61,7 @@ void signal_handler(int signal) {
 int start_server(scoped_actor& self, const actor& server, chrono::seconds timeout) {
   int server_success = 0;
   self->request(server, timeout, StartServer())
-      .receive([&](int status) { server_success = status; }, [&](const error& err) { SPDLOG_INFO("Error: {}", to_string(err)); });
+      .receive([&](int status) { server_success = status; }, [&](const error& err) { spdlog::info("Error: {}", to_string(err)); });
 
   return server_success;
 }
@@ -71,7 +72,7 @@ void quit_connection_actors(scoped_actor& self, actor_system& sys) {
   for (auto actor_in_registry : sys.registry().named_actors()) {
     regex connection_regex("Connection\\([0-9]+\\)");
     if (regex_match(actor_in_registry.first, connection_regex)) {
-      SPDLOG_INFO("App shutdown, forcing actor {} to close", actor_in_registry.first);
+      spdlog::info("App shutdown, forcing actor {} to close", actor_in_registry.first);
       self->send(actor_cast<actor>(actor_in_registry.second), GoodbyeConnection());
     }
   }
@@ -95,7 +96,7 @@ bool kill_server(scoped_actor& self, const actor& server, chrono::seconds timeou
   self->request(server, timeout, GoodbyeServer())
       .receive(
           [&](bool status) {
-            SPDLOG_INFO("Server exit with status: {}", status);
+            spdlog::info("Server exit with status: {}", status);
             result = true;
           },
           [&](const error& err) {
@@ -123,7 +124,7 @@ bool run(actor_system& sys, MudSystemPtr mud) {
 
   int server_status = start_server(self, server, chrono::seconds(10));
   if (server_status != 0) {
-    SPDLOG_INFO("Server failed to start!");
+    spdlog::error("Server failed to start!");
     return false;
   }
 
@@ -146,7 +147,6 @@ bool run(actor_system& sys, MudSystemPtr mud) {
  */
 void caf_main(actor_system& sys) {
   spdlog::set_level(spdlog::level::debug);
-
   signal(SIGINT, signal_handler);
 
   auto [argc, argv] = sys.config().c_args_remainder();
@@ -159,7 +159,7 @@ void caf_main(actor_system& sys) {
 
   unique_ptr<Storage> storage = redis_storage::initialize_redis_storage();
   if (!storage) {
-    SPDLOG_ERROR("Exiting due to storage initialization failure!");
+    spdlog::error("Exiting due to storage initialization failure!");
     exit(-1);
   }
 
@@ -178,7 +178,7 @@ void caf_main(actor_system& sys) {
     sys.await_all_actors_done();
   }
 
-  SPDLOG_INFO("Exiting main");
+  spdlog::info("Exiting main");
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
