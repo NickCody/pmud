@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hiredis/hiredis.h"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 #include <arpa/inet.h>
 #include <string>
 #include <ctime>
@@ -14,6 +14,8 @@
 
 #include "common/pmud_net.h"
 #include "storage/storage_types.h"
+
+#include "common/global_type_id.h"
 
 namespace primordia::mud::storage {
 
@@ -28,6 +30,7 @@ namespace primordia::mud::storage {
     virtual bool list_store(const string& list_name, const string& value) = 0;
     virtual bool set_store(const string& set_name, const string& value) = 0;
     virtual bool del_key(const string& key) = 0;
+    virtual bool stream_store(const string& map_name, const StreamRecordFields_t& fields) = 0;
     virtual vector<StreamResponse> read_stream_raw(const string& command) = 0;
     virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout = 0) = 0;
   };

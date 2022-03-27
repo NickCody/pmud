@@ -12,7 +12,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 namespace primordia::mud::common {
 

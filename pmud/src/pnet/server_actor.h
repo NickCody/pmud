@@ -10,6 +10,7 @@
 
 #include "util.h"
 #include "system/pmud_system.h"
+#include "pnet/connection_actor.h"
 
 namespace primordia::mud::pnet {
 

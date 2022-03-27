@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 
+#include "common/global_type_id.h"
+
 namespace primordia::mud::storage {
   using namespace std;
-  using StreamRecordFields_t = map<string, string>;
 
   struct StreamRecord {
     string timestamp;

@@ -6,12 +6,54 @@
 
 #pragma once
 
+#include <string>
+#include <map>
+
 #include "caf/type_id.hpp"
 
-namespace primordia::mud::type_id {
+using StreamRecordFields_t = std::map<std::string, std::string>;
 
-  constexpr caf::type_id_t first_net_type_id = caf::first_custom_type_id;
-  constexpr caf::type_id_t first_player_type_id = first_net_type_id + 200;
-  constexpr caf::type_id_t first_storage_type_id = first_player_type_id + 200;
+CAF_BEGIN_TYPE_ID_BLOCK(pmud_caf_types, caf::first_custom_type_id)
 
-} // namespace primordia::mud::type_id
+// Server
+CAF_ADD_ATOM(pmud_caf_types, AcceptConnection)
+CAF_ADD_ATOM(pmud_caf_types, StartServer)
+CAF_ADD_ATOM(pmud_caf_types, GoodbyeServer)
+
+// Connection
+CAF_ADD_ATOM(pmud_caf_types, FromUserGetInput)
+CAF_ADD_ATOM(pmud_caf_types, GoodbyeConnection)
+
+// UserClient (Command + Connection)
+CAF_ADD_ATOM(pmud_caf_types, ToUserPrompt)
+CAF_ADD_ATOM(pmud_caf_types, ToUserEmit)
+
+// Command / Controllers
+CAF_ADD_ATOM(pmud_caf_types, PerformWelcome)
+CAF_ADD_ATOM(pmud_caf_types, OnUserInput)
+
+// Storage
+//
+CAF_ADD_TYPE_ID(pmud_caf_types, (StreamRecordFields_t))
+CAF_ADD_ATOM(pmud_caf_types, StorageValueStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageMapStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageStreamStore)
+
+// Events
+//
+CAF_ADD_ATOM(pmud_caf_types, EventUserCreate)
+CAF_ADD_ATOM(pmud_caf_types, EventUserLogin)
+CAF_ADD_ATOM(pmud_caf_types, EventUserLogout)
+
+// Player
+//
+CAF_ADD_ATOM(pmud_caf_types, LoginControllerStart)
+CAF_ADD_ATOM(pmud_caf_types, LoginControllerEnd)
+
+CAF_END_TYPE_ID_BLOCK(pmud_caf_types)
+
+namespace primordia::mud::storage {
+  // template <class Inspector> bool inspect(Inspector& f, StreamRecordFields_t& x) {
+  //   return f.object(x).fields(f.field("size", x.size()));
+  // }
+} // namespace primordia::mud::storage

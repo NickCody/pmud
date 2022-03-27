@@ -2,6 +2,7 @@
 
 #include "caf/all.hpp"
 #include "pnet/server_state.h"
+#include "pnet/comm_static.h"
 
 namespace primordia::mud::pnet {
 

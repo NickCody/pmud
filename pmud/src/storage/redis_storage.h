@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <memory>
 #include <string>
 #include <map>
@@ -8,8 +9,8 @@
 #include <arpa/inet.h>
 #include <limits.h>
 #include <ctime>
-#include "hiredis/hiredis.h"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
+#include <hiredis/hiredis.h>
 
 #include "common/pmud_net.h"
 #include "storage/storage.h"
@@ -98,6 +99,28 @@ namespace primordia::mud::storage::redis {
       if (!reply) {
         SPDLOG_ERROR("Error running command del_key: code {}: {}", m_context->err, m_context->errstr);
       }
+      return reply != nullptr;
+    }
+
+    bool stream_store(const string& map_name, const StreamRecordFields_t& fields) override {
+
+      vector<string> arg_vector;
+      arg_vector.push_back("XADD");
+      arg_vector.push_back(map_name);
+      arg_vector.push_back("*");
+      for (auto const& [key, val] : fields) {
+        arg_vector.push_back(key);
+        arg_vector.push_back(val);
+      }
+
+      std::vector<const char*> argv(arg_vector.size());
+      std::transform(arg_vector.begin(), arg_vector.end(), argv.begin(), [](string& str) { return str.c_str(); });
+
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommandArgv(m_context.get(), arg_vector.size(), argv.data(), NULL));
+      if (!reply) {
+        SPDLOG_ERROR("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
+      }
+
       return reply != nullptr;
     }
 

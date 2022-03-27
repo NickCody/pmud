@@ -8,6 +8,7 @@ cc_library(
     deps = [
         "//pmud/src/common:library",
         "//pmud/src/controllers:library",
+        "//pmud/src/event:library",
         "//pmud/src/system:library",
     ],
 )
