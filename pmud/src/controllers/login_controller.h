@@ -62,7 +62,8 @@ namespace primordia::mud::player {
 
   private:
     CredentialHash hash_and_scrub_password() {
-      auto hash = primordia::mud::security::hash_credentials(password);
+      auto salt = generate_random_salt();
+      auto hash = primordia::mud::security::hash_credentials(password, salt);
       for (size_t i = 0; i < password.size(); i++) {
         password[i] = ' ';
       }
