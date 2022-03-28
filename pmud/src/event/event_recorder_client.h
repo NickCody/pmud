@@ -13,8 +13,8 @@ namespace primordia::mud::event {
     EventRecorderClient(strong_actor_ptr event_actor)
         : m_event_actor(event_actor) {}
 
-    void record_event_user_create(const string& username) {
-      caf::anon_send(actor_cast<actor>(m_event_actor), EventUserCreate(), username);
+    void record_event_user_create(const string& username, const string& passphrase) {
+      caf::anon_send(actor_cast<actor>(m_event_actor), EventUserCreate(), username, passphrase);
     }
 
     void record_event_user_login(const string& username) {

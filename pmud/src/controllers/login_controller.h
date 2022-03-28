@@ -8,6 +8,7 @@
 #include "pnet/user_client.h"
 #include "system/pmud_system.h"
 #include "event/event_recorder_client.h"
+#include "common/pmud_security.h"
 
 namespace primordia::mud::player {
 
@@ -15,6 +16,7 @@ namespace primordia::mud::player {
   using namespace std;
   using namespace system;
   using namespace primordia::mud::event;
+  using namespace primordia::mud::security;
 
   constexpr chrono::seconds LOGIN_TIMEOUT = 60s;
 
@@ -44,7 +46,8 @@ namespace primordia::mud::player {
               emit_user();
               emit_user(fmt::format("Welcome to Primordia {}!", username));
               emit_user();
-              record_event_user_create(username);
+              auto hash = this->hash_and_scrub_password();
+              record_event_user_create(username, hash.to_string());
               end_controller();
             } else {
               emit_user();
@@ -55,6 +58,15 @@ namespace primordia::mud::player {
           }
         },
       };
+    }
+
+  private:
+    CredentialHash hash_and_scrub_password() {
+      auto hash = primordia::mud::security::hash_credentials(password);
+      for (size_t i = 0; i < password.size(); i++) {
+        password[i] = ' ';
+      }
+      return hash;
     }
 
   private:

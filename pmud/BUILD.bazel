@@ -22,6 +22,11 @@ filegroup(
 )
 
 filegroup(
+    name = "brumme-hash_so",
+    data = ["//pmud/src/common/hash-library:brumme-hash"],
+)
+
+filegroup(
     name = "hiredis_so",
     data = ["@hiredis//:main"],
 )
@@ -58,6 +63,7 @@ pkg_tar(
     name = "dist",
     srcs = [
         "//pmud",
+        "//pmud:brumme-hash_so",
         "//pmud:caf_so",
         "//pmud:conf",
         "//pmud:hiredis_so",

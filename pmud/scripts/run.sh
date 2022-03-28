@@ -8,7 +8,10 @@ PMUD_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 export REDIS_HOST=${1:-localhost}
 export REDIS_PORT=${2:-6379}
-export LD_LIBRARY_PATH=$PMUD_DIR/_solib_k8/_U@caf_S_S_Cmain___Ulib:$PMUD_DIR/_solib_k8/_U@hiredis_S_S_Cmain___Ulocal_Slib
+LD_LIBRARY_PATH=$PMUD_DIR/_solib_k8/_U@caf_S_S_Cmain___Ulib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PMUD_DIR/_solib_k8/_U@hiredis_S_S_Cmain___Ulocal_Slib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PMUD_DIR/_solib_k8/
+export LD_LIBRARY_PATH
 
 echo "Using:"
 echo "REDIS_HOST=$REDIS_HOST"
