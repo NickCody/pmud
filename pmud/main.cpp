@@ -1,4 +1,6 @@
 #include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #include <csignal>
 #include <fmt/core.h>
@@ -35,10 +37,10 @@ MudConfig parse_yaml(const string& filename) {
   const YAML::Node config = YAML::LoadFile(filename);
 
   return {
-    config["server"]["name"].as<string>(),
-    config["server"]["address"].as<string>(),
-    config["server"]["port"].as<uint16_t>(),
-    config["server"]["max_queued_connections"].as<uint16_t>(),
+    config["server"]["name"].as<string>(),         config["server"]["address"].as<string>(),
+    config["server"]["port"].as<uint16_t>(),       config["server"]["max-queued-connections"].as<uint16_t>(),
+    config["server"]["log-name"].as<string>(),     config["server"]["log-level"].as<string>(),
+    config["server"]["log-filename"].as<string>(), config["server"]["log-truncate"].as<bool>(),
   };
 }
 
@@ -138,6 +140,34 @@ bool run(actor_system& sys, MudSystemPtr mud) {
 }
 
 /**
+ * \brief Initializes the logger
+ *
+ * Longer Description
+ *
+ * @param config MudConfig which contains logging options
+ * @returns true if logger was initialized, false otherwise
+ *
+ */
+
+bool configure_logging(const MudConfig& config) {
+
+  try {
+    std::shared_ptr<spdlog::logger> logger;
+
+    if (config.log_name == "console")
+      logger = spdlog::stdout_color_mt("console", spdlog::color_mode::automatic);
+    else
+      logger = spdlog::basic_logger_mt(config.log_name, config.log_filename, false);
+    logger->set_level(spdlog::level::from_str(config.log_level));
+    spdlog::set_default_logger(logger);
+    return true;
+  } catch (const spdlog::spdlog_ex& ex) {
+    fmt::print("Log init failed: {}\n", ex.what());
+    return false;
+  }
+}
+
+/**
  * \brief main function
  *
  * This is  the main entrypoint provided by CAF actor system.
@@ -146,7 +176,6 @@ bool run(actor_system& sys, MudSystemPtr mud) {
  *
  */
 void caf_main(actor_system& sys) {
-  spdlog::set_level(spdlog::level::debug);
   signal(SIGINT, signal_handler);
 
   auto [argc, argv] = sys.config().c_args_remainder();
@@ -156,6 +185,10 @@ void caf_main(actor_system& sys) {
   }
 
   MudConfig config = parse_yaml(YAML_CONFIG);
+
+  if (!configure_logging(config)) {
+    exit(-1);
+  }
 
   unique_ptr<Storage> storage = redis_storage::initialize_redis_storage();
   if (!storage) {
