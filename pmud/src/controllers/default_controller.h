@@ -22,8 +22,10 @@ namespace primordia::mud::player {
           if (input == "help") {
             emit_help();
             prompt_user();
-          } else {
+          } else if (!input.empty()) {
             emit_user(fmt::format("Unknown command: {}", input));
+            prompt_user();
+          } else {
             prompt_user();
           }
         },

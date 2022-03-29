@@ -3,10 +3,10 @@ load("@//:global_copts.bzl", "global_cppopts")
 
 cc_test(
     name = "test",
-    srcs = glob(["**/*.cpp"]),
+    srcs = glob(["*.cpp"]),
     copts = global_cppopts(),
+    visibility = ["//visibility:public"],
     deps = [
-        "//pmud/graph:library",
         "@com_google_googletest//:gtest_main",
     ],
 )

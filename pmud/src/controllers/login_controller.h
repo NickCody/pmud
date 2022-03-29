@@ -40,9 +40,11 @@ namespace primordia::mud::player {
             prompt_user("enter password");
           } else if (password.empty()) {
             password = input;
+            emit_user();
             prompt_user("confirm password");
           } else {
             if (password == input) {
+              emit_user(ENABLE_ECHO_SEQUENCE);
               emit_user();
               emit_user(fmt::format("Welcome to Primordia {}!", username));
               emit_user();

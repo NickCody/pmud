@@ -7,6 +7,6 @@ cc_test(
     copts = global_cppopts(),
     deps = [
         "//pmud/graph:library",
-        "@googletest//:gtest_main",
+        "@com_google_googletest//:gtest_main",
     ],
 )

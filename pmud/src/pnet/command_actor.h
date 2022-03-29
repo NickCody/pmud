@@ -23,62 +23,63 @@ namespace primordia::mud::pnet {
   public:
     CommandActor(actor_config& cfg, MudSystemPtr mud, strong_actor_ptr connection_actor, int connection)
         : UserClient(cfg, connection_actor, "Command"),
+          m_active_controller(nullptr),
+          m_connection(connection),
           m_mud(mud) {
-      connection = connection;
-      active_controller = nullptr;
-      default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
+
+      m_default_controller = actor_cast<strong_actor_ptr>(spawn<DefaultController>(actor_cast<strong_actor_ptr>(this)));
 
       attach_functor([this](const error& reason) {
-        spdlog::info("CommandActor({}) exiting, reason={}", this->connection, to_string(reason));
-        if (active_controller)
-          send_exit(actor_cast<actor>(active_controller), exit_reason::user_shutdown);
-        if (default_controller)
-          send_exit(actor_cast<actor>(default_controller), exit_reason::user_shutdown);
-        active_controller.reset();
-        default_controller.reset();
+        spdlog::info("CommandActor({}) exiting, reason={}", this->m_connection, to_string(reason));
+        if (this->m_active_controller)
+          send_exit(actor_cast<actor>(this->m_active_controller), exit_reason::user_shutdown);
+        if (this->m_default_controller)
+          send_exit(actor_cast<actor>(this->m_default_controller), exit_reason::user_shutdown);
+        this->m_active_controller.reset();
+        this->m_default_controller.reset();
       });
     }
 
     behavior make_behavior() override {
       return {
         [this](PerformWelcome) {
-          spdlog::debug("CommandActor::PerformWelcome({})", connection);
+          spdlog::debug("CommandActor::PerformWelcome({})", m_connection);
 
           auto login_controller = spawn<LoginController>(m_mud, actor_cast<strong_actor_ptr>(this));
-          active_controller = actor_cast<strong_actor_ptr>(login_controller);
+          m_active_controller = actor_cast<strong_actor_ptr>(login_controller);
           send(login_controller, LoginControllerStart());
         },
         [this](OnUserInput, string input) {
-          spdlog::debug("CommandActor::PerformWelcome({}) \"{}\"", connection, input);
-          if (active_controller == nullptr) {
-            CommStatic comm(connection);
+          spdlog::debug("CommandActor::OnUserInput({}) \"{}\"", m_connection, input);
+          if (m_active_controller == nullptr) {
+            CommStatic comm(m_connection);
             prompt_user();
           } else {
-            send(actor_cast<actor>(active_controller), OnUserInput(), input);
+            send(actor_cast<actor>(m_active_controller), OnUserInput(), input);
           }
         },
         [this](ToUserPrompt, string prompt) {
-          spdlog::debug("CommandActor::ToUserPrompt({}) \"{}\"", connection, prompt);
+          spdlog::debug("CommandActor::ToUserPrompt({}) \"{}\"", m_connection, prompt);
           prompt_user(prompt);
         },
         [this](ToUserEmit, string emission) {
-          spdlog::debug("CommandActor::ToUserEmit({}) \"{}\"", connection, emission);
+          spdlog::debug("CommandActor::ToUserEmit({}) \"{}\"", m_connection, emission);
           emit_user(emission);
         },
         [this](LoginControllerEnd) {
-          spdlog::debug("CommandActor::LoginControllerEnd({})", connection);
-          send_exit(actor_cast<actor>(active_controller), exit_reason::user_shutdown);
-          active_controller.reset();
-          active_controller = actor_cast<strong_actor_ptr>(default_controller);
+          spdlog::debug("CommandActor::LoginControllerEnd({})", m_connection);
+          send_exit(actor_cast<actor>(m_active_controller), exit_reason::user_shutdown);
+          m_active_controller.reset();
+          m_active_controller = actor_cast<strong_actor_ptr>(m_default_controller);
           prompt_user();
         },
       };
     }
 
   private:
-    int connection;
-    strong_actor_ptr active_controller;
-    strong_actor_ptr default_controller;
+    strong_actor_ptr m_active_controller;
+    int m_connection;
+    strong_actor_ptr m_default_controller;
     MudSystemPtr m_mud;
   };
 

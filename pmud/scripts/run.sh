@@ -30,7 +30,6 @@ while true; do
     echo "Waiting for port..."
     sleep 5
   else
-    echo "Started!"
     break;
   fi
 done

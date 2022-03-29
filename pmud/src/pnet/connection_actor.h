@@ -22,74 +22,73 @@ namespace primordia::mud::pnet {
 
   class ConnectionActor : public event_based_actor {
   public:
-    ConnectionActor(actor_config& cfg, MudSystemPtr mud, const string welcome, int _connection)
+    ConnectionActor(actor_config& cfg, MudSystemPtr mud, const string& welcome, int connection)
         : event_based_actor(cfg),
-          m_welcome(welcome),
-          m_mud(mud) {
+          m_break_count(0),
+          m_connection(connection),
+          m_current_input(""),
+          m_mud(mud),
+          m_welcome(welcome) {
 
-      connection = _connection;
-      break_count = 0;
-      current_input = "";
-      command = actor_cast<strong_actor_ptr>(spawn<CommandActor>(mud, actor_cast<strong_actor_ptr>(this), connection));
-      registery_id = format("Connection({})", id());
-      system().registry().put(registery_id, this);
+      m_command = actor_cast<strong_actor_ptr>(spawn<CommandActor>(mud, actor_cast<strong_actor_ptr>(this), m_connection));
+      m_registery_id = format("Connection({})", id());
+      system().registry().put(m_registery_id, this);
 
       attach_functor([this](const error& reason) {
-        spdlog::info("Connection actor ({}) exiting, reason={}", this->connection, to_string(reason));
-        send_exit(actor_cast<actor>(command), exit_reason::user_shutdown);
-        command.reset();
+        spdlog::info("Connection actor ({}) exiting, reason={}", m_connection, to_string(reason));
+        send_exit(actor_cast<actor>(m_command), exit_reason::user_shutdown);
+        m_command.reset();
       });
 
-      {
-        CommStatic comm(connection);
-        bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
-        if (!success) {
-          spdlog::info("Failed to send welcome to connection {}", connection);
-          // send(self, GoodbyeConnection());
-        }
+      CommStatic comm(m_connection);
+      bool success = comm.emit_banner() && comm.emit_line() && comm.emit_line(welcome) && comm.emit_line() && comm.emit_line();
+      if (!success) {
+        spdlog::info("Failed to send welcome to connection {}", m_connection);
+        // send(self, GoodbyeConnection());
       }
     }
 
     behavior make_behavior() {
+
       return {
         [this](PerformWelcome) {
-          spdlog::debug("ConnectionActor::PerformWelcome({})", connection);
-          send(actor_cast<actor>(command), PerformWelcome());
+          spdlog::debug("ConnectionActor::PerformWelcome({})", m_connection);
+          send(actor_cast<actor>(m_command), PerformWelcome());
         },
         [this](ToUserEmit, string emission) {
-          spdlog::debug("ConnectionActor::ToUserEmit({}) \"{}\" ", connection, emission);
-          CommStatic(connection).emit_line(emission);
+          spdlog::debug("ConnectionActor::ToUserEmit({}) \"{}\" ", m_connection, emission);
+          CommStatic(m_connection).emit_line(emission);
         },
         [this](ToUserPrompt, string prompt) {
-          spdlog::debug("ConnectionActor::ToUserPrompt({}) \"{}\" ", connection, prompt);
-          CommStatic(connection).emit_prompt(prompt);
+          spdlog::debug("ConnectionActor::ToUserPrompt({}) \"{}\" ", m_connection, prompt);
+          CommStatic(m_connection).emit_prompt(prompt);
           send(this, FromUserGetInput());
         },
         [this](FromUserGetInput) {
-          CommStatic comm(connection);
+          CommStatic comm(m_connection);
           if (comm.has_data()) {
             ssize_t bytes_read = 0;
             string user_read = comm.read_from_user(bytes_read);
-            spdlog::debug("ConnectionActor::FromUserGetInput({}) has_data \"{}\"", connection, user_read);
+            spdlog::debug("ConnectionActor::FromUserGetInput({}) has_data \"{}\"", m_connection, user_read);
 
             if (bytes_read == 0) {
-              if (break_count == 0) {
+              if (m_break_count == 0) {
                 // comm.emit_line("Detected quit, type again to quit!"); // todo: only do on virgin connection
-                break_count++;
+                m_break_count++;
                 send(this, FromUserGetInput());
               } else {
-                spdlog::info("Connection {} quit", connection);
+                spdlog::info("Connection {} quit", m_connection);
                 send(this, GoodbyeConnection());
               }
             } else {
-              break_count = 0;
+              m_break_count = 0;
 
               if (user_read.find("\n") == string::npos) {
-                current_input += user_read;
+                m_current_input += user_read;
                 send(this, FromUserGetInput());
               } else {
-                string final_user_read = comm.sanitize(current_input + user_read);
-                current_input.clear();
+                string final_user_read = comm.sanitize(m_current_input + user_read);
+                m_current_input.clear();
 
                 if (final_user_read == "quit" || final_user_read == "exit") {
                   send(this, GoodbyeConnection());
@@ -97,7 +96,7 @@ namespace primordia::mud::pnet {
                   // if (final_user_read.size() == 0)
                   //   comm.emit_line();
 
-                  send(actor_cast<actor>(command), OnUserInput(), final_user_read);
+                  send(actor_cast<actor>(m_command), OnUserInput(), final_user_read);
                   send(this, FromUserGetInput());
                 }
               }
@@ -107,17 +106,17 @@ namespace primordia::mud::pnet {
           }
         },
         [this](GoodbyeConnection) {
-          spdlog::debug("ConnectionActor::GoodbyeConnection({})", connection);
-          if (connection != -1) {
-            CommStatic comm(connection);
+          spdlog::debug("ConnectionActor::GoodbyeConnection({})", m_connection);
+          if (m_connection != -1) {
+            CommStatic comm(m_connection);
             comm.emit_line();
             comm.emit_line("Goodbye!");
 
             // ZMQ:
             //
-            close(connection);
+            close(m_connection);
           }
-          system().registry().erase(registery_id);
+          system().registry().erase(m_registery_id);
 
           send_exit(actor_cast<actor>(this), exit_reason::user_shutdown);
         },
@@ -125,13 +124,13 @@ namespace primordia::mud::pnet {
     }
 
   private:
-    const string& m_welcome;
-    int connection;
-    std::string registery_id;
-    int break_count;
-    std::string current_input;
-    strong_actor_ptr command;
+    int m_break_count;
+    strong_actor_ptr m_command;
+    int m_connection;
+    string m_current_input;
     MudSystemPtr m_mud;
+    string m_registery_id;
+    const string& m_welcome;
   };
 
 } // namespace primordia::mud::pnet
