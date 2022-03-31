@@ -2,8 +2,24 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
     name = "brumme-hash",
-    srcs = glob(["*.cpp"]),
-    hdrs = glob(["*.h"]),
+    srcs = [
+        "crc32.cpp",
+        "keccak.cpp",
+        "md5.cpp",
+        "sha1.cpp",
+        "sha256.cpp",
+        "sha3.cpp",
+    ],
+    hdrs = [
+        "crc32.h",
+        "hash.h",
+        "hmac.h",
+        "keccak.h",
+        "md5.h",
+        "sha1.h",
+        "sha256.h",
+        "sha3.h",
+    ],
     strip_include_prefix = "//pmud/src/",
     visibility = ["//visibility:public"],
     deps = [],

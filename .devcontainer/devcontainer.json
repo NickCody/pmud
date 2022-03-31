@@ -27,10 +27,11 @@
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "galexite.bazel-cpp-tools",
+    "bazelbuild.vscode-bazel",
     //"llvm-vs-code-extensions.vscode-clangd",
     "ms-vscode.cpptools",
     "ms-azuretools.vscode-docker",
-    "matepek.vscode-catch2-test-adapter",
+    "matepek.testmate-cpp-legacy",
     "jeff-hykin.better-cpp-syntax",
     "xaver.clang-format",
     "redhat.vscode-yaml",

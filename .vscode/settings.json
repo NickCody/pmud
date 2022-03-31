@@ -152,6 +152,15 @@
       "  ${commentprefix} @return The test results",
       "  ${commentprefix}",
       "  ${commentend}"
+    ],
+    "testMate.cpp.test.advancedExecutables": [
+      {
+        "pattern": "bazel-bin/**/*-test",
+        "cwd": "${absDirpath}",
+        "env": {}
+      }
     ]
-  }
+  },
+  "testMate.cpp.test.parallelExecutionLimit": 12,
+  "testExplorer.useNativeTesting": true
 }

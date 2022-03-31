@@ -2,11 +2,13 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 load("@//:global_copts.bzl", "global_cppopts")
 
 cc_test(
-    name = "test",
+    name = "non-actor-test",
     srcs = glob(["*.cpp"]),
     copts = global_cppopts(),
     visibility = ["//visibility:public"],
     deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/common/hash-library:brumme-hash",
         "@com_google_googletest//:gtest_main",
     ],
 )
