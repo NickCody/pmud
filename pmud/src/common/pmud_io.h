@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include "fmt/core.h"
+#include <fmt/core.h>
 
 namespace primordia::mud::common {
 

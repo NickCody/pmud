@@ -2,6 +2,7 @@
 
 #include "hiredis/hiredis.h"
 #include "storage/redis_types.h"
+#include "storage/storage_types.h"
 
 namespace primordia::mud::storage::redis {
 

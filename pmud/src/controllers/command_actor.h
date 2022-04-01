@@ -4,20 +4,19 @@
 #include <arpa/inet.h>
 #include <fmt/core.h>
 #include <spdlog/spdlog.h>
-#include <caf/stateful_actor.hpp>
+#include <caf/all.hpp>
 
 #include "system/pmud_system.h"
-#include "util.h"
+#include "common/util.h"
 #include "controllers/login_controller.h"
 #include "controllers/default_controller.h"
 
-namespace primordia::mud::pnet {
+namespace primordia::mud::controllers {
 
   using namespace std;
   using namespace fmt;
   using namespace caf;
   using namespace primordia::mud::system;
-  using namespace primordia::mud::player;
 
   class CommandActor : public UserClient {
   public:
@@ -52,7 +51,6 @@ namespace primordia::mud::pnet {
         [this](OnUserInput, string input) {
           spdlog::debug("CommandActor::OnUserInput({}) \"{}\"", m_connection, input);
           if (m_active_controller == nullptr) {
-            CommStatic comm(m_connection);
             prompt_user();
           } else {
             send(actor_cast<actor>(m_active_controller), OnUserInput(), input);
@@ -83,4 +81,4 @@ namespace primordia::mud::pnet {
     MudSystemPtr m_mud;
   };
 
-} // namespace primordia::mud::pnet
+} // namespace primordia::mud::controllers

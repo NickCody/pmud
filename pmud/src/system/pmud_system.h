@@ -1,15 +1,14 @@
 #pragma once
 
 #include <caf/actor_system.hpp>
-#include "storage/storage.h"
-#include "pnet/server_state.h"
+
+#include "system/mud_config.h"
 
 namespace primordia::mud::system {
 
   using namespace std;
   using namespace caf;
   using namespace primordia::mud;
-  using namespace primordia::mud::pnet;
 
   class MudSystem {
   public:

@@ -8,6 +8,8 @@ cc_library(
     strip_include_prefix = "//pmud/src",
     visibility = ["//visibility:public"],
     deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/system:library",
         "@hiredis//:main",
     ],
 )

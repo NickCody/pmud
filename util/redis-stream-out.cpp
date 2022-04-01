@@ -7,7 +7,7 @@
 #include "spdlog/sinks/stdout_sinks.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "common/pmud_io.h"
-#include "common/yaml_storage.h"
+#include "storage/yaml_storage.h"
 #include "storage/redis_storage.h"
 #include "spdlog/stopwatch.h"
 

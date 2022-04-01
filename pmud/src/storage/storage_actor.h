@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <caf/all.hpp>
+#include <spdlog/spdlog.h>
+
 #include "storage/storage.h"
 #include "system/pmud_system.h"
-#include "caf/type_id.hpp"
 #include "common/global_type_id.h"
 
 namespace primordia::mud::storage {
@@ -15,9 +17,9 @@ namespace primordia::mud::storage {
   public:
     StorageActor(actor_config& cfg, unique_ptr<Storage> storage)
         : event_based_actor(cfg),
-          m_storage(move(storage)) {
+          m_storage(std::move(storage)) {
 
-      attach_functor([this](const error& reason) { spdlog::info("StorageActor exiting, reason: {}", to_string(reason)); });
+      attach_functor([](const error& reason) { spdlog::info("StorageActor exiting, reason: {}", to_string(reason)); });
     }
 
     behavior make_behavior() {

@@ -1,12 +1,13 @@
 #pragma once
 
 #include <string>
+#include <caf/all.hpp>
+#include <fmt/format.h>
 
-#include "caf/all.hpp"
-#include "pnet/server_state.h"
-#include "pnet/user_client.h"
+#include "controllers/user_client.h"
+#include "common/global_type_id.h"
 
-namespace primordia::mud::player {
+namespace primordia::mud::controllers {
 
   using namespace caf;
   using namespace std;
@@ -42,4 +43,4 @@ namespace primordia::mud::player {
       emit_user("\n");
     }
   };
-} // namespace primordia::mud::player
+} // namespace primordia::mud::controllers

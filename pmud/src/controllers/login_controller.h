@@ -1,16 +1,16 @@
 #pragma once
 
 #include <string>
+#include <caf/all.hpp>
+#include <fmt/format.h>
 
-#include "caf/all.hpp"
 #include "common/global_type_id.h"
-#include "pnet/server_state.h"
-#include "pnet/user_client.h"
+#include "controllers/user_client.h"
 #include "system/pmud_system.h"
 #include "event/event_recorder_client.h"
 #include "common/pmud_security.h"
 
-namespace primordia::mud::player {
+namespace primordia::mud::controllers {
 
   using namespace caf;
   using namespace std;
@@ -78,4 +78,4 @@ namespace primordia::mud::player {
     MudSystemPtr m_mud;
   };
 
-} // namespace primordia::mud::player
+} // namespace primordia::mud::controllers

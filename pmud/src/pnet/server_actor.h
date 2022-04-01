@@ -8,7 +8,7 @@
 
 #include "caf/all.hpp"
 
-#include "util.h"
+#include "common/util.h"
 #include "system/pmud_system.h"
 #include "pnet/connection_actor.h"
 

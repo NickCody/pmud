@@ -3,6 +3,7 @@
 #include <memory>
 #include <map>
 #include <caf/all.hpp>
+#include <spdlog/spdlog.h>
 
 #include "common/global_type_id.h"
 #include "storage/storage_actor.h"
@@ -21,7 +22,7 @@ namespace primordia::mud::event {
     EventRecorderActor(actor_config& cfg, strong_actor_ptr storage_actor)
         : event_based_actor(cfg),
           m_storage_actor(storage_actor) {
-      attach_functor([this](const error& reason) { spdlog::info("EventRecorderActor exiting, reason: {}", to_string(reason)); });
+      attach_functor([](const error& reason) { spdlog::info("EventRecorderActor exiting, reason: {}", to_string(reason)); });
     }
 
     behavior make_behavior() {

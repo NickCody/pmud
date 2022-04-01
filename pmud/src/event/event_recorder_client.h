@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <caf/fwd.hpp>
+#include <caf/all.hpp>
+#include "common/global_type_id.h"
 
 namespace primordia::mud::event {
 
@@ -10,7 +11,7 @@ namespace primordia::mud::event {
 
   class EventRecorderClient {
   public:
-    EventRecorderClient(strong_actor_ptr event_actor)
+    explicit EventRecorderClient(strong_actor_ptr event_actor)
         : m_event_actor(event_actor) {}
 
     void record_event_user_create(const string& username, const string& passphrase) {

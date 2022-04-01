@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 #include <set>
-#include <optional>
-#include <spdlog/logger.h>
 
 namespace primordia::mud::system {
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <fmt/format.h>
 #include <random>
+#include <sstream>
 
 #include "common/hash-library/sha256.h"
 

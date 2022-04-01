@@ -10,5 +10,7 @@ cc_library(
     deps = [
         "//pmud/src/common:library",
         "//pmud/src/system:library",
+        "//pmud/src/storage:library",
+        "//pmud/src/event:library",
     ],
 )

@@ -2,6 +2,9 @@
 
 #include <map>
 #include <string>
+#include <memory>
+#include <hiredis/hiredis.h>
+#include <spdlog/spdlog.h>
 
 namespace primordia::mud::storage::redis {
 

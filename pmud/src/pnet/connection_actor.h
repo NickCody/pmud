@@ -5,9 +5,9 @@
 #include <fmt/core.h>
 
 #include "caf/stateful_actor.hpp"
-#include "util.h"
+#include "common/util.h"
 #include <spdlog/spdlog.h>
-#include "command_actor.h"
+#include "controllers/command_actor.h"
 #include "system/pmud_system.h"
 #include "pnet/comm_static.h"
 
@@ -17,6 +17,7 @@ namespace primordia::mud::pnet {
   using namespace caf;
   using namespace std;
   using namespace primordia::mud::system;
+  using namespace primordia::mud::controllers;
 
   // using namespace player;
 
@@ -27,8 +28,7 @@ namespace primordia::mud::pnet {
           m_break_count(0),
           m_connection(connection),
           m_current_input(""),
-          m_mud(mud),
-          m_welcome(welcome) {
+          m_mud(mud) {
 
       m_command = actor_cast<strong_actor_ptr>(spawn<CommandActor>(mud, actor_cast<strong_actor_ptr>(this), m_connection));
       m_registery_id = format("Connection({})", id());
@@ -130,7 +130,6 @@ namespace primordia::mud::pnet {
     string m_current_input;
     MudSystemPtr m_mud;
     string m_registery_id;
-    const string& m_welcome;
   };
 
 } // namespace primordia::mud::pnet

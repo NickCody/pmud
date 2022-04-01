@@ -1,11 +1,12 @@
 #pragma once
 
-#include "caf/all.hpp"
-#include "pnet/server_state.h"
-#include "pnet/comm_static.h"
+#include <string>
+#include <caf/all.hpp>
+#include "common/global_type_id.h"
 
-namespace primordia::mud::pnet {
+namespace primordia::mud::controllers {
 
+  using namespace std;
   using namespace caf;
 
   class UserClient : public event_based_actor {
@@ -19,7 +20,7 @@ namespace primordia::mud::pnet {
       m_connection_actor.reset();
     }
 
-    void prompt_user(const string& prompt = CommStatic::DEFAULT_PROMPT) {
+    void prompt_user(const string& prompt = DEFAULT_PROMPT) {
       send(actor_cast<actor>(m_connection_actor), ToUserPrompt(), prompt);
     }
 
@@ -36,7 +37,9 @@ namespace primordia::mud::pnet {
     }
 
   private:
+    inline static const string DEFAULT_PROMPT = "pmud";
+
     strong_actor_ptr m_connection_actor;
     string m_name;
   };
-} // namespace primordia::mud::pnet
+} // namespace primordia::mud::controllers

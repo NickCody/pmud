@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 #include "common/pmud_io.h"
-#include "common/yaml_storage.h"
+#include "storage/yaml_storage.h"
 #include "storage/redis_storage.h"
 #include "spdlog/stopwatch.h"
 

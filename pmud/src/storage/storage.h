@@ -33,7 +33,7 @@ namespace primordia::mud::storage {
     virtual bool event_store(const string& event_name, const StreamRecordFields_t& fields) = 0;
     virtual bool stream_store(const string& map_name, const StreamRecordFields_t& fields) = 0;
     virtual vector<StreamResponse> read_stream_raw(const string& command) = 0;
-    virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout = 0) = 0;
+    virtual vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout) = 0;
   };
 
 } // namespace primordia::mud::storage

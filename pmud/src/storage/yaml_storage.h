@@ -6,10 +6,9 @@
 #include "yaml-cpp/yaml.h"
 #include "storage/storage.h"
 
-namespace primordia::mud::common {
+namespace primordia::mud::storage {
 
   using namespace std;
-  using namespace primordia::mud::storage;
 
   inline void yaml_to_storage(Storage* storage, const string& path, const YAML::Node node, bool idempotence = true) {
 
@@ -52,4 +51,4 @@ namespace primordia::mud::common {
     }
   }
 
-} // namespace primordia::mud::common
+} // namespace primordia::mud::storage
