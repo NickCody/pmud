@@ -14,23 +14,28 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PMUD_DIR/_solib_k8/
 export LD_LIBRARY_PATH
 
 echo "Using:"
+echo "PMUD_DIR=$PMUD_DIR"
 echo "REDIS_HOST=$REDIS_HOST"
 echo "REDIS_PORT=$REDIS_PORT"
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
 echo "Killing existing instance..."
 pkill pmud || true
-echo "Waiting..."
 
 cd $PMUD_DIR
 
-while true; do 
-  ./pmud --config-file=conf/pmud.caf conf/primordia-mud.yml
-  if [ $? -eq 98 ]; then
-    echo "Waiting for port..."
-    sleep 5
-  else
-    break;
-  fi
-done
+# ./pmud --config-file=conf/pmud.caf conf/primordia-mud.yml
+nohup ./pmud --config-file=conf/pmud.caf conf/primordia-mud.yml > pmud.out 2> pmud.err < /dev/null &
+
+echo "Started pmud"
+
+# while true; do 
+#   ./pmud --config-file=conf/pmud.caf conf/primordia-mud.yml
+#   if [ $? -eq 98 ]; then
+#     echo "Waiting for port..."
+#     sleep 5
+#   else
+#     break;
+#   fi
+# done
 

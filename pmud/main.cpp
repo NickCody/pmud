@@ -1,4 +1,6 @@
+#include <spdlog/common.h>
 #include <spdlog/spdlog.h>
+#include <spdlog/async.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
@@ -30,10 +32,6 @@ string YAML_CONFIG = "primordia-mud.yaml";
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=
 //
 MudConfig parse_yaml(const string& filename) {
-  char cwd[PATH_MAX];
-  if (getcwd(cwd, sizeof(cwd)) != NULL) {
-    spdlog::info("Loading yaml {} from current working dir: {}", filename, cwd);
-  }
   const YAML::Node config = YAML::LoadFile(filename);
 
   return {
@@ -102,7 +100,7 @@ bool kill_server(scoped_actor& self, const actor& server, chrono::seconds timeou
             result = true;
           },
           [&](const error& err) {
-            aout(self) << format("Error: {}", to_string(err));
+            spdlog::error("Error killing server: {}", to_string(err));
             result = false;
           });
 
@@ -130,6 +128,8 @@ bool run(actor_system& sys, MudSystemPtr mud) {
     return false;
   }
 
+  spdlog::info("Server started successfully");
+
   while (g_signal_status != SIGINT) {
     this_thread::sleep_for(chrono::milliseconds(50));
   }
@@ -154,12 +154,17 @@ bool configure_logging(const MudConfig& config) {
   try {
     std::shared_ptr<spdlog::logger> logger;
 
-    if (config.log_name == "console")
-      logger = spdlog::stdout_color_mt("console", spdlog::color_mode::automatic);
-    else
-      logger = spdlog::basic_logger_mt(config.log_name, config.log_filename, false);
+    if (config.log_name == "console") {
+      fmt::print("Configuring console logger...\n");
+      logger = spdlog::stdout_color_mt<spdlog::async_factory>("console", spdlog::color_mode::automatic);
+    } else {
+      fmt::print("Configuring file logger to {}...\n", config.log_filename);
+      logger = spdlog::basic_logger_mt<spdlog::async_factory>(config.log_name, config.log_filename, config.log_truncate);
+    }
     logger->set_level(spdlog::level::from_str(config.log_level));
     spdlog::set_default_logger(logger);
+    spdlog::flush_on(spdlog::level::info);
+    spdlog::info("Logging configured successfully!");
     return true;
   } catch (const spdlog::spdlog_ex& ex) {
     fmt::print("Log init failed: {}\n", ex.what());
@@ -199,7 +204,7 @@ void caf_main(actor_system& sys) {
   bool kill_result;
 
   {
-    auto storage_actor = actor_cast<strong_actor_ptr>(sys.spawn<StorageActor>(move(storage)));
+    auto storage_actor = actor_cast<strong_actor_ptr>(sys.spawn<StorageActor>(std::move(storage)));
     auto event_actor = actor_cast<strong_actor_ptr>(sys.spawn<EventRecorderActor>(storage_actor));
 
     MudSystemPtr mud_system = make_shared<MudSystem>(sys, config, storage_actor, event_actor);
@@ -212,6 +217,7 @@ void caf_main(actor_system& sys) {
   }
 
   spdlog::info("Exiting main");
+  fmt::print("Exiting main\n");
 }
 
 // -==---=-=-=-=-=-=-=-=-=-=--===-=-==-=-=-=--==-=-===-=-=-=-=-=-=-=-=-==-=-=-=

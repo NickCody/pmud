@@ -12,7 +12,7 @@
 #include <spdlog/spdlog.h>
 #include <hiredis/hiredis.h>
 
-#include "common/pmud_net.h"
+#include "common/util.h"
 #include "storage/storage.h"
 #include "storage/redis_types.h"
 #include "storage/redis_stream_injestor.h"
@@ -33,7 +33,7 @@ namespace primordia::mud::storage::redis {
 
     ~RedisStorage() {}
 
-    bool init() {
+    bool init() override {
       string ip;
       if (primordia::mud::common::hostname_to_ip(m_host, ip) == -1) {
         spdlog::info("Could not resolve hostname {} to IP address!", m_host);

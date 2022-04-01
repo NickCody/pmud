@@ -5,7 +5,6 @@ set -u
 set -o pipefail
 
 TARGET="${1:-nic@singularity}"
-ENV="${2:-dev}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR/../..
 
@@ -29,9 +28,8 @@ elif [[ $TARGET =~ sing ]]; then
 fi
 
 echo "Using:"
-echo "ENV=$ENV"
 echo "REDIS_HOST=$REDIS_HOST"
 echo "REDIS_PORT=$REDIS_PORT"
 
-ssh ${TARGET} "cd pmud; scripts/load-redis-static.sh $REDIS_HOST $REDIS_PORT $ENV >> ../pmud.log 2>&1 &"
-ssh ${TARGET} "cd pmud; nohup scripts/run.sh $REDIS_HOST $REDIS_PORT $ENV 2>&1 &"
+ssh ${TARGET} "cd pmud; scripts/load-redis-static.sh $REDIS_HOST $REDIS_PORT"
+ssh ${TARGET} "cd pmud; scripts/run.sh $REDIS_HOST $REDIS_PORT"

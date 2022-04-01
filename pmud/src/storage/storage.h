@@ -1,7 +1,5 @@
 #pragma once
 
-#include "hiredis/hiredis.h"
-#include <spdlog/spdlog.h>
 #include <arpa/inet.h>
 #include <string>
 #include <ctime>
@@ -11,11 +9,11 @@
 #include <netdb.h>
 #include <sstream>
 #include <string>
+#include <hiredis/hiredis.h>
+#include <spdlog/spdlog.h>
 
-#include "common/pmud_net.h"
+#include "common/util.h"
 #include "storage/storage_types.h"
-
-#include "common/global_type_id.h"
 
 namespace primordia::mud::storage {
 

@@ -10,7 +10,7 @@ cc_test(
         "-lstdc++fs",
         "-g",
     ],
-    linkstatic = True,
+    # linkstatic = True,
     visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",

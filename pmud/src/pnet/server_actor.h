@@ -5,8 +5,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fmt/core.h>
-
-#include "caf/all.hpp"
+#include <caf/all.hpp>
 
 #include "common/util.h"
 #include "system/pmud_system.h"
@@ -18,6 +17,7 @@ namespace primordia::mud::pnet {
   using namespace caf;
   using namespace std;
   using namespace primordia::mud::system;
+  using namespace primordia::mud::common;
 
   class ServerActor : public event_based_actor {
   public:
