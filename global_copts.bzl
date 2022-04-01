@@ -23,6 +23,7 @@ def global_cppopts(unwanted_options = []):
         "-Wno-ignored-qualifiers",
         "-Woverloaded-virtual",
         "-Wvla",
+        "-Wnoc++17-extensions",
         "-pedantic",
         "-Og",
         "-g",

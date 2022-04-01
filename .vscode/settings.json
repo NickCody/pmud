@@ -1,7 +1,6 @@
 {
   "terminal.integrated.sendKeybindingsToShell": true,
   "terminal.integrated.allowChords": false,
-  "C_Cpp.errorSquiggles": "Disabled",
   "testMate.cpp.test.advancedExecutables": [
     {
       "pattern": "./bazel-out/k8-dbg/**/*test.runfiles/**/*test",
@@ -162,5 +161,8 @@
     ]
   },
   "testMate.cpp.test.parallelExecutionLimit": 12,
-  "testExplorer.useNativeTesting": true
+  "testExplorer.useNativeTesting": true,
+  "C_Cpp.intelliSenseEngine": "Disabled",
+  "C_Cpp.autocomplete": "Disabled",
+  "C_Cpp.errorSquiggles": "Disabled",
 }

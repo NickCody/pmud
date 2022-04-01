@@ -28,7 +28,7 @@
   "extensions": [
     "galexite.bazel-cpp-tools",
     "bazelbuild.vscode-bazel",
-    //"llvm-vs-code-extensions.vscode-clangd",
+    "llvm-vs-code-extensions.vscode-clangd",
     "ms-vscode.cpptools",
     "ms-azuretools.vscode-docker",
     "matepek.testmate-cpp-legacy",

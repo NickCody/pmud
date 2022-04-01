@@ -8,8 +8,7 @@
 
 #include <string>
 #include <map>
-
-#include "caf/type_id.hpp"
+#include <caf/all.hpp>
 
 using StreamRecordFields_t = std::map<std::string, std::string>;
 

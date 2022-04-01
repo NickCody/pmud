@@ -96,6 +96,7 @@ alias yq='docker run -i --rm mikefarah/yq'
 alias yl='yamllint'
 
 alias gitg='git log --graph --pretty=format:"%C(yellow)%h %Cred%ad%Cgreen%d %Creset%s %Cblue(%an)" --date=short'
+alias gitgp='GIT_PAGER=cat git log -P --graph --pretty=format:"%C(yellow)%h %Cred%ad%Cgreen%d %Creset%s %Cblue(%an)" --date=short'
 alias gitga='git log --all --graph --pretty=format:"%C(yellow)%h %Cred%ad%Cgreen%d %Creset%s %Cblue(%an)" --date=short'
 
 # Alias definitions.

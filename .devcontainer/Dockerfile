@@ -125,7 +125,7 @@ RUN wget https://github.com/redis/redis/archive/7.0-rc2.tar.gz \
   && rm 7.0-rc2.tar.gz
 
 RUN apt update \
-  && apt install -y doxygen clang-format
+  && apt install -y doxygen clang-format clangd
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
