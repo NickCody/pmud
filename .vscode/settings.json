@@ -17,14 +17,6 @@
   "terminal.integrated.scrollback": 100000,
   "editor.detectIndentation": false,
   "bazel.buildifierFixOnFormat": true,
-  "bsv.bzl.lsp.enableCodelenses": true,
-  "bsv.bzl.lsp.enableCodelensCopyLabel": true,
-  "bsv.bzl.lsp.enableCodelensCodesearch": true,
-  "bsv.bzl.lsp.enableCodelensBrowse": true,
-  "bsv.bzl.lsp.enableCodelensStarlarkDebug": true,
-  "bsv.bzl.lsp.enableCodelensBuild": true,
-  "bsv.bzl.lsp.enableCodelensTest": true,
-  "bsv.bzl.lsp.enableCodelensRun": true,
   "yaml.schemas": {
     "pmud/schema/items-schema.json": "items.yml",
     "pmud/schema/monsters-schema.json": "monsters.yml",
@@ -165,4 +157,5 @@
   "C_Cpp.intelliSenseEngine": "Disabled",
   "C_Cpp.autocomplete": "Disabled",
   "C_Cpp.errorSquiggles": "Disabled",
+  "bazel.enableCodeLens": true,
 }
