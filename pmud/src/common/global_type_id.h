@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <string>
-#include <map>
 #include <caf/all.hpp>
+#include <map>
+#include <string>
 
 using StreamRecordFields_t = std::map<std::string, std::string>;
 

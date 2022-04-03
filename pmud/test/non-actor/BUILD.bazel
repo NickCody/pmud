@@ -1,10 +1,11 @@
 load("@rules_cc//cc:defs.bzl", "cc_test")
-load("@//:global_copts.bzl", "global_cppopts")
+load("@//:global_copts.bzl", "global_cppopts", "global_linkopts")
 
 cc_test(
-    name = "non-actor-test",
-    srcs = glob(["*.cpp"]),
+    name = "hash-test",
+    srcs = ["hash_test.cpp"],
     copts = global_cppopts(),
+    linkopts = global_linkopts(),
     visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",

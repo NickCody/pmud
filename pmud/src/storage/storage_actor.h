@@ -1,12 +1,12 @@
 #pragma once
 
-#include <memory>
 #include <caf/all.hpp>
+#include <memory>
 #include <spdlog/spdlog.h>
 
+#include "common/global_type_id.h"
 #include "storage/storage.h"
 #include "system/pmud_system.h"
-#include "common/global_type_id.h"
 
 namespace primordia::mud::storage {
 
@@ -25,20 +25,30 @@ namespace primordia::mud::storage {
     behavior make_behavior() {
       return {
         [this](StorageValueStore, const string& key, const string& value) {
-          spdlog::debug("StorageActor::StorageValueStore: {}={}", key, value);
-          m_storage->value_store(key, value);
+          if (m_storage) {
+            spdlog::debug("StorageActor::StorageValueStore: {}={}", key, value);
+            m_storage->value_store(key, value);
+          }
         },
         [this](StorageMapStore, const string& map_name, const string& key, const string& value) {
-          spdlog::debug("StorageActor::StorageMapStore: map={}, key={}, value={}", map_name, key, value);
-          m_storage->map_store(map_name, key, value);
+          if (m_storage) {
+            spdlog::debug("StorageActor::StorageMapStore: map={}, key={}, value={}", map_name, key, value);
+            m_storage->map_store(map_name, key, value);
+          }
         },
         [this](StorageStreamStore, const string& stream_name, const StreamRecordFields_t& fields) {
-          spdlog::debug("StorageActor::StorageStreamStore: stream_name={}, size={}", stream_name, fields.size());
-          m_storage->stream_store(stream_name, fields);
+          if (m_storage) {
+
+            spdlog::debug("StorageActor::StorageStreamStore: stream_name={}, size={}", stream_name, fields.size());
+            m_storage->stream_store(stream_name, fields);
+          }
         },
         [this](StorageEventStore, const string& event_name, const StreamRecordFields_t& fields) {
-          spdlog::debug("StorageActor::StorageEventStore: event_name={}, size={}", event_name, fields.size());
-          m_storage->event_store(event_name, fields);
+          if (m_storage) {
+
+            spdlog::debug("StorageActor::StorageEventStore: event_name={}, size={}", event_name, fields.size());
+            m_storage->event_store(event_name, fields);
+          }
         },
       };
     }

@@ -1,21 +1,29 @@
 load("@rules_cc//cc:defs.bzl", "cc_test")
-load("@//:global_copts.bzl", "global_cppopts")
+load("@//:global_copts.bzl", "global_cppopts", "global_linkopts")
 
 cc_test(
-    name = "actor-test",
-    srcs = glob(["*.cpp"]),
+    name = "basic-test",
+    srcs = ["basic.cpp"],
     copts = global_cppopts(),
-    linkopts = [
-        "-pthread",
-        "-lstdc++fs",
-        "-g",
-    ],
-    # linkstatic = True,
+    linkopts = global_linkopts(),
     visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",
-        "//pmud/src/common/hash-library:brumme-hash",
         "@caf//:main",
         "@com_google_googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "storage-test",
+    srcs = ["storage_test.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
+        "//pmud/test/mocks:library",
+        "@caf//:main",
     ],
 )

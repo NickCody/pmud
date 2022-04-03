@@ -1,15 +1,25 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
-load("@//:global_copts.bzl", "global_cppopts")
+load("@//:global_copts.bzl", "global_cppopts", "global_linkopts")
 
 cc_library(
     name = "library",
-    hdrs = glob(["*.h"]),
+    hdrs = [
+        "redis_storage.h",
+        "redis_stream_injestor.h",
+        "redis_types.h",
+        "storage.h",
+        "storage_actor.h",
+        "storage_types.h",
+        "yaml_storage.h",
+    ],
     copts = global_cppopts(),
+    linkopts = global_linkopts(),
     strip_include_prefix = "//pmud/src",
     visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/common:library",
         "//pmud/src/system:library",
+        "@caf//:main",
         "@hiredis//:main",
     ],
 )

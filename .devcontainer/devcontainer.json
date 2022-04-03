@@ -27,11 +27,13 @@
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "galexite.bazel-cpp-tools",
-    "bazelbuild.vscode-bazel",
+    //"bazelbuild.vscode-bazel",
     "llvm-vs-code-extensions.vscode-clangd",
     "ms-vscode.cpptools",
-    "ms-azuretools.vscode-docker",
+    // "ms-azuretools.vscode-docker",
+    // "DavidSchuldenfrei.gtest-adapter",
     "matepek.testmate-cpp-legacy",
+    //"matepek.vscode-catch2-test-adapter",
     "jeff-hykin.better-cpp-syntax",
     "xaver.clang-format",
     "redhat.vscode-yaml",
@@ -40,7 +42,9 @@
     "sumneko.lua",
     "cweijan.vscode-database-client2",
     "doi.fileheadercomment",
-    "joaompinto.vscode-graphviz"
+    "joaompinto.vscode-graphviz",
+    "hbenl.vscode-test-explorer",
+    "ms-vscode.test-adapter-converter"
   ],
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",

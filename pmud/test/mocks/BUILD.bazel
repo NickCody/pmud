@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@//:global_copts.bzl", "global_cppopts")
+
+cc_library(
+    name = "library",
+    hdrs = glob(["*.h"]),
+    visibility = ["//visibility:public"],
+    copts = global_cppopts(),
+    deps = [
+        "//pmud/src/storage:library",
+    ],
+)

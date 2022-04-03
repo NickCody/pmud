@@ -26,9 +26,18 @@ def global_cppopts(unwanted_options = []):
         "-Wno-c++17-extensions",
         "-Wno-unused-const-variable",
         "-pedantic",
-        "-Og",
         "-g",
+        "-ggdb",
         "-DSPDLOG_FMT_EXTERNAL",
+    ]
+    unwanted = {x: x for x in unwanted_options}
+    return [opt for opt in opts if unwanted.get(opt) == None]
+
+def global_linkopts(unwanted_options = []):
+    opts = [
+        "-pthread",
+        "-lstdc++fs",
+        "-g",
     ]
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]
