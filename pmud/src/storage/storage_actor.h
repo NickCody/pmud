@@ -19,11 +19,12 @@ namespace primordia::mud::storage {
         : event_based_actor(cfg),
           m_storage(std::move(storage)) {
 
-      attach_functor([](const error& reason) { spdlog::info("StorageActor exiting, reason: {}", to_string(reason)); });
+      // attach_functor([](const error& reason) { spdlog::info("StorageActor exiting, reason: {}", to_string(reason)); });
     }
 
     behavior make_behavior() {
       return {
+        [](StorageNoop) { spdlog::debug("StorageActor::Noop"); },
         [this](StorageValueStore, const string& key, const string& value) {
           if (m_storage) {
             spdlog::debug("StorageActor::StorageValueStore: {}={}", key, value);
@@ -50,7 +51,7 @@ namespace primordia::mud::storage {
             m_storage->event_store(event_name, fields);
           }
         },
-      };
+      }; // namespace primordia::mud::storage
     }
 
   private:

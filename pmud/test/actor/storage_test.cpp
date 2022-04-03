@@ -15,6 +15,7 @@
 
 using namespace std;
 using namespace caf;
+
 using namespace primordia::mud::storage;
 using namespace primordia::mud::test::mock;
 
@@ -23,25 +24,21 @@ struct basic_functionality : test_coordinator_fixture<> {
 
   basic_functionality() {
     spdlog::set_level(spdlog::level::level_enum::debug);
-    // unique_ptr<Storage> mock_storage = std::make_unique<MockStorage>();
-    storage_actor = sys.spawn<StorageActor>(nullptr);
-    // storage_actor = sys.spawn<StorageActor>(nullptr);
+
+    unique_ptr<Storage> mock_storage = std::make_unique<MockStorage>();
+    storage_actor = sys.spawn<StorageActor>(std::move(mock_storage));
+
     run();
   }
 };
 
 CAF_TEST_FIXTURE_SCOPE(storage_tests, basic_functionality)
 
-CAF_TEST(storage basic_functionality) {
-  string foo("foo");
-  string bar("bar");
-  self->send(storage_actor, StorageValueStore(), foo, bar);
-  // sched.run_once();
-  // expect((StorageValueStore, string, string), from(self).to(storage_actor).with(_, "foo", "bar"));
+CAF_TEST(basic_test) {
+  self->send(storage_actor, StorageNoop_v);
+  sched.run_once();
+  expect((StorageNoop), from(self).to(storage_actor).with(_));
 
   self->send_exit(storage_actor, caf::exit_reason::user_shutdown);
-
-  // No further messages allowed.
-  // disallow((StorageValueStore, string, string), from(self).to(storage_actor).with(_, "", ""));
 }
 CAF_TEST_FIXTURE_SCOPE_END()
