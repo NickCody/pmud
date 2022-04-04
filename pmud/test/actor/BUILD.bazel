@@ -12,30 +12,31 @@ cc_test(
     ],
 )
 
-# cc_test(
-#     name = "storage-test",
-#     srcs = ["storage_test.cpp"],
-#     copts = global_cppopts(),
-#     linkopts = global_linkopts(),
-#     visibility = ["//visibility:public"],
-#     deps = [
-#         "//pmud/src/common:library",
-#         "//pmud/src/storage:library",
-#         "//pmud/test/mocks:library",
-#         "@caf//:main",
-#     ],
-# )
+cc_test(
+    name = "storage-test",
+    srcs = ["storage_test.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
+        "//pmud/test/mocks:library",
+        "@caf//:main",
+    ],
+)
 
-# cc_test(
-#     name = "quick-test",
-#     srcs = ["quick_test.cpp"],
-#     copts = global_cppopts(),
-#     linkopts = global_linkopts(),
-#     visibility = ["//visibility:public"],
-#     deps = [
-#         # "//pmud/src/common:library",
-#         # "//pmud/src/storage:library",
-#         # "//pmud/test/mocks:library",
-#         "@caf//:main",
-#     ],
-# )
+cc_test(
+    name = "quick-test",
+    srcs = ["quick_test.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        # "//pmud/src/common:library",
+        # "//pmud/src/storage:library",
+        # "//pmud/test/mocks:library",
+        "@caf//:main",
+        "@fmt//:main",
+    ],
+)
