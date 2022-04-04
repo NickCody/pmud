@@ -56,5 +56,6 @@ int main(int argc, char** argv) {
 
   YAML::Node config = YAML::Load(*input);
   yaml_to_storage(storage.get(), prefix, config);
+
   return EXIT_SUCCESS;
 }

@@ -4,8 +4,9 @@ load("@//:global_copts.bzl", "global_cppopts")
 cc_library(
     name = "library",
     hdrs = glob(["*.h"]),
-    visibility = ["//visibility:public"],
     copts = global_cppopts(),
+    strip_include_prefix = "//pmud/test",
+    visibility = ["//visibility:public"],
     deps = [
         "//pmud/src/storage:library",
     ],

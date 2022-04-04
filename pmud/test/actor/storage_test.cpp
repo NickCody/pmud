@@ -17,7 +17,7 @@ using namespace std;
 using namespace caf;
 
 using namespace primordia::mud::storage;
-using namespace primordia::mud::test::mock;
+using namespace primordia::mud::test::mocks;
 
 struct basic_functionality : test_coordinator_fixture<> {
   actor storage_actor;

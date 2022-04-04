@@ -20,6 +20,8 @@ cc_library(
         "//pmud/src/common:library",
         "//pmud/src/system:library",
         "@caf//:main",
+        "@fmt//:main",
         "@hiredis//:main",
+        "@yaml-cpp//:main",
     ],
 )

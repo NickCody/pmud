@@ -13,3 +13,20 @@ cc_test(
         "@com_google_googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "storage-test",
+    srcs = ["storage_test.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/common/hash-library:brumme-hash",
+        "//pmud/src/storage:library",
+        "//pmud/test/mocks:library",
+        "@com_google_googletest//:gtest_main",
+        "@hiredis//:main",
+        "@yaml-cpp//:main",
+    ],
+)

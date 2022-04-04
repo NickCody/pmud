@@ -7,16 +7,12 @@
 
 #include "storage/storage.h"
 
-namespace primordia::mud::test::mock {
+namespace primordia::mud::test::mocks {
 
   using namespace std;
   using namespace primordia::mud::storage;
 
   class MockStorage : public Storage {
-    using kv_t = map<string, string>;
-    using named_map_t = map<string, kv_t>;
-    using named_list_t = map<string, vector<string>>;
-    using named_set_t = map<string, set<string>>;
 
   public:
     bool init() override {
@@ -28,12 +24,26 @@ namespace primordia::mud::test::mock {
       return true;
     }
 
+    optional<string> value_get(const string& key) override {
+      if (!m_kv.contains(key))
+        return nullopt;
+
+      return m_kv[key];
+    }
+
     bool map_store(const string& map_name, const string& key, const string& value) override {
       if (!m_map.contains(map_name)) {
         m_map[map_name] = {};
       }
       m_map[map_name][key] = value;
       return true;
+    }
+
+    optional<kv_t> map_get(const string map_name) override {
+      if (!m_map.contains(map_name))
+        return nullopt;
+
+      return m_map[map_name];
     }
 
     bool list_store(const string& list_name, const string& value) override {
@@ -44,12 +54,26 @@ namespace primordia::mud::test::mock {
       return true;
     }
 
+    optional<list_t> list_get(const string& list_name) override {
+      if (!m_list.contains(list_name))
+        return nullopt;
+
+      return m_list[list_name];
+    }
+
     bool set_store(const string& set_name, const string& value) override {
       if (!m_set.contains(set_name)) {
         m_set[set_name] = {};
       }
       m_set[set_name].insert(value);
       return true;
+    }
+
+    optional<set_t> set_get(const string& set_name) override {
+      if (!m_set.contains(set_name))
+        return nullopt;
+
+      return m_set[set_name];
     }
 
     bool del_key(const string& key) override {
@@ -80,4 +104,4 @@ namespace primordia::mud::test::mock {
     named_set_t m_set;
   };
 
-} // namespace primordia::mud::test::mock
+} // namespace primordia::mud::test::mocks

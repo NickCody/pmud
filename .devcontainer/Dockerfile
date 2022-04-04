@@ -124,6 +124,10 @@ RUN wget https://github.com/redis/redis/archive/7.0-rc2.tar.gz \
   && rm -rf redis-7.0-rc2/ \
   && rm 7.0-rc2.tar.gz
 
+RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
+  && mv bzl /usr/local/bin \
+  && chmod +x /usr/local/bin/bzl
+
 RUN apt update \
   && apt install -y doxygen clang-format clangd
 

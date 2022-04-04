@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@//:global_copts.bzl", "global_cppopts")
+load("@//:global_copts.bzl", "global_cppopts", "global_linkopts")
 
 package(features = ["-default_compile_flags"])
 
@@ -121,5 +121,20 @@ cc_binary(
     visibility = ["//visibility:public"],
     deps = [
         "@zeromq//:main",
+    ],
+)
+
+cc_binary(
+    name = "redis-keydump",
+    srcs = ["redis-keydump.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pmud/src/common:library",
+        "//pmud/src/storage:library",
+        "@fmt//:main",
+        "@hiredis//:main",
+        "@lua//:main",
     ],
 )

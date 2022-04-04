@@ -65,6 +65,20 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
+    virtual std::optional<string> value_get(const string& key) override {
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "GET %s", key.c_str()));
+      if (!reply) {
+        spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+        return nullopt;
+      }
+      if (reply->type == REDIS_REPLY_STRING) {
+        return reply->str;
+      } else {
+        spdlog::error("Error running command GET, return type {}, value {}", reply->type, reply->str);
+        return nullopt;
+      }
+    }
+
     bool map_store(const string& map_name, const string& key, const string& value) override {
       spdlog::debug("redis: HSET {} {} {}", map_name, key, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "HSET %s %s %s", map_name.c_str(), key.c_str(), value.c_str()));
@@ -72,6 +86,25 @@ namespace primordia::mud::storage::redis {
         spdlog::error("Error running command map_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
+    }
+
+    virtual std::optional<kv_t> map_get(const string map_name) override {
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "HGETALL %s", map_name.c_str()));
+      if (!reply) {
+        spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+        return nullopt;
+      }
+      if (reply->type == REDIS_REPLY_MAP || reply->type == REDIS_REPLY_ARRAY) {
+        kv_t result;
+        for (size_t i = 0; i < reply->elements; i += 2) {
+          result[reply->element[i]->str] = reply->element[i + 1]->str;
+        }
+        return result;
+      } else {
+        spdlog::error("Error, didn't get REDIS_REPLY_MAP, got {}", reply->type);
+
+        return nullopt;
+      }
     }
 
     bool list_store(const string& list_name, const string& value) override {
@@ -83,6 +116,23 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
+    virtual std::optional<list_t> list_get(const string& list_name) override {
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "LRANGE %s 0 -1", list_name.c_str()));
+      if (!reply) {
+        spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+        return nullopt;
+      }
+      if (reply->type == REDIS_REPLY_ARRAY) {
+        list_t result;
+        for (size_t i = 0; i < reply->elements; i++) {
+          result.push_back(reply->element[i]->str);
+        }
+        return result;
+      } else {
+        return nullopt;
+      }
+    }
+
     bool set_store(const string& set_name, const string& value) override {
       spdlog::debug("redis: SADD {} {}", set_name, value);
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SADD %s %s", set_name.c_str(), value.c_str()));
@@ -90,6 +140,23 @@ namespace primordia::mud::storage::redis {
         spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
       }
       return reply != nullptr;
+    }
+
+    virtual std::optional<set_t> set_get(const string& set_name) override {
+      auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SMEMBERS %s", set_name.c_str()));
+      if (!reply) {
+        spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
+        return nullopt;
+      }
+      if (reply->type == REDIS_REPLY_ARRAY) {
+        set_t result;
+        for (size_t i = 0; i < reply->elements; i++) {
+          result.insert(reply->element[i]->str);
+        }
+        return result;
+      } else {
+        return nullopt;
+      }
     }
 
     bool del_key(const string& key) override {

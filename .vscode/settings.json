@@ -193,4 +193,5 @@
   ],
   "testMate.cpp.test.parallelExecutionLimit": 12,
   "testExplorer.useNativeTesting": true,
+  "bsv.bzl.server.address": "http://127.0.0.1:8080",
 }

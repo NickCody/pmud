@@ -38,6 +38,8 @@ def global_linkopts(unwanted_options = []):
         "-pthread",
         "-lstdc++fs",
         "-g",
+        "-ldl",
+        "-lzmq",
     ]
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]
