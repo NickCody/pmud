@@ -24,7 +24,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    optional<string> value_get(const string& key) override {
+    std::optional<string> value_get(const string& key) override {
       if (!m_kv.contains(key))
         return nullopt;
 
@@ -39,7 +39,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    optional<kv_t> map_get(const string map_name) override {
+    std::optional<kv_t> map_get(const string map_name) override {
       if (!m_map.contains(map_name))
         return nullopt;
 
@@ -54,7 +54,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    optional<list_t> list_get(const string& list_name) override {
+    std::optional<list_t> list_get(const string& list_name) override {
       if (!m_list.contains(list_name))
         return nullopt;
 
@@ -69,7 +69,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    optional<set_t> set_get(const string& set_name) override {
+    std::optional<set_t> set_get(const string& set_name) override {
       if (!m_set.contains(set_name))
         return nullopt;
 

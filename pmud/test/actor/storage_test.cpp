@@ -3,6 +3,7 @@
 #include <fmt/format.h>
 
 #include <caf/all.hpp>
+#define CAF_TEST_NO_MAIN
 #include <caf/test/unit_test_impl.hpp>
 #include <caf/test/dsl.hpp>
 
@@ -19,6 +20,13 @@ using namespace caf;
 using namespace primordia::mud::storage;
 using namespace primordia::mud::test::mocks;
 
+int main(int argc, char** argv) {
+  using namespace caf;
+  init_global_meta_objects<caf::id_block::pmud_caf_types>();
+  core::init_global_meta_objects();
+  return test::main(argc, argv);
+}
+
 struct basic_functionality : test_coordinator_fixture<> {
   actor storage_actor;
 
@@ -30,15 +38,20 @@ struct basic_functionality : test_coordinator_fixture<> {
 
     run();
   }
+
+  ~basic_functionality() {
+    anon_send_exit(storage_actor, exit_reason::user_shutdown);
+  }
 };
 
 CAF_TEST_FIXTURE_SCOPE(storage_tests, basic_functionality)
 
 CAF_TEST(basic_test) {
   self->send(storage_actor, StorageNoop_v);
-  sched.run_once();
+
   expect((StorageNoop), from(self).to(storage_actor).with(_));
 
-  self->send_exit(storage_actor, caf::exit_reason::user_shutdown);
+  //  No further messages allowed.
+  disallow((StorageNoop), from(self).to(storage_actor));
 }
 CAF_TEST_FIXTURE_SCOPE_END()
