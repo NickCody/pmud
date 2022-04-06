@@ -129,7 +129,7 @@ RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
   && chmod +x /usr/local/bin/bzl
 
 RUN apt update \
-  && apt install -y doxygen clang-format clangd
+  && apt install -y doxygen clang-format clangd protobuf-compiler
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
