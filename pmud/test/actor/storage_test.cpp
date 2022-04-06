@@ -47,7 +47,7 @@ struct basic_functionality : test_coordinator_fixture<> {
 CAF_TEST_FIXTURE_SCOPE(storage_tests, basic_functionality)
 
 CAF_TEST(basic_test) {
-  self->send(storage_actor, StorageNoop_v);
+  self->send(storage_actor, StorageNoop());
 
   expect((StorageNoop), from(self).to(storage_actor).with(_));
 

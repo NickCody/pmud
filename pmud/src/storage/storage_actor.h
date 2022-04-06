@@ -37,6 +37,18 @@ namespace primordia::mud::storage {
             m_storage->map_store(map_name, key, value);
           }
         },
+        [this](StorageListStore, const string& list_name, const string& value) {
+          if (m_storage) {
+            spdlog::debug("StorageActor::StorageListStore: map={}, value={}", list_name, value);
+            m_storage->list_store(list_name, value);
+          }
+        },
+        [this](StorageSetStore, const string& set_name, const string& value) {
+          if (m_storage) {
+            spdlog::debug("StorageActor::StorageSetStore: map={}, value={}", set_name, value);
+            m_storage->set_store(set_name, value);
+          }
+        },
         [this](StorageStreamStore, const string& stream_name, const StreamRecordFields_t& fields) {
           if (m_storage) {
 

@@ -1,29 +1,41 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Build Main",
-            "type": "shell",
-            "command": "g++ -g main.cpp -o main.out",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$gcc"
-            ]
-        },
-        {
-            "label": "Build a.out",
-            "type": "shell",
-            "command": "g++ -g main.cpp",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$gcc"
-            ]
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generate compile_commands.json",
+      "type": "shell",
+      "command": "bazel run @hedron_compile_commands//:refresh_all",
+      "group": {
+        "kind": "none",
+        "isDefault": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": "bazel test -c dbg //pmud/test/...",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build all",
+      "type": "shell",
+      "command": "bazel build //pmud:pmud",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
 }

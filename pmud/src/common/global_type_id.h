@@ -38,6 +38,8 @@ CAF_ADD_TYPE_ID(pmud_caf_types, (StreamRecordFields_t))
 CAF_ADD_ATOM(pmud_caf_types, StorageNoop)
 CAF_ADD_ATOM(pmud_caf_types, StorageValueStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageMapStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageListStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageSetStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageStreamStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageEventStore)
 

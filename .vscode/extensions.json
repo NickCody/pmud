@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "galexite.bazel-cpp-tools",
+    //"galexite.bazel-cpp-tools",
     "bazelbuild.vscode-bazel",
     "llvm-vs-code-extensions.vscode-clangd",
     "ms-vscode.cpptools",

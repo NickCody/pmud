@@ -75,7 +75,7 @@
   "[bazel]": {
     "editor.formatOnSave": true
   },
-  "bazel.enableCodeLens": true,
+  "bazel.enableCodeLens": false,
   "testMate.cpp.test.advancedExecutables": [
     {
       "name": "non-actor-debug",
@@ -98,9 +98,9 @@
   ],
   "testMate.cpp.test.parallelExecutionLimit": 12,
   "testExplorer.useNativeTesting": true,
-  "bazel-cpp-tools.compileCommands.targets": [
-    "//...",
-  ],
+  // "bazel-cpp-tools.compileCommands.targets": [
+  //   "//...",
+  // ],
   "clang-format.executable": "/usr/bin/clang-format",
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "bazel.buildifierFixOnFormat": true,
