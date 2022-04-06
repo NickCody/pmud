@@ -1,4 +1,7 @@
 
+#include "pmud/src/common/global_type_id.h"
+#include <caf/scoped_actor.hpp>
+#include <chrono>
 #include <memory>
 #include <fmt/format.h>
 
@@ -27,16 +30,19 @@ int main(int argc, char** argv) {
   return test::main(argc, argv);
 }
 
-struct basic_functionality : test_coordinator_fixture<> {
+struct basic_functionality {
+  caf::actor_system_config cfg;
+  caf::actor_system sys;
+  caf::scoped_actor self;
   actor storage_actor;
 
-  basic_functionality() {
+  basic_functionality()
+      : sys(cfg),
+        self(sys) {
     spdlog::set_level(spdlog::level::level_enum::debug);
 
     unique_ptr<Storage> mock_storage = std::make_unique<MockStorage>();
     storage_actor = sys.spawn<StorageActor>(std::move(mock_storage));
-
-    run();
   }
 
   ~basic_functionality() {
@@ -47,11 +53,9 @@ struct basic_functionality : test_coordinator_fixture<> {
 CAF_TEST_FIXTURE_SCOPE(storage_tests, basic_functionality)
 
 CAF_TEST(basic_test) {
-  self->send(storage_actor, StorageNoop());
 
-  expect((StorageNoop), from(self).to(storage_actor).with(_));
-
-  //  No further messages allowed.
-  disallow((StorageNoop), from(self).to(storage_actor));
+  self->send(storage_actor, StorageValueStore(), "foo", "bar");
+  self->request(storage_actor, chrono::milliseconds(20), StorageValueGet(), "foo")
+      .receive([](string value) { CAF_CHECK(value == "bar"); }, [](error&) { CAF_CHECK(false); });
 }
 CAF_TEST_FIXTURE_SCOPE_END()

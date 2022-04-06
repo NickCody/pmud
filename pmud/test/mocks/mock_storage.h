@@ -24,11 +24,11 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<string> value_get(const string& key) override {
+    std::optional<string> value_get(const string& key) const override {
       if (!m_kv.contains(key))
         return nullopt;
 
-      return m_kv[key];
+      return m_kv.at(key);
     }
 
     bool map_store(const string& map_name, const string& key, const string& value) override {
@@ -39,11 +39,11 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<kv_t> map_get(const string map_name) override {
+    std::optional<kv_t> map_get(const string map_name) const override {
       if (!m_map.contains(map_name))
         return nullopt;
 
-      return m_map[map_name];
+      return m_map.at(map_name);
     }
 
     bool list_store(const string& list_name, const string& value) override {
@@ -54,11 +54,11 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<list_t> list_get(const string& list_name) override {
+    std::optional<list_t> list_get(const string& list_name) const override {
       if (!m_list.contains(list_name))
         return nullopt;
 
-      return m_list[list_name];
+      return m_list.at(list_name);
     }
 
     bool set_store(const string& set_name, const string& value) override {
@@ -69,11 +69,11 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<set_t> set_get(const string& set_name) override {
+    std::optional<set_t> set_get(const string& set_name) const override {
       if (!m_set.contains(set_name))
         return nullopt;
 
-      return m_set[set_name];
+      return m_set.at(set_name);
     }
 
     bool del_key(const string& key) override {
@@ -89,11 +89,11 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    vector<StreamResponse> read_stream_raw(const string& /*command*/) override {
+    vector<StreamResponse> read_stream_raw(const string& /*command*/) const override {
       return {};
     }
 
-    vector<StreamResponse> read_stream_block(const string& /*stream_name*/, const string& /*pos*/, uint32_t /*timeout*/) override {
+    vector<StreamResponse> read_stream_block(const string& /*stream_name*/, const string& /*pos*/, uint32_t /*timeout*/) const override {
       return {};
     }
 

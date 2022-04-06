@@ -1,7 +1,8 @@
 #pragma once
 
-#include <caf/all.hpp>
 #include <memory>
+#include <optional>
+#include <caf/all.hpp>
 #include <spdlog/spdlog.h>
 
 #include "common/global_type_id.h"
@@ -27,39 +28,39 @@ namespace primordia::mud::storage {
         [](StorageNoop) { spdlog::debug("StorageActor::Noop"); },
         [this](StorageValueStore, const string& key, const string& value) {
           if (m_storage) {
-            spdlog::debug("StorageActor::StorageValueStore: {}={}", key, value);
             m_storage->value_store(key, value);
           }
         },
+        [this](StorageValueGet, const string& key) -> string {
+          auto val = m_storage->value_get(key);
+
+          if (m_storage && val.has_value()) {
+            return m_storage->value_get(key).value();
+          }
+          return "";
+        },
         [this](StorageMapStore, const string& map_name, const string& key, const string& value) {
           if (m_storage) {
-            spdlog::debug("StorageActor::StorageMapStore: map={}, key={}, value={}", map_name, key, value);
             m_storage->map_store(map_name, key, value);
           }
         },
         [this](StorageListStore, const string& list_name, const string& value) {
           if (m_storage) {
-            spdlog::debug("StorageActor::StorageListStore: map={}, value={}", list_name, value);
             m_storage->list_store(list_name, value);
           }
         },
         [this](StorageSetStore, const string& set_name, const string& value) {
           if (m_storage) {
-            spdlog::debug("StorageActor::StorageSetStore: map={}, value={}", set_name, value);
             m_storage->set_store(set_name, value);
           }
         },
         [this](StorageStreamStore, const string& stream_name, const StreamRecordFields_t& fields) {
           if (m_storage) {
-
-            spdlog::debug("StorageActor::StorageStreamStore: stream_name={}, size={}", stream_name, fields.size());
             m_storage->stream_store(stream_name, fields);
           }
         },
         [this](StorageEventStore, const string& event_name, const StreamRecordFields_t& fields) {
           if (m_storage) {
-
-            spdlog::debug("StorageActor::StorageEventStore: event_name={}, size={}", event_name, fields.size());
             m_storage->event_store(event_name, fields);
           }
         },

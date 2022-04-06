@@ -65,7 +65,7 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
-    virtual std::optional<string> value_get(const string& key) override {
+    virtual std::optional<string> value_get(const string& key) const override {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "GET %s", key.c_str()));
       if (!reply) {
         spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
@@ -88,7 +88,7 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
-    virtual std::optional<kv_t> map_get(const string map_name) override {
+    virtual std::optional<kv_t> map_get(const string map_name) const override {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "HGETALL %s", map_name.c_str()));
       if (!reply) {
         spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
@@ -116,7 +116,7 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
-    virtual std::optional<list_t> list_get(const string& list_name) override {
+    virtual std::optional<list_t> list_get(const string& list_name) const override {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "LRANGE %s 0 -1", list_name.c_str()));
       if (!reply) {
         spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
@@ -142,7 +142,7 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
-    virtual std::optional<set_t> set_get(const string& set_name) override {
+    virtual std::optional<set_t> set_get(const string& set_name) const override {
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), "SMEMBERS %s", set_name.c_str()));
       if (!reply) {
         spdlog::error("Error running command set_store: code {}: {}", m_context->err, m_context->errstr);
@@ -219,7 +219,7 @@ namespace primordia::mud::storage::redis {
       return reply != nullptr;
     }
 
-    vector<StreamResponse> read_stream_raw(const string& command) override {
+    vector<StreamResponse> read_stream_raw(const string& command) const override {
       spdlog::debug("redis:{}", command);
 
       auto reply = RedisReplyUniquePtr((redisReply*)redisCommand(m_context.get(), command.c_str()));
@@ -232,7 +232,7 @@ namespace primordia::mud::storage::redis {
       }
     }
 
-    vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout) override {
+    vector<StreamResponse> read_stream_block(const string& stream_name, const string& pos, uint32_t timeout) const override {
       auto _timeout = std::to_string(timeout);
       spdlog::debug("redis: XREAD BLOCK {} STREAMS {} {}", _timeout, stream_name, pos);
 

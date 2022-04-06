@@ -8,6 +8,7 @@
 
 #include <caf/all.hpp>
 #include <caf/allowed_unsafe_message_type.hpp>
+#include <caf/optional.hpp>
 #include <map>
 #include <string>
 
@@ -37,9 +38,13 @@ CAF_ADD_ATOM(pmud_caf_types, OnUserInput)
 CAF_ADD_TYPE_ID(pmud_caf_types, (StreamRecordFields_t))
 CAF_ADD_ATOM(pmud_caf_types, StorageNoop)
 CAF_ADD_ATOM(pmud_caf_types, StorageValueStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageValueGet)
 CAF_ADD_ATOM(pmud_caf_types, StorageMapStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageMapGet)
 CAF_ADD_ATOM(pmud_caf_types, StorageListStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageListGet)
 CAF_ADD_ATOM(pmud_caf_types, StorageSetStore)
+CAF_ADD_ATOM(pmud_caf_types, StorageSetGet)
 CAF_ADD_ATOM(pmud_caf_types, StorageStreamStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageEventStore)
 
@@ -57,3 +62,4 @@ CAF_ADD_ATOM(pmud_caf_types, LoginControllerEnd)
 CAF_END_TYPE_ID_BLOCK(pmud_caf_types)
 
 CAF_ALLOW_UNSAFE_MESSAGE_TYPE(StreamRecordFields_t)
+CAF_ALLOW_UNSAFE_MESSAGE_TYPE(caf::optional<std::string>)
