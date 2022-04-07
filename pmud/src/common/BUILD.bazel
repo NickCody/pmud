@@ -8,6 +8,7 @@ cc_library(
         "pmud_io.h",
         "pmud_security.h",
         "pmud_string.h",
+        "storage_types.h",
         "util.h",
         "yaml_util.h",
     ],

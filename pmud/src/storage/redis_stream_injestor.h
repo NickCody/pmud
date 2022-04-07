@@ -2,9 +2,11 @@
 
 #include "hiredis/hiredis.h"
 #include "storage/redis_types.h"
-#include "storage/storage_types.h"
+#include "common/storage_types.h"
 
 namespace primordia::mud::storage::redis {
+
+  using namespace primordia::mud::common;
 
   namespace {
     StreamRecord _stream_record(const string timestamp, redisReply& fields) {

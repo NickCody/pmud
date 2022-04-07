@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 
+#include "pmud/src/common/storage_types.h"
 #include "storage/storage.h"
 
 namespace primordia::mud::test::mocks {
@@ -24,7 +25,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<string> value_get(const string& key) const override {
+    common::opt_string_t value_get(const string& key) const override {
       if (!m_kv.contains(key))
         return nullopt;
 
@@ -39,7 +40,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<kv_t> map_get(const string map_name) const override {
+    common::opt_map_t map_get(const string map_name) const override {
       if (!m_map.contains(map_name))
         return nullopt;
 
@@ -54,7 +55,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<list_t> list_get(const string& list_name) const override {
+    common::opt_list_t list_get(const string& list_name) const override {
       if (!m_list.contains(list_name))
         return nullopt;
 
@@ -69,7 +70,7 @@ namespace primordia::mud::test::mocks {
       return true;
     }
 
-    std::optional<set_t> set_get(const string& set_name) const override {
+    common::opt_set_t set_get(const string& set_name) const override {
       if (!m_set.contains(set_name))
         return nullopt;
 
@@ -77,31 +78,41 @@ namespace primordia::mud::test::mocks {
     }
 
     bool del_key(const string& key) override {
-      m_kv.erase(key);
+      if (m_kv.contains(key))
+        m_kv.erase(key);
+      else if (m_map.contains(key))
+        m_map.erase(key);
+      else if (m_list.contains(key))
+        m_list.erase(key);
+      else if (m_set.contains(key))
+        m_set.erase(key);
+      else
+        return false;
+
       return true;
     }
 
-    bool event_store(const string& /*event_name*/, const StreamRecordFields_t& /*fields*/) override {
+    bool event_store(const string& /*event_name*/, const common::StreamRecordFields_t& /*fields*/) override {
       return true;
     }
 
-    bool stream_store(const string& /*map_name*/, const StreamRecordFields_t& /*fields*/) override {
+    bool stream_store(const string& /*map_name*/, const common::StreamRecordFields_t& /*fields*/) override {
       return true;
     }
 
-    vector<StreamResponse> read_stream_raw(const string& /*command*/) const override {
+    vector<common::StreamResponse> read_stream_raw(const string& /*command*/) const override {
       return {};
     }
 
-    vector<StreamResponse> read_stream_block(const string& /*stream_name*/, const string& /*pos*/, uint32_t /*timeout*/) const override {
+    vector<common::StreamResponse> read_stream_block(const string& /*stream_name*/, const string& /*pos*/, uint32_t /*timeout*/) const override {
       return {};
     }
 
   private:
-    kv_t m_kv;
-    named_map_t m_map;
-    named_list_t m_list;
-    named_set_t m_set;
+    common::map_t m_kv;
+    common::named_map_t m_map;
+    common::named_list_t m_list;
+    common::named_set_t m_set;
   };
 
 } // namespace primordia::mud::test::mocks

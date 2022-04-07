@@ -9,7 +9,6 @@ cc_library(
         "redis_types.h",
         "storage.h",
         "storage_actor.h",
-        "storage_types.h",
         "yaml_storage.h",
     ],
     copts = global_cppopts(),

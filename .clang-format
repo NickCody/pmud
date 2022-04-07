@@ -57,7 +57,7 @@ BreakBeforeBraces: Custom
 # BreakConstructorInitializers: BeforeColon
 # BreakAfterJavaFieldAnnotations: false
 # BreakStringLiterals: true
-ColumnLimit: 150
+ColumnLimit: 135
 # CommentPragmas:  '^ IWYU pragma:'
 # QualifierAlignment: Leave
 # CompactNamespaces: false

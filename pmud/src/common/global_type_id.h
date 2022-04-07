@@ -9,10 +9,8 @@
 #include <caf/all.hpp>
 #include <caf/allowed_unsafe_message_type.hpp>
 #include <caf/optional.hpp>
-#include <map>
-#include <string>
 
-using StreamRecordFields_t = std::map<std::string, std::string>;
+#include "storage_types.h"
 
 CAF_BEGIN_TYPE_ID_BLOCK(pmud_caf_types, caf::first_custom_type_id)
 
@@ -35,7 +33,12 @@ CAF_ADD_ATOM(pmud_caf_types, OnUserInput)
 
 // Storage
 //
-CAF_ADD_TYPE_ID(pmud_caf_types, (StreamRecordFields_t))
+CAF_ADD_TYPE_ID(pmud_caf_types, (primordia::mud::common::StreamRecordFields_t))
+CAF_ADD_TYPE_ID(pmud_caf_types, (primordia::mud::common::opt_string_t))
+CAF_ADD_TYPE_ID(pmud_caf_types, (primordia::mud::common::opt_map_t))
+CAF_ADD_TYPE_ID(pmud_caf_types, (primordia::mud::common::opt_list_t))
+CAF_ADD_TYPE_ID(pmud_caf_types, (primordia::mud::common::opt_set_t))
+
 CAF_ADD_ATOM(pmud_caf_types, StorageNoop)
 CAF_ADD_ATOM(pmud_caf_types, StorageValueStore)
 CAF_ADD_ATOM(pmud_caf_types, StorageValueGet)
@@ -61,5 +64,5 @@ CAF_ADD_ATOM(pmud_caf_types, LoginControllerEnd)
 
 CAF_END_TYPE_ID_BLOCK(pmud_caf_types)
 
-CAF_ALLOW_UNSAFE_MESSAGE_TYPE(StreamRecordFields_t)
-CAF_ALLOW_UNSAFE_MESSAGE_TYPE(caf::optional<std::string>)
+// CAF_ALLOW_UNSAFE_MESSAGE_TYPE(StreamRecordFields_t)
+// CAF_ALLOW_UNSAFE_MESSAGE_TYPE(opt_string_t)

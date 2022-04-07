@@ -28,18 +28,18 @@ namespace primordia::mud::event {
     behavior make_behavior() {
       return {
         [this](EventUserCreate, const string& username, const string& passphrase) {
-          StreamRecordFields_t fields;
+          common::StreamRecordFields_t fields;
           fields["username"] = username;
           fields["passphrase"] = passphrase;
           send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserCreate", fields);
         },
         [this](EventUserLogin, const string& username) {
-          StreamRecordFields_t fields;
+          common::StreamRecordFields_t fields;
           fields["username"] = username;
           send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserLogin", fields);
         },
         [this](EventUserLogout, const string& username) {
-          StreamRecordFields_t fields;
+          common::StreamRecordFields_t fields;
           fields["username"] = username;
           send(actor_cast<actor>(m_storage_actor), StorageEventStore(), "EventUserLogout", fields);
         },

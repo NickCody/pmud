@@ -1,5 +1,6 @@
 
 #include "pmud/src/common/global_type_id.h"
+#include <algorithm>
 #include <caf/scoped_actor.hpp>
 #include <chrono>
 #include <memory>
@@ -22,6 +23,10 @@ using namespace caf;
 
 using namespace primordia::mud::storage;
 using namespace primordia::mud::test::mocks;
+
+namespace common = primordia::mud::common;
+
+const auto TEST_TIMEOUT = chrono::milliseconds(20);
 
 int main(int argc, char** argv) {
   using namespace caf;
@@ -52,10 +57,40 @@ struct basic_functionality {
 
 CAF_TEST_FIXTURE_SCOPE(storage_tests, basic_functionality)
 
-CAF_TEST(basic_test) {
-
+CAF_TEST(value store) {
   self->send(storage_actor, StorageValueStore(), "foo", "bar");
-  self->request(storage_actor, chrono::milliseconds(20), StorageValueGet(), "foo")
-      .receive([](string value) { CAF_CHECK(value == "bar"); }, [](error&) { CAF_CHECK(false); });
+  self->request(storage_actor, TEST_TIMEOUT, StorageValueGet(), "foo")
+      .receive([](const common::opt_string_t& value) { CAF_CHECK(value.value() == "bar"); }, [](error&) { CAF_CHECK(false); });
 }
+
+CAF_TEST(map store) {
+  self->send(storage_actor, StorageMapStore(), "mymap", "foo", "bar");
+  self->request(storage_actor, TEST_TIMEOUT, StorageMapGet(), "mymap")
+      .receive([](const common::opt_map_t& value) { CAF_CHECK(value.value().at("foo") == "bar"); }, [](error&) { CAF_CHECK(false); });
+}
+
+CAF_TEST(list store) {
+  self->send(storage_actor, StorageListStore(), "mylist", "foo");
+  self->send(storage_actor, StorageListStore(), "mylist", "bar");
+  self->request(storage_actor, TEST_TIMEOUT, StorageListGet(), "mylist")
+      .receive(
+          [](const common::opt_list_t& value) {
+            CAF_CHECK(std::find(value.value().begin(), value.value().end(), "foo") != value.value().end());
+            CAF_CHECK(std::find(value.value().begin(), value.value().end(), "bar") != value.value().end());
+          },
+          [](error&) { CAF_CHECK(false); });
+}
+
+CAF_TEST(set store) {
+  self->send(storage_actor, StorageSetStore(), "myset", "foo");
+  self->send(storage_actor, StorageSetStore(), "myset", "bar");
+  self->request(storage_actor, TEST_TIMEOUT, StorageSetGet(), "myset")
+      .receive(
+          [](const common::opt_set_t& value) {
+            CAF_CHECK(std::find(value.value().begin(), value.value().end(), "foo") != value.value().end());
+            CAF_CHECK(std::find(value.value().begin(), value.value().end(), "bar") != value.value().end());
+          },
+          [](error&) { CAF_CHECK(false); });
+}
+
 CAF_TEST_FIXTURE_SCOPE_END()
