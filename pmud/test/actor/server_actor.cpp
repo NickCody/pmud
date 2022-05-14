@@ -19,6 +19,8 @@
 
 #include "common/global_type_id.h"
 
+#include <zmq.hpp>
+
 using namespace std;
 using namespace caf;
 
@@ -78,6 +80,24 @@ CAF_TEST(server creation) {
                });
 
   CAF_CHECK(server_success);
+
+  zmq::context_t context{ 1 };
+
+  zmq::socket_t socket{ context, zmq::socket_type::stream };
+  socket.connect("tcp://localhost:49201");
+
+  zmq::message_t reply{};
+  zmq::recv_result_t result = socket.recv(reply, zmq::recv_flags::none);
+
+  CAF_CHECK(result.has_value());
+
+  fmt::print("Got reply from server 1: {}\n", reply.to_string());
+  fmt::print("Got reply from server (value): {}\n", result.value());
+
+  // TODO: Nick, write a dedicated client
+
+  // const std::string data{ "Hello" };
+  // socket.send(zmq::buffer(data), zmq::send_flags::none);
 
   self->request(server_actor, TEST_TIMEOUT, GoodbyeServer())
       .receive([&](bool status) { server_success = status; },

@@ -138,3 +138,15 @@ cc_binary(
         "@lua//:main",
     ],
 )
+
+cc_binary(
+    name = "cli-zmq",
+    srcs = ["cli-zmq.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@fmt//:main",
+        "@zeromq//:main",
+    ],
+)

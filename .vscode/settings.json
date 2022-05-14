@@ -104,4 +104,6 @@
   "clang-format.executable": "/usr/bin/clang-format",
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "bazel.buildifierFixOnFormat": true,
+  "workbench.editor.highlightModifiedTabs": true,
+  "workbench.editor.pinnedTabSizing": "normal",
 }

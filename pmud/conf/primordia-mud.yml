@@ -4,7 +4,7 @@ server:
   address: "0.0.0.0"
   port: 49201
   max-queued-connections: 24
-  log-level: "info"
+  log-level: "debug"
   log-name: "varlog"
   log-filename: "/var/log/pmud/pmud.log"
   log-truncate: false
