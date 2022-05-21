@@ -12,7 +12,7 @@
         "${default}"
       ],
       "macFrameworkPath": [],
-      "compilerPath": "/usr/lib/llvm-14/bin/clang",
+      "compilerPath": "/usr/lib/llvm-15/bin/clang",
       "cStandard": "c17",
       "cppStandard": "c++23",
       "intelliSenseMode": "linux-gcc-x64",

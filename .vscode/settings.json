@@ -102,6 +102,7 @@
   //   "//...",
   // ],
   "clang-format.executable": "/usr/bin/clang-format",
+  "clangd.path": "/usr/lib/llvm-14/bin//clangd",
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "bazel.buildifierFixOnFormat": true,
   "workbench.editor.highlightModifiedTabs": true,

@@ -9,11 +9,6 @@ RUN mv /etc/apt/sources.list /tmp/ \
   && apt update
 
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
-  && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
-  && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
-  && echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
-  && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main"  >> /etc/apt/sources.list \
-  && echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main" >> /etc/apt/sources.list \
   && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
   && sudo mv bazel.gpg /etc/apt/trusted.gpg.d/ \
   && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
@@ -135,12 +130,17 @@ RUN git clone --depth=1 https://github.com/gcc-mirror/gcc.git \
   && cd ../.. \
   && rm -rf gcc
 
+RUN wget https://apt.llvm.org/llvm.sh \
+  && chmod +x llvm.sh \
+  && ./llvm.sh 14 all
+
 RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
   && mv bzl /usr/local/bin \
   && chmod +x /usr/local/bin/bzl
 
 RUN apt update \
-  && apt install -y doxygen clang-format clangd clang-tidy protobuf-compiler
+  # && apt install -y doxygen clang-format-15 clangd-15 clang-tidy-15 protobuf-compiler
+  && apt install -y doxygen protobuf-compiler
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'

@@ -149,7 +149,7 @@ if [ -f '/home/vscode/google-cloud-sdk/path.bash.inc' ]; then . '/home/vscode/go
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/vscode/google-cloud-sdk/completion.bash.inc' ]; then . '/home/vscode/google-cloud-sdk/completion.bash.inc'; fi
 
-export PATH=$PATH:/usr/local/go/bin:/home/vscode/go/bin
+export PATH=$PATH:/usr/local/go/bin:/home/vscode/go/bin:/usr/lib/llvm-15/bin:/usr/lib/llvm-14/bin/
 
 if [ -f ~/.localrc ]; then source ~/.localrc; fi
 
