@@ -10,6 +10,8 @@ static const char* cpp_version = "C++14";
 static const char* cpp_version = "C++17";
 #elif __cplusplus <= 202002L
 static const char* cpp_version = "C++20";
+#elif __cplusplus <= 202302L
+static const char* cpp_version = "C++23";
 #else
 static const char* cpp_version = "C++Unknown";
 #endif

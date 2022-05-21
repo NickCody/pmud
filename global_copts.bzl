@@ -16,7 +16,7 @@ def global_copts(unwanted_options = []):
 
 def global_cppopts(unwanted_options = []):
     opts = [
-        "-std=c++20",
+        "-std=c++23",
         "-Wall",
         "-Werror",
         "-Wextra",

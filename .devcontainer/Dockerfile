@@ -30,9 +30,28 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
   ninja-build \
   libssl-dev \
   bazel
+  
 ## redis # installed manually below for 6.9/7.x
 # && rm -rf /var/lib/apt/lists/* \
 # && apt-get clean
+
+RUN sudo apt install -y \
+  yamllint \
+  curl \
+  gnupg2 \
+  vim \
+  graphviz xdot \
+  docker-ce-cli \
+  tree \
+  moreutils \
+  telnet \
+  rlwrap \
+  iputils-ping \
+  ssh-askpass \
+  npm \
+  lua5.4 \
+  liblua5.4-dev \
+  tmux 
 
 RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz \
   && tar xvfz v1.9.2.tar.gz \
@@ -72,7 +91,6 @@ RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7
   && rm -rf yaml-cpp-yaml-cpp-0.7.0  \
   && rm yaml-cpp-0.7.0.tar.gz
 
-
 RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
   && unzip master.zip \
   && cd hiredis-master \
@@ -81,24 +99,6 @@ RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
   && cd .. \
   && rm master.zip \
   && rm -rf hiredis-master
-
-RUN sudo apt install -y \
-  yamllint \
-  curl \
-  gnupg2 \
-  vim \
-  graphviz xdot \
-  docker-ce-cli \
-  tree \
-  moreutils \
-  telnet \
-  rlwrap \
-  iputils-ping \
-  ssh-askpass \
-  npm \
-  lua5.4 \
-  liblua5.4-dev \
-  tmux
 
 RUN apt install -y libzmq3-dev \
   && git clone https://github.com/zeromq/libzmq.git \
@@ -123,6 +123,17 @@ RUN wget https://github.com/redis/redis/archive/7.0-rc2.tar.gz \
   && cd .. \
   && rm -rf redis-7.0-rc2/ \
   && rm 7.0-rc2.tar.gz
+
+RUN git clone --depth=1 https://github.com/gcc-mirror/gcc.git \
+  && sudo apt install -y flex \
+  && cd gcc \
+  && ./contrib/download_prerequisites \
+  && mkdir build && cd build \
+  && ../configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --enable-checking=release --enable-languages=c,c++ --disable-multilib \
+  && make -j24 \
+  && sudo make install \
+  && cd ../.. \
+  && rm -rf gcc
 
 RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
   && mv bzl /usr/local/bin \

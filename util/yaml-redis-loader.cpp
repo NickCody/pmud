@@ -41,21 +41,19 @@ int main(int argc, char** argv) {
     }
   }
 
-  auto storage = redis_storage::initialize_redis_storage();
+  if (auto storage = redis_storage::initialize_redis_storage(); storage) {
+    auto input = stdout_or_file(filename.c_str());
+    if (!input) {
+      spdlog::info("Failed to open file: {}", filename);
+      return EXIT_FAILURE;
+    }
 
-  if (!storage) {
+    YAML::Node config = YAML::Load(*input);
+    yaml_to_storage(storage.get(), prefix, config);
+  } else {
     spdlog::error("Failed to initialize redis storage.");
     return EXIT_FAILURE;
   }
-
-  auto input = stdout_or_file(filename.c_str());
-  if (!input) {
-    spdlog::info("Failed to open file: {}", filename);
-    return EXIT_FAILURE;
-  }
-
-  YAML::Node config = YAML::Load(*input);
-  yaml_to_storage(storage.get(), prefix, config);
 
   return EXIT_SUCCESS;
 }

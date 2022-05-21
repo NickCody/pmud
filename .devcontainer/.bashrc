@@ -152,3 +152,6 @@ if [ -f '/home/vscode/google-cloud-sdk/completion.bash.inc' ]; then . '/home/vsc
 export PATH=$PATH:/usr/local/go/bin:/home/vscode/go/bin
 
 if [ -f ~/.localrc ]; then source ~/.localrc; fi
+
+# for gcc13
+export LD_LIBRARY_PATH=/usr/local/lib64

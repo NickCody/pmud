@@ -150,3 +150,14 @@ cc_binary(
         "@zeromq//:main",
     ],
 )
+
+cc_binary(
+    name = "lambda-main",
+    srcs = ["lambda-main.cpp"],
+    copts = global_cppopts(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@fmt//:main",
+    ],
+)

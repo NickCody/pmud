@@ -3,8 +3,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 git_repository(
     name = "com_google_googletest",
+    commit = "e2239ee6043f73722e7aa812a459f54a28552929",
     remote = "https://github.com/google/googletest",
-    tag = "release-1.11.0",
+    shallow_since = "1623433346 -0700",
 )
 
 new_local_repository(
@@ -55,6 +56,7 @@ new_local_repository(
 # https://github.com/hedronvision/bazel-compile-commands-extractor
 http_archive(
     name = "hedron_compile_commands",
+    sha256 = "16a817aaf3ac578d2ee44eebcf354bedb7ff32dc9cc8f4879dc48da4c99a9cc3",
     strip_prefix = "bazel-compile-commands-extractor-fa7e9fc11ec4a4de7ea63c6a060108ac612fec0e",
 
     # Replace the commit hash in both places (below) with the latest, rather than using the stale one here.
