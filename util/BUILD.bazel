@@ -65,7 +65,7 @@ cc_binary(
 cc_binary(
     name = "redis-stream-out",
     srcs = ["redis-stream-out.cpp"],
-    copts = global_cppopts(),
+    copts = global_cppopts() + global_cpp2b() + ["-Wno-stringop-overflow"],
     linkopts = [
         "-ldl",
         "-pthread",
