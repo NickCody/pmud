@@ -42,7 +42,7 @@ new_local_repository(
 
 new_local_repository(
     name = "lua",
-    build_file = "lua.BUILD",
+    build_file = "//:lua.BUILD",
     path = "/usr",
 )
 

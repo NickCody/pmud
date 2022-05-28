@@ -1,12 +1,12 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@//:global_copts.bzl", "global_cppopts", "global_linkopts")
+load("@//:global_copts.bzl", "global_cpp2b", "global_cppopts", "global_linkopts")
 
 package(features = ["-default_compile_flags"])
 
 cc_binary(
     name = "cppversion",
     srcs = ["cppversion.cpp"],
-    copts = global_cppopts(),
+    copts = global_cppopts() + global_cpp2b(),
     deps = [
         "@fmt//:main",
         "@ncurses//:main",
@@ -84,7 +84,7 @@ cc_binary(
 cc_binary(
     name = "redis-stream-in",
     srcs = ["redis-stream-in.cpp"],
-    copts = global_cppopts(),
+    copts = global_cppopts() + global_cpp2b() + ["-Wno-stringop-overflow"],
     linkopts = ["-ldl"],  # lua-specific
     visibility = ["//visibility:public"],
     deps = [
@@ -154,7 +154,7 @@ cc_binary(
 cc_binary(
     name = "lambda-main",
     srcs = ["lambda-main.cpp"],
-    copts = global_cppopts(),
+    copts = global_cppopts() + global_cpp2b(),
     linkopts = global_linkopts(),
     visibility = ["//visibility:public"],
     deps = [

@@ -98,10 +98,7 @@
   ],
   "testMate.cpp.test.parallelExecutionLimit": 12,
   "testExplorer.useNativeTesting": true,
-  // "bazel-cpp-tools.compileCommands.targets": [
-  //   "//...",
-  // ],
-  "clang-format.executable": "/usr/bin/clang-format",
+  "clang-format.executable": "/usr/lib/llvm-14/bin/clang-format",
   "clangd.path": "/usr/lib/llvm-14/bin//clangd",
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "bazel.buildifierFixOnFormat": true,

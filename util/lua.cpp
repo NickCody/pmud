@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "lua.hpp"
+#include <lua/lua.hpp>
 
-int main(void) {
+auto main() -> int {
   char buff[256];
   int error;
   lua_State* L = luaL_newstate();

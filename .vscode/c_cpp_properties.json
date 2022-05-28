@@ -3,10 +3,8 @@
     {
       "name": "Linux",
       "includePath": [
-        "${workspaceFolder}/**",
         "/usr/local/lib/gcc/x86_64-linux-gnu/13.0.0/include/**",
-        "/usr/local/include/**",
-        "${default}"
+        "/usr/local/include/**"
       ],
       "defines": [
         "${default}"
@@ -14,7 +12,7 @@
       "macFrameworkPath": [],
       "compilerPath": "/usr/lib/llvm-15/bin/clang",
       "cStandard": "c17",
-      "cppStandard": "c++23",
+      "cppStandard": "c++2b",
       "intelliSenseMode": "linux-gcc-x64",
       "compileCommands": "${workspaceFolder}/compile_commands.json",
       "browse": {

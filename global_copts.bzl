@@ -14,9 +14,30 @@ def global_copts(unwanted_options = []):
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]
 
+def global_cpp20(unwanted_options = []):
+    opts = [
+        "-std=c++20",
+    ]
+    unwanted = {x: x for x in unwanted_options}
+    return [opt for opt in opts if unwanted.get(opt) == None]
+
+def global_cpp17(unwanted_options = []):
+    opts = [
+        "-std=c++17",
+    ]
+    unwanted = {x: x for x in unwanted_options}
+    return [opt for opt in opts if unwanted.get(opt) == None]
+
+def global_cpp2b(unwanted_options = []):
+    opts = [
+        "-std=c++2b",
+    ]
+    unwanted = {x: x for x in unwanted_options}
+    return [opt for opt in opts if unwanted.get(opt) == None]
+
 def global_cppopts(unwanted_options = []):
     opts = [
-        "-std=c++23",
+        "-std=c++20",
         "-Wall",
         "-Werror",
         "-Wextra",
@@ -25,9 +46,12 @@ def global_cppopts(unwanted_options = []):
         "-Wvla",
         "-Wno-unused-const-variable",
         "-pedantic",
-        "-g",
-        "-ggdb",
+        "-O3",
+        # "-g",
+        # "-ggdb",
         "-DSPDLOG_FMT_EXTERNAL",
+        "-fdiagnostics-color=always",
+        "-fdiagnostics-path-format=inline-events",
     ]
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]
@@ -36,7 +60,7 @@ def global_linkopts(unwanted_options = []):
     opts = [
         "-pthread",
         "-lstdc++fs",
-        "-g",
+        # "-g",
         "-ldl",
         "-lzmq",
     ]

@@ -19,6 +19,7 @@ cc_library(
         "include/lua5.4/luaconf.h",
         "include/lua5.4/lualib.h",
     ],
-    strip_include_prefix = "include/lua5.4",
+    include_prefix = "lua",
+    strip_include_prefix = "include/lua5.4/",
     visibility = ["//visibility:public"],
 )
