@@ -51,7 +51,6 @@ def global_cppopts(unwanted_options = []):
         # "-ggdb",
         "-DSPDLOG_FMT_EXTERNAL",
         "-fdiagnostics-color=always",
-        "-fdiagnostics-path-format=inline-events",
     ]
     unwanted = {x: x for x in unwanted_options}
     return [opt for opt in opts if unwanted.get(opt) == None]

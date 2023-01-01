@@ -52,6 +52,20 @@ new_local_repository(
     path = "/usr",
 )
 
+new_local_repository(
+    name = "eigen3",
+    build_file = "eigen3.BUILD",
+    path = "/usr/include",
+)
+
+new_git_repository(
+    name = "cnl",
+    build_file = "//:cnl.BUILD",
+    commit = "3ef9b0e224f135dbfed9d210fa8bdf53367b18ff",
+    remote = "https://github.com/johnmcfarlane/cnl",
+    shallow_since = "1659776808 +0100",
+)
+
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor
 http_archive(

@@ -69,13 +69,10 @@
       "  ${commentend}"
     ],
   },
-  "C_Cpp.intelliSenseEngine": "Disabled",
-  "C_Cpp.autocomplete": "Disabled",
-  "C_Cpp.errorSquiggles": "Disabled",
   "[bazel]": {
     "editor.formatOnSave": true
   },
-  "bazel.enableCodeLens": false,
+  "bazel.enableCodeLens": true,
   "testMate.cpp.test.advancedExecutables": [
     {
       "name": "non-actor-debug",
@@ -104,4 +101,9 @@
   "bazel.buildifierFixOnFormat": true,
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.editor.pinnedTabSizing": "normal",
+  "files.associations": {
+    "initializer_list": "cpp",
+    "ranges": "cpp",
+    "iostream": "cpp"
+  },
 }

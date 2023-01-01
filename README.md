@@ -112,7 +112,7 @@ bazel run //util:cppversion           # shows which C++ version is configured
 bazel run //util:lua                  # basic lua interpreter
 bazel run //util:scratch              # scratch, throwaway code
 bazel run //util:yaml-print           # prints a yaml file with some basic type information
-bazel run //util:taml-redis-loader    # loads yaml into redis
+bazel run //util:yaml-redis-loader    # loads yaml into redis
 bazel run //util:
 ```
 

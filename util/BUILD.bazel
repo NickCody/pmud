@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
-load("@//:global_copts.bzl", "global_cpp2b", "global_cppopts", "global_linkopts")
+load("@//:global_copts.bzl", "global_cpp20", "global_cpp2b", "global_cppopts", "global_linkopts")
 
 package(features = ["-default_compile_flags"])
 
@@ -158,6 +158,19 @@ cc_binary(
     linkopts = global_linkopts(),
     visibility = ["//visibility:public"],
     deps = [
+        "@fmt//:main",
+    ],
+)
+
+cc_binary(
+    name = "math",
+    srcs = ["math.cpp"],
+    copts = global_cppopts() + global_cpp20(),
+    linkopts = global_linkopts(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@cnl//:main",
+        "@eigen3//:main",
         "@fmt//:main",
     ],
 )

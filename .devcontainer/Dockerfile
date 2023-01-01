@@ -25,7 +25,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
   ninja-build \
   libssl-dev \
   bazel
-  
+
 ## redis # installed manually below for 6.9/7.x
 # && rm -rf /var/lib/apt/lists/* \
 # && apt-get clean
@@ -46,7 +46,8 @@ RUN sudo apt install -y \
   npm \
   lua5.4 \
   liblua5.4-dev \
-  tmux 
+  tmux \
+  libeigen3-dev
 
 RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz \
   && tar xvfz v1.9.2.tar.gz \
