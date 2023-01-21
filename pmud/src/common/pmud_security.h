@@ -18,7 +18,7 @@ namespace primordia::mud::security {
     string hash;
 
     string to_string() {
-      return format("{}:{}:{}", iterations, salt, hash);
+      return fmt::format("{}:{}:{}", iterations, salt, hash);
     }
   };
 
@@ -37,7 +37,7 @@ namespace primordia::mud::security {
 
   CredentialHash hash_credentials(const string& passphrase, const string& salt) {
     SHA256 sha256;
-    string passphrase_salt = format("{}:{}", passphrase, salt);
+    string passphrase_salt = fmt::format("{}:{}", passphrase, salt);
     CredentialHash hash{ 0, salt, sha256(passphrase_salt) };
     return hash;
   }

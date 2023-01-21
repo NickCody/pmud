@@ -1,6 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@//:global_copts.bzl", "global_cppopts")
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 package(features = ["-default_compile_flags"])
 
@@ -59,20 +58,22 @@ cc_binary(
     ],
 )
 
-pkg_tar(
-    name = "dist",
-    srcs = [
-        "//pmud",
-        "//pmud:brumme-hash_so",
-        "//pmud:caf_so",
-        "//pmud:conf",
-        "//pmud:hiredis_so",
-        "//pmud:scripts",
-    ],
-    extension = "tar.gz",
-    include_runfiles = True,
-    mode = "0755",
-    package_dir = "pmud",
-    remap_paths = {"pmud/_solib_k8/_U@caf_S_S_Cmain___Ulib": ""},
-    strip_prefix = ".",
-)
+# This broke and it makes me angry
+
+# pkg_tar(
+#     name = "dist",
+#     srcs = [
+#         "//pmud",
+#         "//pmud:brumme-hash_so",
+#         "//pmud:caf_so",
+#         "//pmud:conf",
+#         "//pmud:hiredis_so",
+#         "//pmud:scripts",
+#     ],
+#     extension = "tar.gz",
+#     include_runfiles = True,
+#     mode = "0755",
+#     package_dir = "pmud",
+#     remap_paths = {"pmud/_solib_k8/_U@caf_S_S_Cmain___Ulib": ""},
+#     strip_prefix = ".",
+# )

@@ -31,7 +31,7 @@ namespace primordia::mud::pnet {
           m_mud(mud) {
 
       m_command = actor_cast<strong_actor_ptr>(spawn<CommandActor>(mud, actor_cast<strong_actor_ptr>(this), m_connection));
-      m_registery_id = format("Connection({})", id());
+      m_registery_id = fmt::format("Connection({})", id());
       system().registry().put(m_registery_id, this);
 
       attach_functor([this](const error& reason) {

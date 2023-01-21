@@ -13,5 +13,6 @@ cc_library(
         "//pmud/src/controllers:library",
         "//pmud/src/event:library",
         "//pmud/src/system:library",
+        "@fmt//:main",
     ],
 )

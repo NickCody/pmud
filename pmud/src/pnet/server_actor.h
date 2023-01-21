@@ -89,7 +89,7 @@ namespace primordia::mud::pnet {
             fcntl(c_id, F_SETFL, flags | O_NONBLOCK);
 
             spdlog::info("Performing welcome for connection {}", c_id);
-            string welcome = format("Welcome to {}\nVersion 0.1", m_mud->get_config().name);
+            string welcome = fmt::format("Welcome to {}\nVersion 0.1", m_mud->get_config().name);
             auto connection_actor = spawn<ConnectionActor>(m_mud, welcome, c_id);
             send(connection_actor, PerformWelcome());
           }

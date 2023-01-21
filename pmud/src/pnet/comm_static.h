@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <string>
 #include <sstream>
+#include <vector>
 #include <cstdlib>
 #include <unistd.h>
 #include <netinet/in.h>
@@ -103,7 +104,7 @@ namespace primordia::mud::pnet {
     inline static const ssize_t BUFFER_PADDING = 128;
     inline static const ssize_t BUFFER_SIZE = BUFFER_MAX_READ + BUFFER_PADDING;
     inline static const string NEWLINE = "\n";
-    inline static const string CR = format("{}", (char)0x0D);
+    inline static const string CR = fmt::format("{}", (char)0x0D);
 
     inline static const vector<string> BANNER = { R"(                           _ )",
                                                   R"(                          | |)",
