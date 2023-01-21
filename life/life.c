@@ -113,7 +113,7 @@ void process_cli(int argc, char** argv) {
 //
 // play
 //
-struct results play() {
+struct results play(void) {
   // Create all boards we need
   char** board1 = allocate_board();
   char** board2 = allocate_board();
@@ -183,7 +183,7 @@ struct results play() {
 //
 // Board Allocation/Deallocation
 //
-char** allocate_board() {
+char** allocate_board(void) {
   char** board = (char**)malloc(NUM_ROWS * sizeof(char*));
   for (int i = 0; i < NUM_ROWS; i++) {
     board[i] = (char*)malloc(NUM_COLS * sizeof(char));
