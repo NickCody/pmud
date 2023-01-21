@@ -27,7 +27,7 @@ struct results {
 };
 
 void process_cli(int argc, char** argv);
-struct results play();
+struct results play(void);
 
 // Board Structure
 //
@@ -40,7 +40,7 @@ struct results play();
 // board[0][0] = cell(0,0)
 
 // Board Allocation/Deallocation
-char** allocate_board();
+char** allocate_board(void);
 void free_board(char** board);
 
 // Board Operations
