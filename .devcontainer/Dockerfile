@@ -8,15 +8,16 @@ RUN mv /etc/apt/sources.list /tmp/ \
   && mv /tmp/sources.list /etc/apt/ \
   && apt update
 
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
+RUN ARCH=$(dpkg --print-architecture) \
+  && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
   && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
   && sudo mv bazel.gpg /etc/apt/trusted.gpg.d/ \
-  && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
+  && echo "deb [arch=${ARCH}] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
   && curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg \
   && echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list \
   && apt-get update \
   && apt install -y software-properties-common \
-  && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+  && add-apt-repository "deb [arch=${ARCH}] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
   && apt-get update \
   && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install --no-install-recommends \
@@ -57,11 +58,18 @@ RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz 
   && cd ../.. \
   && rm -rf spdlog-1.9.2
 
-RUN curl -L -O https://golang.org/dl/go1.15.5.linux-amd64.tar.gz \
-  && tar -C /usr/local -xzf go1.15.5.linux-amd64.tar.gz \
-  && rm go1.15.5.linux-amd64.tar.gz
+RUN GO_ARCH=$(dpkg --print-architecture) \
+  && curl -L -O https://golang.org/dl/go1.15.5.linux-${GO_ARCH}.tar.gz \
+  && tar -C /usr/local -xzf go1.15.5.linux-${GO_ARCH}.tar.gz \
+  && rm go1.15.5.linux-${GO_ARCH}.tar.gz
 
-RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier \
+RUN BUILDIFIER_ARCH=$(dpkg --print-architecture) \
+  && case "${BUILDIFIER_ARCH}" in \
+    amd64) BUILDIFIER_URL=https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier-linux-amd64 ;; \
+    arm64) BUILDIFIER_URL=https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier-linux-arm64 ;; \
+    *) echo "Unsupported architecture: ${BUILDIFIER_ARCH}" && exit 1 ;; \
+  esac \
+  && curl -L -o buildifier ${BUILDIFIER_URL} \
   && chmod +x buildifier \
   && mv buildifier /usr/local/bin
 
@@ -109,7 +117,7 @@ RUN git clone https://github.com/zeromq/cppzmq.git \
   && mkdir build \
   && cd build \
   && cmake .. \
-  && make -j4 install
+  && make -j"$(nproc)" install
 
 RUN wget https://github.com/redis/redis/archive/7.0-rc2.tar.gz \
   && tar xvfz 7.0-rc2.tar.gz \
@@ -125,8 +133,9 @@ RUN git clone --depth=1 https://github.com/gcc-mirror/gcc.git \
   && cd gcc \
   && ./contrib/download_prerequisites \
   && mkdir build && cd build \
-  && ../configure -v --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu --enable-checking=release --enable-languages=c,c++ --disable-multilib \
-  && make -j24 \
+  && GNU_ARCH=$(gcc -dumpmachine) \
+  && ../configure -v --build=${GNU_ARCH} --host=${GNU_ARCH} --target=${GNU_ARCH} --enable-checking=release --enable-languages=c,c++ --disable-multilib \
+  && make -j"$(nproc)" \
   && sudo make install \
   && cd ../.. \
   && rm -rf gcc
@@ -135,7 +144,8 @@ RUN wget https://apt.llvm.org/llvm.sh \
   && chmod +x llvm.sh \
   && ./llvm.sh 14 all
 
-RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
+RUN BZL_ARCH=$(dpkg --print-architecture) \
+  && wget https://get.bzl.io/linux_${BZL_ARCH}/v1.3.19/bzl \
   && mv bzl /usr/local/bin \
   && chmod +x /usr/local/bin/bzl
 
@@ -152,12 +162,17 @@ RUN groupadd docker \
 USER vscode
 WORKDIR /home/vscode
 
-RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-371.0.0-linux-x86_64.tar.gz \
-  && tar xvfz google-cloud-sdk-371.0.0-linux-x86_64.tar.gz \
+RUN GCLOUD_ARCH=$(dpkg --print-architecture) \
+  && case "${GCLOUD_ARCH}" in \
+    amd64) GCLOUD_FILE=google-cloud-sdk-371.0.0-linux-x86_64.tar.gz ;; \
+    arm64) GCLOUD_FILE=google-cloud-sdk-371.0.0-linux-arm.tar.gz ;; \
+    *) echo "Unsupported architecture: ${GCLOUD_ARCH}" && exit 1 ;; \
+  esac \
+  && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_FILE} \
+  && tar xvfz ${GCLOUD_FILE} \
   && cd google-cloud-sdk \
   && ./install.sh -q \
   && cd ~ \
-  && rm google-cloud-sdk-371.0.0-linux-x86_64.tar.gz
+  && rm ${GCLOUD_FILE}
 
 RUN /usr/local/go/bin/go get github.com/bazelbuild/buildtools/buildifier >> /home/vscode/results
-
